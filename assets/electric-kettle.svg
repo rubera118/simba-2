@@ -1,0 +1,19 @@
+<svg width="1200" height="1200" viewBox="0 0 1200 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="1200" rx="80" fill="url(#bg)"/>
+  <circle cx="943" cy="266" r="164" fill="#FFFFFF" fill-opacity="0.18"/>
+  <circle cx="262" cy="959" r="215" fill="#F59E0B" fill-opacity="0.18"/>
+  <rect x="322" y="257" width="411" height="534" rx="145" fill="#F8FAFC"/>
+  <rect x="393" y="340" width="270" height="313" rx="97" fill="#DDE7F1"/>
+  <path d="M733 360C846 360 917 431 917 533C917 618 866 688 786 719" stroke="#F8FAFC" stroke-width="48" stroke-linecap="round"/>
+  <path d="M526 223V131" stroke="#F8FAFC" stroke-width="42" stroke-linecap="round"/>
+  <rect x="439" y="768" width="174" height="64" rx="28" fill="#1E293B"/>
+  <path d="M435 862H710" stroke="#F8FAFC" stroke-width="34" stroke-linecap="round"/>
+  <path d="M777 311C854 283 895 224 900 154" stroke="#FDE68A" stroke-width="20" stroke-linecap="round"/>
+  <text x="96" y="1080" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="82" font-weight="700">Electric Kettle</text>
+  <defs>
+    <linearGradient id="bg" x1="119" y1="76" x2="1049" y2="1137" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F766E"/>
+      <stop offset="1" stop-color="#1E3A8A"/>
+    </linearGradient>
+  </defs>
+</svg>

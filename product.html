@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Details | Simba Supermarket</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="product">
+    <div class="site-shell detail-shell">
+      <header class="topbar">
+        <a class="brand" href="index.html">
+          <span class="brand-mark">S</span>
+          <span>
+            <strong>Simba Supermarket</strong>
+            <small data-i18n="detailsLabel">Product details</small>
+          </span>
+        </a>
+
+        <div class="topbar-actions">
+          <label class="lang-picker">
+            <select id="languageSelect" aria-label="Select language">
+              <option value="en">English</option>
+              <option value="fr">Francais</option>
+              <option value="rw">Kinyarwanda</option>
+            </select>
+          </label>
+          <button id="themeToggle" class="icon-button" type="button" data-i18n="theme">Theme</button>
+          <a class="cart-button" href="checkout.html">
+            <span data-i18n="checkout">Proceed to checkout</span>
+          </a>
+        </div>
+      </header>
+
+      <main id="productDetail" class="product-detail-page">
+        <section id="detailLoading" class="state-panel loading-panel">
+          <div class="loader"></div>
+          <p data-i18n="loadingProduct">Loading product details...</p>
+        </section>
+      </main>
+
+      <section id="detailRecommendations" class="showcase-panel hidden">
+        <div class="toolbar-header">
+          <div>
+            <p class="eyebrow" data-i18n="moreToExplore">More to explore</p>
+            <h2 data-i18n="recommendedTitle">Similar picks shoppers also view</h2>
+          </div>
+          <p class="toolbar-note" data-i18n="recommendedText">
+            Keep discovery going with products from the same aisle and nearby price range.
+          </p>
+        </div>
+        <div id="recommendedProducts" class="row-products"></div>
+      </section>
+    </div>
+
+    <script src="product.js" defer></script>
+  </body>
+</html>

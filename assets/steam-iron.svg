@@ -1,0 +1,19 @@
+<svg width="1200" height="1200" viewBox="0 0 1200 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="1200" rx="80" fill="url(#bg)"/>
+  <circle cx="930" cy="250" r="160" fill="#FFFFFF" fill-opacity="0.12"/>
+  <circle cx="231" cy="903" r="190" fill="#FFFFFF" fill-opacity="0.08"/>
+  <path d="M263 700C263 494 412 348 604 348C748 348 857 424 918 555L1008 747H263V700Z" fill="#F8FAFC"/>
+  <path d="M398 747H977C939 847 846 920 727 920H387C316 920 258 862 258 791V752C258 749 260 747 263 747H398Z" fill="#CBD5E1"/>
+  <rect x="485" y="250" width="219" height="124" rx="58" fill="#F8FAFC"/>
+  <path d="M540 315C540 261 584 217 638 217H728C782 217 826 261 826 315" stroke="#F8FAFC" stroke-width="26" stroke-linecap="round"/>
+  <circle cx="792" cy="625" r="24" fill="#0F766E"/>
+  <circle cx="712" cy="625" r="24" fill="#0F766E"/>
+  <circle cx="632" cy="625" r="24" fill="#0F766E"/>
+  <text x="96" y="1080" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="82" font-weight="700">Steam Iron</text>
+  <defs>
+    <linearGradient id="bg" x1="110" y1="96" x2="1085" y2="1121" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7C3AED"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
+</svg>

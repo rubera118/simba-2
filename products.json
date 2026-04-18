@@ -1,0 +1,182 @@
+[
+  {
+    "id": "prod-001",
+    "name": "Premium Rice 5kg",
+    "category": "Food Products",
+    "price": 8900,
+    "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=900&q=80",
+    "description": "Long-grain rice for everyday family meals and celebrations.",
+    "badge": "Best Seller"
+  },
+  {
+    "id": "prod-002",
+    "name": "Whole Wheat Bread",
+    "category": "Food Products",
+    "price": 1800,
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=900&q=80",
+    "description": "Soft whole wheat loaf great for toast, sandwiches, and quick lunches.",
+    "badge": "Bakery"
+  },
+  {
+    "id": "prod-003",
+    "name": "Dishwashing Liquid",
+    "category": "Cleaning & Sanitary",
+    "price": 3500,
+    "image": "https://images.unsplash.com/photo-1583947582886-f40ec95dd752?auto=format&fit=crop&w=900&q=80",
+    "description": "Powerful dishwashing soap that keeps plates and utensils sparkling.",
+    "badge": "Home Care"
+  },
+  {
+    "id": "prod-004",
+    "name": "Laundry Detergent",
+    "category": "Cleaning & Sanitary",
+    "price": 6800,
+    "image": "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=900&q=80",
+    "description": "Fresh-scent detergent designed for clean everyday laundry.",
+    "badge": "Top Rated"
+  },
+  {
+    "id": "prod-005",
+    "name": "Avocado Basket",
+    "category": "Vegetables & Fruits",
+    "price": 4500,
+    "image": "https://images.unsplash.com/photo-1519162808019-7de1683fa2ad?auto=format&fit=crop&w=900&q=80",
+    "description": "Creamy ripe avocados selected for salads, sandwiches, and smoothies.",
+    "badge": "Fresh"
+  },
+  {
+    "id": "prod-006",
+    "name": "Sweet Banana Bunch",
+    "category": "Vegetables & Fruits",
+    "price": 3200,
+    "image": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=900&q=80",
+    "description": "Naturally sweet bananas packed with energy for breakfast and snacks.",
+    "badge": "Daily Pick"
+  },
+  {
+    "id": "prod-007",
+    "name": "Hydrating Body Lotion",
+    "category": "Cosmetics",
+    "price": 5900,
+    "image": "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=80",
+    "description": "Moisturizing body lotion for smooth everyday skin care.",
+    "badge": "Beauty"
+  },
+  {
+    "id": "prod-008",
+    "name": "Herbal Shampoo",
+    "category": "Cosmetics",
+    "price": 5400,
+    "image": "https://images.unsplash.com/photo-1526947425960-945c6e72858f?auto=format&fit=crop&w=900&q=80",
+    "description": "Gentle cleansing shampoo with a fresh herbal scent.",
+    "badge": "Care"
+  },
+  {
+    "id": "prod-009",
+    "name": "Red Wine Reserve",
+    "category": "Alcoholic Drinks",
+    "price": 18500,
+    "image": "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?auto=format&fit=crop&w=900&q=80",
+    "description": "Elegant table wine for dinners, celebrations, and gifting.",
+    "badge": "Premium"
+  },
+  {
+    "id": "prod-010",
+    "name": "Craft Lager Pack",
+    "category": "Alcoholic Drinks",
+    "price": 9200,
+    "image": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=900&q=80",
+    "description": "Refreshing lager pack suited for social gatherings and chilled evenings.",
+    "badge": "Weekend"
+  },
+  {
+    "id": "prod-011",
+    "name": "Glass Bowl Set",
+    "category": "Kitchenware",
+    "price": 12400,
+    "image": "https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=900&q=80",
+    "description": "Multi-use bowls for serving salads, fruit, cereals, and snacks.",
+    "badge": "Kitchen"
+  },
+  {
+    "id": "prod-012",
+    "name": "Electric Kettle",
+    "category": "Electronics",
+    "price": 28500,
+    "image": "assets/electric-kettle.svg",
+    "description": "Fast-boil kettle for tea, coffee, and quick kitchen prep.",
+    "badge": "Appliance"
+  },
+  {
+    "id": "prod-012b",
+    "name": "Compact Blender",
+    "category": "Electronics",
+    "price": 36500,
+    "image": "assets/compact-blender.svg",
+    "description": "Compact blender for smoothies, sauces, and quick breakfast prep.",
+    "badge": "Kitchen Tech"
+  },
+  {
+    "id": "prod-012c",
+    "name": "Steam Iron",
+    "category": "Electronics",
+    "price": 24800,
+    "image": "assets/steam-iron.svg",
+    "description": "Reliable steam iron for crisp shirts, uniforms, and household laundry.",
+    "badge": "Home Essential"
+  },
+  {
+    "id": "prod-013",
+    "name": "Mango Juice",
+    "category": "Non-Alcoholic Drinks",
+    "price": 2500,
+    "image": "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=900&q=80",
+    "description": "Refreshing tropical mango juice served chilled for a bright taste.",
+    "badge": "Cold"
+  },
+  {
+    "id": "prod-014",
+    "name": "Sparkling Mineral Water",
+    "category": "Non-Alcoholic Drinks",
+    "price": 1400,
+    "image": "https://images.unsplash.com/photo-1564419320461-6870880221ad?auto=format&fit=crop&w=900&q=80",
+    "description": "Crisp bottled mineral water for hydration throughout the day.",
+    "badge": "Hydrate"
+  },
+  {
+    "id": "prod-015",
+    "name": "Baby Diaper Pack",
+    "category": "Baby & Family",
+    "price": 15800,
+    "image": "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=900&q=80",
+    "description": "Comfortable diaper pack designed for softness and leak protection.",
+    "badge": "Family"
+  },
+  {
+    "id": "prod-016",
+    "name": "Baby Cereal",
+    "category": "Baby & Family",
+    "price": 7600,
+    "image": "https://images.unsplash.com/photo-1584263347416-85a696b4eda7?auto=format&fit=crop&w=900&q=80",
+    "description": "Nutritious cereal made for easy baby feeding and growth support.",
+    "badge": "Infant"
+  },
+  {
+    "id": "prod-017",
+    "name": "Toy Car Racer",
+    "category": "Toys",
+    "price": 6900,
+    "image": "https://images.unsplash.com/photo-1558877385-81a1c7e67d72?auto=format&fit=crop&w=900&q=80",
+    "description": "Colorful toy racing car for energetic play and gifts.",
+    "badge": "Kids"
+  },
+  {
+    "id": "prod-018",
+    "name": "Puzzle Game Set",
+    "category": "Toys",
+    "price": 8400,
+    "image": "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=900&q=80",
+    "description": "Fun puzzle set that encourages learning, focus, and play.",
+    "badge": "Learning"
+  }
+]

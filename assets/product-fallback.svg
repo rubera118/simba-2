@@ -1,0 +1,15 @@
+<svg width="1200" height="1200" viewBox="0 0 1200 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="1200" rx="80" fill="url(#bg)"/>
+  <rect x="244" y="230" width="712" height="740" rx="44" fill="#F8FAFC" fill-opacity="0.12" stroke="#F8FAFC" stroke-opacity="0.22" stroke-width="12"/>
+  <rect x="334" y="320" width="532" height="354" rx="28" fill="#F8FAFC" fill-opacity="0.16"/>
+  <path d="M366 623L489 493L622 628L703 548L834 674" stroke="#F8FAFC" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="484" cy="431" r="54" fill="#FDE68A"/>
+  <text x="284" y="852" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="88" font-weight="700">Simba Supermarket</text>
+  <text x="284" y="935" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="54">Product preview</text>
+  <defs>
+    <linearGradient id="bg" x1="96" y1="84" x2="1113" y2="1116" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D96B22"/>
+      <stop offset="1" stop-color="#0F766E"/>
+    </linearGradient>
+  </defs>
+</svg>

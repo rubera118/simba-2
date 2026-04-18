@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simba Supermarket | Rwanda's Modern Online Supermarket</title>
+    <meta
+      name="description"
+      content="A modern reimagining of Simba Supermarket with grocery aisles, fresh picks, easy checkout, and fast online shopping in Rwanda."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="home">
+    <div class="announcement-bar">
+      <div class="announcement-inner">
+        <p data-i18n="announceText">Modern shopping for Kigali families, offices, and everyday essentials.</p>
+        <span class="announce-pill" data-i18n="announcePill">Same-day delivery available</span>
+      </div>
+    </div>
+
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="brand" href="index.html" aria-label="Simba Supermarket home">
+          <span class="brand-mark">S</span>
+          <span>
+            <strong>Simba Supermarket</strong>
+            <small data-i18n="brandTagline">Rwanda's upgraded online supermarket</small>
+          </span>
+        </a>
+
+        <nav class="nav-links">
+          <a href="#aisles" data-i18n="navAisles">Aisles</a>
+          <a href="#featured" data-i18n="navFeatured">Featured</a>
+          <a href="#catalog" data-i18n="navShop">Shop</a>
+          <a href="checkout.html" data-i18n="navCheckout">Checkout</a>
+        </nav>
+
+        <div class="topbar-actions">
+          <label class="lang-picker">
+            <span class="sr-only">Language</span>
+            <select id="languageSelect" aria-label="Select language">
+              <option value="en">English</option>
+              <option value="fr">Francais</option>
+              <option value="rw">Kinyarwanda</option>
+            </select>
+          </label>
+
+          <button id="themeToggle" class="icon-button" type="button" aria-label="Toggle dark mode">
+            <span class="theme-label" data-i18n="theme">Theme</span>
+          </button>
+
+          <button id="cartToggle" class="cart-button" type="button" aria-label="Open shopping cart">
+            <span data-i18n="cart">Cart</span>
+            <strong id="cartCount">0</strong>
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero hero-redesign">
+          <div class="hero-copy hero-premium">
+            <p class="eyebrow" data-i18n="heroBadge">A modern Simba experience</p>
+            <h1 data-i18n="heroTitle">Shop the supermarket by aisle, offer, and mood</h1>
+            <p data-i18n="heroText">
+              We redesigned Simba Supermarket into a faster, cleaner, more visual shopping experience with fresh produce,
+              household essentials, beverages, beauty, and checkout built for mobile first.
+            </p>
+
+            <div class="hero-cta">
+              <a class="primary-button" href="#catalog" data-i18n="shopNow">Start shopping</a>
+              <a class="ghost-button" href="#aisles" data-i18n="exploreAisles">Explore aisles</a>
+            </div>
+
+            <div class="search-suggestions">
+              <span data-i18n="popularSearches">Popular:</span>
+              <button class="chip quick-search" data-search="rice" type="button">Rice</button>
+              <button class="chip quick-search" data-search="juice" type="button">Juice</button>
+              <button class="chip quick-search" data-search="detergent" type="button">Detergent</button>
+              <button class="chip quick-search" data-search="milk" type="button">Milk</button>
+            </div>
+
+            <div class="hero-metrics">
+              <article>
+                <strong>9</strong>
+                <span data-i18n="metricCategories">main shopping aisles</span>
+              </article>
+              <article>
+                <strong>18+</strong>
+                <span data-i18n="metricProducts">sample products ready</span>
+              </article>
+              <article>
+                <strong>MoMo</strong>
+                <span data-i18n="metricPayment">checkout ready</span>
+              </article>
+            </div>
+          </div>
+
+          <div class="hero-showcase">
+            <article class="hero-spotlight spotlight-main">
+              <p class="eyebrow" data-i18n="spotlightToday">Today's spotlight</p>
+              <h2 data-i18n="spotlightTitle">Fresh produce, pantry staples, and trusted household brands</h2>
+              <p data-i18n="spotlightText">Designed to feel more premium and easier to browse than the current live site.</p>
+            </article>
+            <div class="hero-tiles">
+              <article class="feature-card accent-orange">
+                <span data-i18n="featureFast">Fast delivery</span>
+                <strong data-i18n="featureFastValue">Built for quick ordering on mobile</strong>
+              </article>
+              <article class="feature-card accent-gold">
+                <span data-i18n="featureFresh">Clearer browsing</span>
+                <strong data-i18n="featureFreshValue">Aisle-first navigation instead of crowded text menus</strong>
+              </article>
+              <article class="feature-card accent-green">
+                <span data-i18n="featureTrusted">Better trust signals</span>
+                <strong data-i18n="featureTrustedValue">Delivery, payment, and support made obvious</strong>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="marketplace-stage">
+          <aside class="departments-panel">
+            <div class="toolbar-header compact-header">
+              <div>
+                <p class="eyebrow" data-i18n="departmentsBadge">Departments</p>
+                <h2 data-i18n="departmentsTitle">Shop by department</h2>
+              </div>
+              <p class="toolbar-note" data-i18n="departmentsText">
+                Quick aisle shortcuts inspired by large marketplace navigation.
+              </p>
+            </div>
+            <label class="field department-search-field">
+              <span data-i18n="departmentSearchLabel">Search inside departments</span>
+              <input
+                id="departmentSearchInput"
+                type="search"
+                placeholder="Search rice, drinks, baby..."
+                data-i18n-placeholder="departmentSearchPlaceholder"
+              />
+            </label>
+            <nav id="departmentMenu" class="department-menu" aria-label="Departments"></nav>
+          </aside>
+
+          <div class="promo-stage">
+            <section class="promo-carousel-panel">
+              <div class="promo-carousel-header">
+                <div>
+                  <p class="eyebrow" data-i18n="promoBadge">Promo highlights</p>
+                  <h2 data-i18n="promoTitle">Weekly deals, bundles, and fast-moving offers</h2>
+                </div>
+                <div class="carousel-controls">
+                  <button id="promoPrev" class="icon-button" type="button" aria-label="Previous banner">Prev</button>
+                  <button id="promoNext" class="icon-button" type="button" aria-label="Next banner">Next</button>
+                </div>
+              </div>
+              <div id="promoCarousel" class="promo-carousel" aria-live="polite"></div>
+            </section>
+
+            <div id="promoTiles" class="promo-tiles"></div>
+          </div>
+        </section>
+
+        <section class="trust-strip">
+          <article>
+            <strong data-i18n="trustOneTitle">Shop by category</strong>
+            <span data-i18n="trustOneText">Main aisles inspired by the real Simba store structure</span>
+          </article>
+          <article>
+            <strong data-i18n="trustTwoTitle">Faster decisions</strong>
+            <span data-i18n="trustTwoText">Promotions, popular items, and curated shortcuts above the fold</span>
+          </article>
+          <article>
+            <strong data-i18n="trustThreeTitle">Beginner friendly</strong>
+            <span data-i18n="trustThreeText">Simple code, clean files, and easy deployment</span>
+          </article>
+        </section>
+
+        <section id="aisles" class="showcase-panel">
+          <div class="toolbar-header">
+            <div>
+              <p class="eyebrow" data-i18n="aislesBadge">Main aisles</p>
+              <h2 data-i18n="aislesTitle">Browse the supermarket the modern way</h2>
+            </div>
+            <p class="toolbar-note" data-i18n="aislesText">
+              Instead of long old-style category lists, these quick tiles surface the main departments shoppers care about first.
+            </p>
+          </div>
+          <div id="categoryShowcase" class="category-showcase-grid"></div>
+        </section>
+
+        <section id="featured" class="showcase-panel alt-panel">
+          <div class="toolbar-header">
+            <div>
+              <p class="eyebrow" data-i18n="featuredBadge">Featured shelves</p>
+              <h2 data-i18n="featuredTitle">Popular picks and weekly highlights</h2>
+            </div>
+            <p class="toolbar-note" data-i18n="featuredText">
+              This section gives the homepage energy, helps discovery, and makes the store feel more alive than a plain list.
+            </p>
+          </div>
+          <div id="featuredShelf" class="featured-shelf"></div>
+        </section>
+
+        <section class="showcase-panel row-panel">
+          <div class="toolbar-header">
+            <div>
+              <p class="eyebrow" data-i18n="shoppingRowsBadge">Shopping rows</p>
+              <h2 data-i18n="shoppingRowsTitle">Curated shelves that feel more like a real marketplace</h2>
+            </div>
+            <p class="toolbar-note" data-i18n="shoppingRowsText">
+              These rows help shoppers discover products by intent instead of only by category.
+            </p>
+          </div>
+          <div id="shoppingRows" class="shopping-rows"></div>
+        </section>
+
+        <section class="showcase-panel electronics-panel">
+          <div class="toolbar-header">
+            <div>
+              <p class="eyebrow" data-i18n="electronicsBadge">Smart home picks</p>
+              <h2 data-i18n="electronicsTitle">Electronics that deserve more visibility</h2>
+            </div>
+            <p class="toolbar-note" data-i18n="electronicsText">
+              We now give electronics its own spotlight so high-value items do not disappear inside a long supermarket catalog.
+            </p>
+          </div>
+          <div id="electronicsSpotlight" class="electronics-spotlight"></div>
+        </section>
+
+        <section class="toolbar elevated-toolbar" id="catalog">
+          <div class="toolbar-header">
+            <div>
+              <p class="eyebrow" data-i18n="catalogBadge">Digital supermarket</p>
+              <h2 data-i18n="catalogTitle">Search, filter, and add to cart quickly</h2>
+            </div>
+            <p class="toolbar-note" data-i18n="catalogNote">
+              The catalog below keeps the power of the old store, but packages it in a cleaner and more responsive layout.
+            </p>
+          </div>
+
+          <div class="toolbar-controls">
+            <label class="field">
+              <span data-i18n="searchLabel">Search products</span>
+              <input id="searchInput" type="search" placeholder="Search milk, bread, rice..." data-i18n-placeholder="searchPlaceholder" />
+            </label>
+
+            <label class="field">
+              <span data-i18n="categoryLabel">Category</span>
+              <select id="categoryFilter"></select>
+            </label>
+
+            <label class="field">
+              <span data-i18n="priceLabel">Max price</span>
+              <input id="priceFilter" type="range" min="1000" max="120000" step="1000" value="120000" />
+              <strong id="priceValue">FRw 120,000</strong>
+            </label>
+          </div>
+        </section>
+
+        <section class="status-row">
+          <p id="resultsSummary"></p>
+        </section>
+
+        <section id="loadingState" class="state-panel loading-panel">
+          <div class="loader"></div>
+          <p data-i18n="loading">Loading products...</p>
+        </section>
+
+        <section id="emptyState" class="state-panel hidden">
+          <h3 data-i18n="emptyTitle">No products found</h3>
+          <p data-i18n="emptyText">Try a different search term, category, or price range.</p>
+        </section>
+
+        <section id="productsByCategory" class="catalog-grid" aria-live="polite"></section>
+      </main>
+    </div>
+
+    <aside id="cartDrawer" class="cart-drawer" aria-hidden="true">
+      <div class="cart-header">
+        <div>
+          <p class="eyebrow" data-i18n="cartBadge">Your basket</p>
+          <h2 data-i18n="cartTitle">Shopping cart</h2>
+        </div>
+        <button id="closeCart" class="icon-button" type="button" aria-label="Close cart">Close</button>
+      </div>
+
+      <div id="cartItems" class="cart-items"></div>
+
+      <div class="cart-footer">
+        <div class="cart-summary-line">
+          <span data-i18n="subtotal">Subtotal</span>
+          <strong id="cartSubtotal">FRw 0</strong>
+        </div>
+        <a class="primary-button full-width" href="checkout.html" data-i18n="checkout">Proceed to checkout</a>
+      </div>
+    </aside>
+
+    <div id="overlay" class="overlay" hidden></div>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
