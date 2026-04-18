@@ -382,7 +382,7 @@ function getProductDistance(baseProduct, candidate) {
 }
 
 function formatCurrency(value) {
-  return `FRw ${new Intl.NumberFormat("en-RW", {
+  return `RWF ${new Intl.NumberFormat("en-RW", {
     maximumFractionDigits: 0,
   }).format(value)}`;
 }

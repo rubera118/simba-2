@@ -23,7 +23,7 @@ const translations = {
     exploreAisles: "Explore aisles",
     popularSearches: "Popular:",
     metricCategories: "main shopping aisles",
-    metricProducts: "sample products ready",
+    metricProducts: "real Simba products live",
     metricPayment: "checkout ready",
     spotlightToday: "Today's spotlight",
     spotlightTitle: "Fresh produce, pantry staples, and trusted household brands",
@@ -122,7 +122,7 @@ const translations = {
     exploreAisles: "Explorer les rayons",
     popularSearches: "Populaire :",
     metricCategories: "rayons principaux",
-    metricProducts: "produits de demonstration",
+    metricProducts: "produits Simba reels disponibles",
     metricPayment: "paiement pret",
     spotlightToday: "A la une",
     spotlightTitle: "Produits frais, essentiels du garde-manger et marques de confiance",
@@ -221,7 +221,7 @@ const translations = {
     exploreAisles: "Reba ibyiciro",
     popularSearches: "Bikunzwe:",
     metricCategories: "ibyiciro by'ingenzi",
-    metricProducts: "ibicuruzwa byiteguye",
+    metricProducts: "ibicuruzwa bya Simba biri live",
     metricPayment: "kwishyura byiteguye",
     spotlightToday: "Iby'uyu munsi",
     spotlightTitle: "Imboga n'imbuto bishya, ibyo mu bubiko n'amazina yizewe",
@@ -312,14 +312,14 @@ const categoryMeta = {
     image:
       "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80",
   },
-  "Cleaning & Sanitary": {
+  "Cleaning and Sanitary": {
     icon: "Care",
     colorClass: "category-cleaning",
     summary: "Laundry, dishwashing, hygiene, and home cleaning essentials.",
     image:
       "https://images.unsplash.com/photo-1583947582886-f40ec95dd752?auto=format&fit=crop&w=1200&q=80",
   },
-  "Vegetables & Fruits": {
+  "Vegetable and Fruits": {
     icon: "Fresh",
     colorClass: "category-produce",
     summary: "Fresh fruits and vegetables for healthier daily shopping.",
@@ -333,7 +333,7 @@ const categoryMeta = {
     image:
       "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80",
   },
-  "Alcoholic Drinks": {
+  "Alcoholic Drinkings": {
     icon: "Drinks",
     colorClass: "category-alcohol",
     summary: "Beers, wines, and celebration-ready drink selections.",
@@ -347,7 +347,7 @@ const categoryMeta = {
     image:
       "https://images.unsplash.com/photo-1517705008128-361805f42e86?auto=format&fit=crop&w=1200&q=80",
   },
-  Electronics: {
+  "Electronics and Electrical Equipments": {
     icon: "Tech",
     colorClass: "category-electronics",
     summary: "Appliances and everyday electrical tools for the home.",
@@ -361,12 +361,12 @@ const categoryMeta = {
     image:
       "https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=1200&q=80",
   },
-  "Baby & Family": {
-    icon: "Family",
+  "Pet Care": {
+    icon: "Pet",
     colorClass: "category-baby",
-    summary: "Baby food, diapers, and family care products.",
+    summary: "Pet food, pet accessories, and daily care essentials.",
     image:
-      "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=1200&q=80",
   },
   Toys: {
     icon: "Play",
@@ -743,7 +743,13 @@ function getPromoSlides() {
   if (!products.length) return [];
 
   const cheapest = [...products].sort((a, b) => a.price - b.price)[0];
-  const family = products.find((product) => product.category === "Baby & Family") || products[0];
+  const family =
+    products.find(
+      (product) =>
+        product.category === "Cleaning and Sanitary" ||
+        product.category === "Food Products" ||
+        product.category === "Non-Alcoholic Drinks"
+    ) || products[0];
   const premium = [...products].sort((a, b) => b.price - a.price)[0];
 
   return [
@@ -773,7 +779,12 @@ function getPromoSlides() {
 
 function getPromoTiles() {
   return [...appState.products]
-    .filter((product) => product.category === "Electronics" || product.category === "Food Products" || product.category === "Non-Alcoholic Drinks")
+    .filter(
+      (product) =>
+        product.category === "Electronics and Electrical Equipments" ||
+        product.category === "Food Products" ||
+        product.category === "Non-Alcoholic Drinks"
+    )
     .slice(0, 3);
 }
 
@@ -843,7 +854,7 @@ function renderShoppingRows() {
       title: copy.bestRowTitle,
       description: copy.bestRowText,
       products: fillRow(
-        [...appState.products].filter((product) => /best|top|fresh/i.test(product.badge))
+        [...appState.products].filter((product) => /best|top|fresh|popular|featured/i.test(product.badge))
       ),
     },
     {
@@ -859,9 +870,9 @@ function renderShoppingRows() {
         [...appState.products]
           .filter(
             (product) =>
-              product.category === "Baby & Family" ||
+              product.category === "Non-Alcoholic Drinks" ||
               product.category === "Food Products" ||
-              product.category === "Cleaning & Sanitary"
+              product.category === "Cleaning and Sanitary"
           )
           .sort((a, b) => a.price - b.price)
       ),
@@ -917,7 +928,9 @@ function createRowProductCard(product, copy, badgeLabel, rowIndex) {
 
 function renderElectronicsSpotlight() {
   const copy = translations[appState.language] || translations.en;
-  const electronics = appState.products.filter((product) => product.category === "Electronics").slice(0, 3);
+  const electronics = appState.products
+    .filter((product) => product.category === "Electronics and Electrical Equipments")
+    .slice(0, 3);
 
   if (!electronics.length) {
     elements.electronicsSpotlight.innerHTML = "";
@@ -953,7 +966,16 @@ function renderElectronicsSpotlight() {
 
 function renderProducts() {
   const filteredProducts = appState.products.filter((product) => {
-    const matchesSearch = product.name.toLowerCase().includes(appState.searchQuery);
+    const searchHaystack = [
+      product.name,
+      product.category,
+      product.subcategory,
+      product.description,
+      product.badge,
+    ]
+      .join(" ")
+      .toLowerCase();
+    const matchesSearch = searchHaystack.includes(appState.searchQuery);
     const matchesCategory =
       appState.selectedCategory === "all" || product.category === appState.selectedCategory;
     const matchesPrice = product.price <= appState.maxPrice;
@@ -1113,7 +1135,7 @@ function updatePriceLabel() {
 }
 
 function formatCurrency(value) {
-  return `FRw ${new Intl.NumberFormat("en-RW", {
+  return `RWF ${new Intl.NumberFormat("en-RW", {
     maximumFractionDigits: 0,
   }).format(value)}`;
 }
