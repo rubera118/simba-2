@@ -27,21 +27,30 @@
     <div class="site-shell">
       <header class="topbar">
         <a class="brand" href="index.html" aria-label="Simba Supermarket home">
-          <span class="brand-mark">S</span>
+          <img class="brand-logo" src="assets/simba-logo.svg" alt="Simba Supermarket logo" />
           <span>
             <strong>Simba Supermarket</strong>
-            <small data-i18n="brandTagline">Rwanda's upgraded online supermarket</small>
+            <small data-i18n="brandTagline">Fresh groceries, home essentials, and fast shopping in Rwanda</small>
           </span>
         </a>
 
         <nav class="nav-links">
           <a href="#aisles" data-i18n="navAisles">Aisles</a>
           <a href="#featured" data-i18n="navFeatured">Featured</a>
-          <a href="#catalog" data-i18n="navShop">Shop</a>
+          <a href="#catalog" data-i18n="navShop">Products</a>
+          <a href="branches.html" data-i18n="navBranches">Branches</a>
+          <a href="about.html" data-i18n="navAbout">About</a>
+          <a href="contact.html" data-i18n="navContact">Contact</a>
           <a href="checkout.html" data-i18n="navCheckout">Checkout</a>
+          <a href="account.html">Account</a>
         </nav>
 
         <div class="topbar-actions">
+          <label class="lang-picker branch-picker">
+            <span data-i18n="branchLabel">Branch</span>
+            <select id="branchSelect" aria-label="Select branch"></select>
+          </label>
+
           <label class="lang-picker">
             <span class="sr-only">Language</span>
             <select id="languageSelect" aria-label="Select language">
@@ -65,11 +74,11 @@
       <main>
         <section class="hero hero-redesign">
           <div class="hero-copy hero-premium">
-            <p class="eyebrow" data-i18n="heroBadge">A modern Simba experience</p>
-            <h1 data-i18n="heroTitle">Shop the supermarket by aisle, offer, and mood</h1>
+            <p class="eyebrow" data-i18n="heroBadge">Simba Supermarket online</p>
+            <h1 data-i18n="heroTitle">Everything your home needs, from fresh produce to trusted daily essentials</h1>
             <p data-i18n="heroText">
-              We redesigned Simba Supermarket into a faster, cleaner, more visual shopping experience with fresh produce,
-              household essentials, beverages, beauty, and checkout built for mobile first.
+              Shop food products, cleaning supplies, drinks, beauty, kitchenware, and household favorites with a cleaner
+              storefront built for everyday customers in Rwanda.
             </p>
 
             <div class="hero-cta">
@@ -95,30 +104,47 @@
                 <span data-i18n="metricProducts">real Simba products live</span>
               </article>
               <article>
-                <strong>MoMo</strong>
-                <span data-i18n="metricPayment">checkout ready</span>
+                <strong id="heroBranchCount">10</strong>
+                <span data-i18n="metricPayment">branches available</span>
               </article>
             </div>
           </div>
 
           <div class="hero-showcase">
-            <article class="hero-spotlight spotlight-main">
-              <p class="eyebrow" data-i18n="spotlightToday">Today's spotlight</p>
-              <h2 data-i18n="spotlightTitle">Fresh produce, pantry staples, and trusted household brands</h2>
-              <p data-i18n="spotlightText">Designed to feel more premium and easier to browse than the current live site.</p>
+            <article class="hero-visual-card">
+              <img
+                src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1600&q=80"
+                alt="Fresh groceries and supermarket shelves"
+              />
+              <div class="hero-visual-overlay">
+                <img class="hero-overlay-logo" src="assets/simba-logo.svg" alt="Simba Supermarket logo" />
+                <div>
+                  <p class="eyebrow">Everyday supermarket shopping</p>
+                  <h2>Fresh food, pantry staples, drinks, home care, and more in one place</h2>
+                </div>
+              </div>
+            </article>
+            <article class="hero-spotlight spotlight-main branch-spotlight-card">
+              <p class="eyebrow" data-i18n="spotlightToday">Selected branch</p>
+              <h2 id="selectedBranchName" data-i18n="spotlightTitle">Union Trade Centre</h2>
+              <p id="selectedBranchAddress" data-i18n="spotlightText">3336+MHV Union Trade Centre, 1 KN 4 Ave, Kigali</p>
+              <div class="hero-spotlight-actions">
+                <a class="primary-button light-button strong-light-button" href="#catalog" data-i18n="shopThisBranch">Shop this branch</a>
+                <a class="ghost-button light-button" href="branches.html" data-i18n="viewAllBranches">View all branches</a>
+              </div>
             </article>
             <div class="hero-tiles">
               <article class="feature-card accent-orange">
                 <span data-i18n="featureFast">Fast delivery</span>
-                <strong data-i18n="featureFastValue">Built for quick ordering on mobile</strong>
+                <strong data-i18n="featureFastValue">Choose a branch first for better stock and delivery details</strong>
               </article>
               <article class="feature-card accent-gold">
                 <span data-i18n="featureFresh">Clearer browsing</span>
-                <strong data-i18n="featureFreshValue">Aisle-first navigation instead of crowded text menus</strong>
+                <strong data-i18n="featureFreshValue">Search by aisle, compare offers, and shop faster on any screen</strong>
               </article>
               <article class="feature-card accent-green">
                 <span data-i18n="featureTrusted">Better trust signals</span>
-                <strong data-i18n="featureTrustedValue">Delivery, payment, and support made obvious</strong>
+                <strong data-i18n="featureTrustedValue">Pickup, delivery, payment, and support stay visible while you shop</strong>
               </article>
             </div>
           </div>
@@ -172,12 +198,12 @@
             <span data-i18n="trustOneText">Main aisles inspired by the real Simba store structure</span>
           </article>
           <article>
-            <strong data-i18n="trustTwoTitle">Faster decisions</strong>
-            <span data-i18n="trustTwoText">Promotions, popular items, and curated shortcuts above the fold</span>
+            <strong data-i18n="trustTwoTitle">Branch-aware shopping</strong>
+            <span data-i18n="trustTwoText">Selected branch stock, pickup, and delivery context carried into cart and checkout</span>
           </article>
           <article>
-            <strong data-i18n="trustThreeTitle">Beginner friendly</strong>
-            <span data-i18n="trustThreeText">Simple code, clean files, and easy deployment</span>
+            <strong data-i18n="trustThreeTitle">Everyday convenience</strong>
+            <span data-i18n="trustThreeText">Mobile-friendly browsing, account tools, and quick checkout with Mobile Money</span>
           </article>
         </section>
 
@@ -205,6 +231,19 @@
             </p>
           </div>
           <div id="featuredShelf" class="featured-shelf"></div>
+        </section>
+
+        <section class="showcase-panel">
+          <div class="toolbar-header">
+            <div>
+              <p class="eyebrow" data-i18n="branchesShowcaseBadge">Branches</p>
+              <h2 data-i18n="branchesShowcaseTitle">Shop from the branch that works best for you</h2>
+            </div>
+            <p class="toolbar-note" data-i18n="branchesShowcaseText">
+              Branch selection keeps the shopping experience more practical by matching stock and delivery context to your preferred location.
+            </p>
+          </div>
+          <div id="branchHighlights" class="branch-highlight-grid"></div>
         </section>
 
         <section class="showcase-panel row-panel">
@@ -303,6 +342,9 @@
 
     <div id="overlay" class="overlay" hidden></div>
 
+    <script src="config.js" defer></script>
+    <script src="branches-data.js" defer></script>
+    <script src="products-data.js" defer></script>
     <script src="script.js" defer></script>
   </body>
 </html>

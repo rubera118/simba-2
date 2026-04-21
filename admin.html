@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | Simba Supermarket</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="admin">
+    <div class="site-shell checkout-shell">
+      <header class="topbar">
+        <a class="brand" href="index.html">
+          <img class="brand-logo" src="assets/simba-logo.svg" alt="Simba Supermarket logo" />
+          <span>
+            <strong>Simba Supermarket</strong>
+            <small>Admin dashboard</small>
+          </span>
+        </a>
+
+        <div class="topbar-actions">
+          <a class="ghost-button" href="index.html">Storefront</a>
+          <a class="ghost-button" href="branches.html">Branches</a>
+          <a class="ghost-button" href="checkout.html">Checkout</a>
+        </div>
+      </header>
+
+      <main class="admin-layout">
+        <section id="adminLoginCard" class="checkout-form-card admin-login-card">
+          <div class="section-heading">
+            <p class="eyebrow">Admin access</p>
+            <h1>Sign in to review orders</h1>
+          </div>
+
+          <form id="adminLoginForm" class="checkout-form">
+            <label class="field">
+              <span>Admin password</span>
+              <input type="password" name="password" placeholder="Enter admin password" required />
+            </label>
+            <button class="primary-button full-width" type="submit">Open dashboard</button>
+            <p class="toolbar-note">Use the `SIMBA_ADMIN_PASSWORD` environment variable. For local demo only, the fallback password is `simba-admin-2026`.</p>
+            <p class="checkout-message" id="adminLoginMessage" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section id="adminDashboard" class="showcase-panel hidden">
+          <div class="toolbar-header">
+            <div>
+              <p class="eyebrow">Operations</p>
+              <h1>Orders, inventory, and store controls</h1>
+            </div>
+            <div class="topbar-actions">
+              <button id="refreshOrders" class="ghost-button" type="button">Refresh</button>
+              <button id="logoutAdmin" class="ghost-button" type="button">Log out</button>
+            </div>
+          </div>
+
+          <div id="adminStats" class="admin-stats"></div>
+          <section class="admin-section">
+            <div class="toolbar-header compact-header">
+              <div>
+                <p class="eyebrow">Order desk</p>
+                <h2>Incoming orders</h2>
+              </div>
+            </div>
+            <div id="adminOrders" class="admin-orders"></div>
+          </section>
+
+          <section class="admin-section">
+            <div class="toolbar-header compact-header">
+              <div>
+                <p class="eyebrow">Catalog control</p>
+                <h2>Products and stock</h2>
+              </div>
+            </div>
+            <form id="createProductForm" class="showcase-panel admin-create-form">
+              <div class="toolbar-header compact-header">
+                <div>
+                  <p class="eyebrow">New item</p>
+                  <h3>Create product</h3>
+                </div>
+              </div>
+              <div class="admin-product-grid">
+                <label class="field">
+                  <span>Name</span>
+                  <input type="text" name="name" required />
+                </label>
+                <label class="field">
+                  <span>Category</span>
+                  <input type="text" name="category" required />
+                </label>
+                <label class="field">
+                  <span>Subcategory</span>
+                  <input type="text" name="subcategory" />
+                </label>
+                <label class="field">
+                  <span>Price</span>
+                  <input type="number" name="price" min="0" step="100" required />
+                </label>
+                <label class="field">
+                  <span>Stock</span>
+                  <input type="number" name="stock" min="0" step="1" required />
+                </label>
+                <label class="field">
+                  <span>Badge</span>
+                  <input type="text" name="badge" value="New" />
+                </label>
+              </div>
+              <label class="field">
+                <span>Image path</span>
+                <input type="text" name="image" value="assets/product-fallback.svg" />
+              </label>
+              <label class="field">
+                <span>Description</span>
+                <textarea name="description" rows="3"></textarea>
+              </label>
+              <div class="admin-product-actions">
+                <label class="admin-toggle">
+                  <input type="checkbox" name="active" checked />
+                  <span>Visible in store</span>
+                </label>
+                <button class="primary-button" type="submit">Create product</button>
+              </div>
+              <p id="createProductMessage" class="checkout-message" aria-live="polite"></p>
+            </form>
+            <div class="admin-product-toolbar">
+              <input id="productSearch" type="search" placeholder="Search products or categories" />
+            </div>
+            <div id="adminProducts" class="admin-products"></div>
+          </section>
+
+          <section class="admin-section">
+            <div class="toolbar-header compact-header">
+              <div>
+                <p class="eyebrow">Branch control</p>
+                <h2>Branches and delivery zones</h2>
+              </div>
+            </div>
+            <form id="createBranchForm" class="showcase-panel admin-create-form">
+              <div class="admin-product-grid">
+                <label class="field">
+                  <span>Name</span>
+                  <input type="text" name="name" required />
+                </label>
+                <label class="field">
+                  <span>Address</span>
+                  <input type="text" name="address" required />
+                </label>
+                <label class="field">
+                  <span>City</span>
+                  <input type="text" name="city" />
+                </label>
+                <label class="field">
+                  <span>Delivery fee</span>
+                  <input type="number" name="deliveryFee" min="0" step="100" value="2000" />
+                </label>
+                <label class="field">
+                  <span>Hours</span>
+                  <input type="text" name="hours" value="Open daily" />
+                </label>
+                <label class="field">
+                  <span>Phone</span>
+                  <input type="text" name="phone" />
+                </label>
+              </div>
+              <div class="admin-product-actions">
+                <label class="admin-toggle">
+                  <input type="checkbox" name="pickup" checked />
+                  <span>Pickup available</span>
+                </label>
+                <button class="primary-button" type="submit">Create branch</button>
+              </div>
+              <p id="createBranchMessage" class="checkout-message" aria-live="polite"></p>
+            </form>
+            <div id="adminBranches" class="admin-products"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script src="config.js" defer></script>
+    <script src="branches-data.js" defer></script>
+    <script src="admin.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Branches | Simba Supermarket</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="branches">
+    <div class="site-shell checkout-shell">
+      <header class="topbar">
+        <a class="brand" href="index.html" aria-label="Simba Supermarket home">
+          <img class="brand-logo" src="assets/simba-logo.svg" alt="Simba Supermarket logo" />
+          <span>
+            <strong>Simba Supermarket</strong>
+            <small>Branches across Rwanda</small>
+          </span>
+        </a>
+
+        <div class="topbar-actions">
+          <a class="ghost-button" href="index.html">Home</a>
+          <a class="ghost-button" href="about.html">About</a>
+          <a class="ghost-button" href="contact.html">Contact</a>
+        </div>
+      </header>
+
+      <main class="admin-layout">
+        <section class="showcase-panel">
+          <div class="toolbar-header">
+            <div>
+              <p class="eyebrow">Store network</p>
+              <h1>Choose the Simba branch you want to shop from</h1>
+            </div>
+            <p class="toolbar-note">
+              Select a branch for pickup, branch-based stock visibility, and more relevant delivery details during checkout.
+            </p>
+          </div>
+        </section>
+
+        <section id="selectedBranchPanel" class="showcase-panel branch-summary-panel"></section>
+        <section id="branchGrid" class="branch-grid"></section>
+      </main>
+    </div>
+
+    <script src="branches-data.js" defer></script>
+    <script src="branches.js" defer></script>
+  </body>
+</html>

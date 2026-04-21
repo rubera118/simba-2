@@ -2,6 +2,7 @@ const STORAGE_KEYS = {
   cart: "simba-cart",
   theme: "simba-theme",
   language: "simba-language",
+  selectedBranch: "simba-selected-branch",
 };
 
 const translations = {
@@ -10,6 +11,8 @@ const translations = {
     checkout: "Proceed to checkout",
     loadingProduct: "Loading product details...",
     inStock: "In stock",
+    outOfStock: "Out of stock",
+    onlyLeft: "Only {count} left",
     addToCart: "Add to cart",
     details: "View details",
     backHome: "Back to home",
@@ -39,12 +42,17 @@ const translations = {
     categoryLabel: "Category",
     badgeLabel: "Shelf tag",
     priceLabel: "Price",
+    branchLabel: "Branch",
+    branchStockTitle: "Stock at your branch",
+    branchPrompt: "Select the branch you want to shop from for more accurate stock and pickup details.",
   },
   fr: {
     theme: "Theme",
     checkout: "Passer au paiement",
     loadingProduct: "Chargement des details du produit...",
     inStock: "En stock",
+    outOfStock: "Rupture de stock",
+    onlyLeft: "Plus que {count}",
     addToCart: "Ajouter au panier",
     details: "Voir details",
     backHome: "Retour a l'accueil",
@@ -74,12 +82,17 @@ const translations = {
     categoryLabel: "Categorie",
     badgeLabel: "Etiquette",
     priceLabel: "Prix",
+    branchLabel: "Branche",
+    branchStockTitle: "Stock dans votre branche",
+    branchPrompt: "Choisissez la branche ou vous souhaitez acheter pour un stock plus precis.",
   },
   rw: {
     theme: "Insanganyamatsiko",
     checkout: "Komeza wishyure",
     loadingProduct: "Turimo gupakurura ibisobanuro by'igicuruzwa...",
     inStock: "Birahari",
+    outOfStock: "Ntibihari",
+    onlyLeft: "Hasigaye {count} gusa",
     addToCart: "Shyira mu gaseke",
     details: "Reba ibisobanuro",
     backHome: "Subira ahabanza",
@@ -109,14 +122,20 @@ const translations = {
     categoryLabel: "Icyiciro",
     badgeLabel: "Ikirango",
     priceLabel: "Igiciro",
+    branchLabel: "Ishami",
+    branchStockTitle: "Stock ku ishami wahisemo",
+    branchPrompt: "Hitamo ishami ushaka kuguriramo kugira ngo ubone stock nyayo.",
   },
 };
 
 const state = {
   language: loadFromStorage(STORAGE_KEYS.language, "en"),
   theme: loadFromStorage(STORAGE_KEYS.theme, "light"),
-  cart: loadFromStorage(STORAGE_KEYS.cart, []),
+  cart: window.SIMBA_BRANCHES
+    ? window.SIMBA_BRANCHES.normalizeCart(loadFromStorage(STORAGE_KEYS.cart, []), window.SIMBA_BRANCHES.getSelectedBranch().id)
+    : loadFromStorage(STORAGE_KEYS.cart, []),
   quantity: 1,
+  selectedBranchId: window.SIMBA_BRANCHES?.getSelectedBranch()?.id || "",
 };
 
 const PRODUCT_FALLBACK_IMAGE = "assets/product-fallback.svg";
@@ -155,6 +174,7 @@ function applyLanguage() {
     const key = node.dataset.i18n;
     if (copy[key]) node.textContent = copy[key];
   });
+  document.documentElement.lang = state.language;
 }
 
 function applyTheme() {
@@ -173,8 +193,7 @@ async function renderProductDetail() {
   const productId = new URLSearchParams(window.location.search).get("id");
 
   try {
-    const response = await fetch("products.json");
-    const products = await response.json();
+    const products = await loadProducts();
     const product = products.find((item) => item.id === productId);
 
     if (!product) {
@@ -214,8 +233,8 @@ async function renderProductDetail() {
                 <strong>${copy.soldBy}</strong>
               </article>
               <article class="detail-mini-card">
-                <span class="eyebrow">${copy.deliveryTitle}</span>
-                <strong>${copy.deliveryFast}</strong>
+                <span class="eyebrow">${copy.branchStockTitle}</span>
+                <strong>${window.SIMBA_BRANCHES?.getBranchById(state.selectedBranchId).name || ""}</strong>
               </article>
               <article class="detail-mini-card">
                 <span class="eyebrow">${copy.paymentTitle}</span>
@@ -229,7 +248,7 @@ async function renderProductDetail() {
             <h1 class="product-name">${product.name}</h1>
             <div class="chip-row">
               <span class="chip">${product.badge}</span>
-              <span class="chip">${copy.inStock}</span>
+              <span class="chip">${getAvailabilityLabel(product, copy)}</span>
             </div>
             <div class="detail-price-line">
               <div>
@@ -252,17 +271,28 @@ async function renderProductDetail() {
             </div>
 
             <div class="purchase-panel">
+              <label class="field">
+                <span>${copy.branchLabel}</span>
+                <select id="detailBranchSelect">
+                  ${(window.SIMBA_BRANCHES?.getBranches() || [])
+                    .map(
+                      (branch) => `<option value="${branch.id}" ${branch.id === state.selectedBranchId ? "selected" : ""}>${branch.name}</option>`
+                    )
+                    .join("")}
+                </select>
+                <small>${copy.branchPrompt}</small>
+              </label>
               <div class="qty-picker">
                 <span>${copy.quantity}</span>
                 <div class="qty-stepper">
                   <button class="qty-button" type="button" data-qty="decrease">-</button>
                   <strong id="detailQuantityValue">1</strong>
-                  <button class="qty-button" type="button" data-qty="increase">+</button>
+                  <button class="qty-button" type="button" data-qty="increase" ${product.stock <= 1 ? "disabled" : ""}>+</button>
                 </div>
               </div>
               <div class="detail-action-grid">
-                <button id="detailAddToCart" class="primary-button" type="button">${copy.addToCart}</button>
-                <button id="detailBuyNow" class="ghost-button" type="button">${copy.buyNow}</button>
+                <button id="detailAddToCart" class="primary-button" type="button" ${product.stock <= 0 ? "disabled" : ""}>${product.stock > 0 ? copy.addToCart : copy.outOfStock}</button>
+                <button id="detailBuyNow" class="ghost-button" type="button" ${product.stock <= 0 ? "disabled" : ""}>${copy.buyNow}</button>
               </div>
             </div>
 
@@ -316,24 +346,31 @@ async function renderProductDetail() {
 
 function bindDetailActions(product) {
   const quantityValue = document.getElementById("detailQuantityValue");
+  const branchSelect = document.getElementById("detailBranchSelect");
   const syncQuantity = () => {
     quantityValue.textContent = String(state.quantity);
   };
 
+  branchSelect?.addEventListener("change", () => {
+    state.selectedBranchId = branchSelect.value;
+    window.SIMBA_BRANCHES?.saveSelectedBranch(state.selectedBranchId);
+    window.location.search = `?id=${encodeURIComponent(product.id)}`;
+  });
+
   document.querySelectorAll("[data-qty]").forEach((button) => {
     button.addEventListener("click", () => {
-      if (button.dataset.qty === "increase") state.quantity += 1;
+      if (button.dataset.qty === "increase") state.quantity = Math.min(product.stock, state.quantity + 1);
       if (button.dataset.qty === "decrease") state.quantity = Math.max(1, state.quantity - 1);
       syncQuantity();
     });
   });
 
   document.getElementById("detailAddToCart")?.addEventListener("click", () => {
-    addProductToCart(product.id, state.quantity);
+    addProductToCart(product.id, state.quantity, state.selectedBranchId);
   });
 
   document.getElementById("detailBuyNow")?.addEventListener("click", () => {
-    addProductToCart(product.id, state.quantity);
+    addProductToCart(product.id, state.quantity, state.selectedBranchId);
     window.location.href = "checkout.html";
   });
 }
@@ -369,10 +406,10 @@ function renderRecommendations(products, section, container) {
     .join("");
 }
 
-function addProductToCart(productId, quantity) {
-  const existingItem = state.cart.find((item) => item.id === productId);
+function addProductToCart(productId, quantity, branchId) {
+  const existingItem = state.cart.find((item) => item.id === productId && item.branchId === branchId);
   if (existingItem) existingItem.quantity += quantity;
-  else state.cart.push({ id: productId, quantity });
+  else state.cart.push({ id: productId, quantity, branchId });
   saveToStorage(STORAGE_KEYS.cart, state.cart);
 }
 
@@ -398,4 +435,40 @@ function loadFromStorage(key, fallback) {
 
 function saveToStorage(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
+}
+
+function getAvailabilityLabel(product, copy) {
+  if (product.stock <= 0) return copy.outOfStock;
+  if (product.stock <= 5) return copy.onlyLeft.replace("{count}", product.stock);
+  return copy.inStock;
+}
+
+async function loadProducts() {
+  const branchId = encodeURIComponent(state.selectedBranchId || "");
+  try {
+    const response = await fetch(apiUrl(`/api/products${branchId ? `?branchId=${branchId}` : ""}`));
+    if (response.ok) {
+      const payload = await response.json();
+      if (Array.isArray(payload.products)) return payload.products;
+    }
+  } catch {
+    // Fall back to bundled product data when the backend is unavailable.
+  }
+
+  if (Array.isArray(window.SIMBA_PRODUCTS) && window.SIMBA_PRODUCTS.length) {
+    return window.SIMBA_PRODUCTS.map((product) =>
+      window.SIMBA_BRANCHES ? window.SIMBA_BRANCHES.mergeProductForBranch(product, state.selectedBranchId) : product
+    );
+  }
+
+  const response = await fetch("products.json");
+  const products = await response.json();
+  return products.map((product) =>
+    window.SIMBA_BRANCHES ? window.SIMBA_BRANCHES.mergeProductForBranch(product, state.selectedBranchId) : product
+  );
+}
+
+function apiUrl(path) {
+  const baseUrl = window.SIMBA_CONFIG?.API_BASE_URL?.trim();
+  return baseUrl ? `${baseUrl}${path}` : path;
 }

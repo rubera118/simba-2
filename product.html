@@ -16,7 +16,7 @@
     <div class="site-shell detail-shell">
       <header class="topbar">
         <a class="brand" href="index.html">
-          <span class="brand-mark">S</span>
+          <img class="brand-logo" src="assets/simba-logo.svg" alt="Simba Supermarket logo" />
           <span>
             <strong>Simba Supermarket</strong>
             <small data-i18n="detailsLabel">Product details</small>
@@ -32,6 +32,8 @@
             </select>
           </label>
           <button id="themeToggle" class="icon-button" type="button" data-i18n="theme">Theme</button>
+          <a class="ghost-button" href="branches.html">Branches</a>
+          <a class="ghost-button" href="account.html">Account</a>
           <a class="cart-button" href="checkout.html">
             <span data-i18n="checkout">Proceed to checkout</span>
           </a>
@@ -59,6 +61,9 @@
       </section>
     </div>
 
+    <script src="config.js" defer></script>
+    <script src="branches-data.js" defer></script>
+    <script src="products-data.js" defer></script>
     <script src="product.js" defer></script>
   </body>
 </html>

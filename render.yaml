@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: simba-supermarket-api
+    env: node
+    plan: free
+    buildCommand: ""
+    startCommand: node server.js
+    envVars:
+      - key: SIMBA_ADMIN_PASSWORD
+        sync: false
+      - key: SIMBA_TOKEN_SECRET
+        generateValue: true
+      - key: SIMBA_ALLOWED_ORIGINS
+        sync: false

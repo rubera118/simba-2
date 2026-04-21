@@ -2,38 +2,45 @@ const STORAGE_KEYS = {
   cart: "simba-cart",
   theme: "simba-theme",
   language: "simba-language",
+  selectedBranch: "simba-selected-branch",
 };
 
 const translations = {
   en: {
     announceText: "Modern shopping for Kigali families, offices, and everyday essentials.",
     announcePill: "Same-day delivery available",
-    brandTagline: "Rwanda's upgraded online supermarket",
+    brandTagline: "Fresh groceries, home essentials, and fast shopping in Rwanda",
     navAisles: "Aisles",
     navFeatured: "Featured",
-    navShop: "Shop",
+    navShop: "Products",
+    navBranches: "Branches",
+    navAbout: "About",
+    navContact: "Contact",
     navCheckout: "Checkout",
+    branchLabel: "Branch",
     theme: "Theme",
     cart: "Cart",
-    heroBadge: "A modern Simba experience",
-    heroTitle: "Shop the supermarket by aisle, offer, and mood",
+    heroBadge: "Simba Supermarket online",
+    heroTitle: "Everything your home needs, from fresh produce to trusted daily essentials",
     heroText:
-      "We redesigned Simba Supermarket into a faster, cleaner, more visual shopping experience with fresh produce, household essentials, beverages, beauty, and checkout built for mobile first.",
+      "Shop food products, cleaning supplies, drinks, beauty, kitchenware, and household favorites with a cleaner storefront built for everyday customers in Rwanda.",
     shopNow: "Start shopping",
     exploreAisles: "Explore aisles",
     popularSearches: "Popular:",
     metricCategories: "main shopping aisles",
     metricProducts: "real Simba products live",
-    metricPayment: "checkout ready",
-    spotlightToday: "Today's spotlight",
-    spotlightTitle: "Fresh produce, pantry staples, and trusted household brands",
-    spotlightText: "Designed to feel more premium and easier to browse than the current live site.",
+    metricPayment: "branches available",
+    spotlightToday: "Selected branch",
+    spotlightTitle: "Union Trade Centre",
+    spotlightText: "3336+MHV Union Trade Centre, 1 KN 4 Ave, Kigali",
+    shopThisBranch: "Shop this branch",
+    viewAllBranches: "View all branches",
     featureFast: "Fast delivery",
-    featureFastValue: "Built for quick ordering on mobile",
+    featureFastValue: "Choose a branch first for better stock and delivery details",
     featureFresh: "Clearer browsing",
-    featureFreshValue: "Aisle-first navigation instead of crowded text menus",
+    featureFreshValue: "Search by aisle, compare offers, and shop faster on any screen",
     featureTrusted: "Better trust signals",
-    featureTrustedValue: "Delivery, payment, and support made obvious",
+    featureTrustedValue: "Pickup, delivery, payment, and support stay visible while you shop",
     departmentsBadge: "Departments",
     departmentsTitle: "Shop by department",
     departmentsText: "Quick aisle shortcuts inspired by large marketplace navigation.",
@@ -47,10 +54,14 @@ const translations = {
     shoppingRowsText: "These rows help shoppers discover products by intent instead of only by category.",
     trustOneTitle: "Shop by category",
     trustOneText: "Main aisles inspired by the real Simba store structure",
-    trustTwoTitle: "Faster decisions",
-    trustTwoText: "Promotions, popular items, and curated shortcuts above the fold",
-    trustThreeTitle: "Beginner friendly",
-    trustThreeText: "Simple code, clean files, and easy deployment",
+    trustTwoTitle: "Branch-aware shopping",
+    trustTwoText: "Selected branch stock, pickup, and delivery context carried into cart and checkout",
+    trustThreeTitle: "Everyday convenience",
+    trustThreeText: "Mobile-friendly browsing, account tools, and quick checkout with Mobile Money",
+    branchesShowcaseBadge: "Branches",
+    branchesShowcaseTitle: "Shop from the branch that works best for you",
+    branchesShowcaseText:
+      "Branch selection keeps the shopping experience more practical by matching stock and delivery context to your preferred location.",
     aislesBadge: "Main aisles",
     aislesTitle: "Browse the supermarket the modern way",
     aislesText:
@@ -86,7 +97,11 @@ const translations = {
     remove: "Remove",
     categoryItems: "{count} products",
     inStock: "In stock",
+    outOfStock: "Out of stock",
+    onlyLeft: "Only {count} left",
     quantity: "Quantity",
+    branchForItem: "Branch",
+    switchBranch: "Switch branch",
     shopCategory: "Shop this aisle",
     featuredShelfTitle: "Featured",
     departmentCount: "{count} items",
@@ -107,32 +122,38 @@ const translations = {
   fr: {
     announceText: "Shopping moderne pour les familles, bureaux et besoins du quotidien a Kigali.",
     announcePill: "Livraison le jour meme disponible",
-    brandTagline: "Le supermarche en ligne Simba modernise",
+    brandTagline: "Courses, maison et achats rapides au Rwanda",
     navAisles: "Rayons",
     navFeatured: "Vedettes",
-    navShop: "Boutique",
+    navShop: "Produits",
+    navBranches: "Branches",
+    navAbout: "A propos",
+    navContact: "Contact",
     navCheckout: "Paiement",
+    branchLabel: "Branche",
     theme: "Theme",
     cart: "Panier",
-    heroBadge: "Une nouvelle experience Simba",
-    heroTitle: "Faites vos courses par rayon, offre et besoin",
+    heroBadge: "Simba Supermarket en ligne",
+    heroTitle: "Tout pour la maison, des produits frais aux essentiels de confiance",
     heroText:
-      "Nous avons repense Simba Supermarket en une experience plus rapide, plus claire et plus visuelle pour l'alimentation, la maison, les boissons, la beaute et le paiement mobile.",
+      "Achetez l'alimentation, les produits d'entretien, les boissons, la beaute, la cuisine et les essentiels du quotidien dans une boutique plus claire et plus pratique.",
     shopNow: "Commencer",
     exploreAisles: "Explorer les rayons",
     popularSearches: "Populaire :",
     metricCategories: "rayons principaux",
     metricProducts: "produits Simba reels disponibles",
-    metricPayment: "paiement pret",
-    spotlightToday: "A la une",
-    spotlightTitle: "Produits frais, essentiels du garde-manger et marques de confiance",
-    spotlightText: "Concu pour etre plus premium et plus facile a parcourir que le site actuel.",
+    metricPayment: "branches disponibles",
+    spotlightToday: "Branche choisie",
+    spotlightTitle: "Union Trade Centre",
+    spotlightText: "3336+MHV Union Trade Centre, 1 KN 4 Ave, Kigali",
+    shopThisBranch: "Acheter dans cette branche",
+    viewAllBranches: "Voir les branches",
     featureFast: "Livraison rapide",
-    featureFastValue: "Pense pour commander vite sur mobile",
+    featureFastValue: "Choisissez une branche pour mieux voir stock et livraison",
     featureFresh: "Navigation plus claire",
-    featureFreshValue: "Navigation par rayons au lieu de menus de texte charges",
+    featureFreshValue: "Recherchez par rayon et comparez plus vite sur tous les ecrans",
     featureTrusted: "Confiance visible",
-    featureTrustedValue: "Livraison, paiement et support clairement affiches",
+    featureTrustedValue: "Retrait, livraison, paiement et support restent visibles",
     departmentsBadge: "Departements",
     departmentsTitle: "Acheter par departement",
     departmentsText: "Raccourcis rapides inspires de la navigation des grandes marketplaces.",
@@ -146,10 +167,14 @@ const translations = {
     shoppingRowsText: "Ces rangees aident a decouvrir par besoin et non seulement par categorie.",
     trustOneTitle: "Acheter par categorie",
     trustOneText: "Rayons inspires de la vraie structure du magasin Simba",
-    trustTwoTitle: "Choix plus rapides",
-    trustTwoText: "Promotions, produits populaires et raccourcis visibles des le debut",
-    trustThreeTitle: "Facile a comprendre",
-    trustThreeText: "Code simple, fichiers propres et deploiement facile",
+    trustTwoTitle: "Shopping par branche",
+    trustTwoText: "Le stock, le retrait et la livraison suivent la branche choisie",
+    trustThreeTitle: "Confort au quotidien",
+    trustThreeText: "Navigation mobile, compte client et paiement rapide par Mobile Money",
+    branchesShowcaseBadge: "Branches",
+    branchesShowcaseTitle: "Achetez depuis la branche qui vous convient",
+    branchesShowcaseText:
+      "Le choix d'une branche rend le shopping plus concret avec un stock et une livraison lies a votre magasin prefere.",
     aislesBadge: "Rayons principaux",
     aislesTitle: "Parcourez le supermarche de facon moderne",
     aislesText:
@@ -185,7 +210,11 @@ const translations = {
     remove: "Supprimer",
     categoryItems: "{count} produits",
     inStock: "En stock",
+    outOfStock: "Rupture de stock",
+    onlyLeft: "Plus que {count}",
     quantity: "Quantite",
+    branchForItem: "Branche",
+    switchBranch: "Changer de branche",
     shopCategory: "Voir ce rayon",
     featuredShelfTitle: "Vedette",
     departmentCount: "{count} articles",
@@ -206,32 +235,38 @@ const translations = {
   rw: {
     announceText: "Kwamamaza gushya ku miryango, ibiro n'ibikenerwa buri munsi i Kigali.",
     announcePill: "Kohereza umunsi umwe birahari",
-    brandTagline: "Simba Supermarket yongerewe isura nshya",
+    brandTagline: "Ibiribwa, ibikenerwa mu rugo n'uguhaha byihuse mu Rwanda",
     navAisles: "Ibyiciro",
     navFeatured: "Byatoranyijwe",
-    navShop: "Gura",
+    navShop: "Ibicuruzwa",
+    navBranches: "Amashami",
+    navAbout: "Ibyerekeye",
+    navContact: "Twandikire",
     navCheckout: "Kwishyura",
+    branchLabel: "Ishami",
     theme: "Insanganyamatsiko",
     cart: "Agaseke",
-    heroBadge: "Simba nshya kandi igezweho",
-    heroTitle: "Gura ukurikije icyiciro, igabanyirizwa, n'icyo ukeneye",
+    heroBadge: "Simba Supermarket kuri internet",
+    heroTitle: "Ibyo urugo rwawe rukeneye byose, kuva ku mboga n'imbuto kugeza ku bikoresho byizewe",
     heroText:
-      "Twavuguruye Simba Supermarket tuyigira yihuta, isukuye kandi yoroshye kureba ku biribwa, ibikoresho byo mu rugo, ibinyobwa, ubwiza no kwishyura kuri telefoni.",
+      "Gura ibiribwa, ibikoresho by'isuku, ibinyobwa, ubwiza, ibikoresho byo mu gikoni n'ibikenerwa buri munsi mu iduka ryoroshye gukoresha.",
     shopNow: "Tangira kugura",
     exploreAisles: "Reba ibyiciro",
     popularSearches: "Bikunzwe:",
     metricCategories: "ibyiciro by'ingenzi",
     metricProducts: "ibicuruzwa bya Simba biri live",
-    metricPayment: "kwishyura byiteguye",
-    spotlightToday: "Iby'uyu munsi",
-    spotlightTitle: "Imboga n'imbuto bishya, ibyo mu bubiko n'amazina yizewe",
-    spotlightText: "Byubatswe kugira ngo birusheho kuba byiza kandi byoroshye kurusha urubuga ruriho ubu.",
+    metricPayment: "amashami ahari",
+    spotlightToday: "Ishami ryatoranyijwe",
+    spotlightTitle: "Union Trade Centre",
+    spotlightText: "3336+MHV Union Trade Centre, 1 KN 4 Ave, Kigali",
+    shopThisBranch: "Gura kuri iri shami",
+    viewAllBranches: "Reba amashami yose",
     featureFast: "Kohereza vuba",
-    featureFastValue: "Byubakiwe gutumiza vuba kuri telefoni",
+    featureFastValue: "Hitamo ishami mbere ubone stock n'ibijyanye no kohereza neza",
     featureFresh: "Kureba byoroshye",
-    featureFreshValue: "Kuyobora ukurikije ibyiciro aho kuba urutonde rurerure",
+    featureFreshValue: "Shaka ukoresheje icyiciro kandi ugereranye byoroshye ku gikoresho icyo ari cyo cyose",
     featureTrusted: "Kwizerana kugaragara",
-    featureTrustedValue: "Kohereza, kwishyura na serivisi biragaragara neza",
+    featureTrustedValue: "Gufatira ku ishami, kohereza, kwishyura na serivisi biragaragara",
     departmentsBadge: "Amashami",
     departmentsTitle: "Gura ukoresheje amashami",
     departmentsText: "Inzira z'ibyiciro byihuse nk'iziri kuri marketplace nini.",
@@ -245,10 +280,14 @@ const translations = {
     shoppingRowsText: "Iyi mirongo ifasha kubona ibicuruzwa ukurikije icyo ushaka kurusha icyiciro gusa.",
     trustOneTitle: "Gura ukoresheje ibyiciro",
     trustOneText: "Ibyiciro byahumetswe n'imiterere nyayo ya Simba",
-    trustTwoTitle: "Fata icyemezo vuba",
-    trustTwoText: "Ibikunzwe n'ibyagabanyijwe biri hejuru ku rupapuro",
-    trustThreeTitle: "Byoroshye kwiga",
-    trustThreeText: "Code isukuye, amadosiye meza kandi byoroshye kohereza online",
+    trustTwoTitle: "Guhaha gushingiye ku ishami",
+    trustTwoText: "Stock, pickup na delivery bikurikira ishami wahisemo",
+    trustThreeTitle: "Byoroheye buri munsi",
+    trustThreeText: "Gukoresha neza kuri telefoni, konti y'umukiriya na Mobile Money",
+    branchesShowcaseBadge: "Amashami",
+    branchesShowcaseTitle: "Gura ukoresheje ishami rikubereye",
+    branchesShowcaseText:
+      "Guhitamo ishami bituma ugura byoroshye kuko stock na delivery bihuzwa n'aho ukunda guhaha.",
     aislesBadge: "Ibyiciro by'ingenzi",
     aislesTitle: "Reba supermarket mu buryo bwa none",
     aislesText:
@@ -284,7 +323,11 @@ const translations = {
     remove: "Kuramo",
     categoryItems: "{count} ibicuruzwa",
     inStock: "Birahari",
+    outOfStock: "Ntibihari",
+    onlyLeft: "Hasigaye {count} gusa",
     quantity: "Ingano",
+    branchForItem: "Ishami",
+    switchBranch: "Hindura ishami",
     shopCategory: "Gura muri iki cyiciro",
     featuredShelfTitle: "Byatoranyijwe",
     departmentCount: "{count} ibicuruzwa",
@@ -382,6 +425,7 @@ let appState = {
   cart: loadFromStorage(STORAGE_KEYS.cart, []),
   language: loadFromStorage(STORAGE_KEYS.language, "en"),
   theme: loadFromStorage(STORAGE_KEYS.theme, "light"),
+  selectedBranchId: window.SIMBA_BRANCHES?.getSelectedBranch()?.id || "",
   selectedCategory: "all",
   searchQuery: "",
   departmentQuery: "",
@@ -392,6 +436,7 @@ let appState = {
 
 const elements = {
   body: document.body,
+  branchSelect: document.getElementById("branchSelect"),
   languageSelect: document.getElementById("languageSelect"),
   themeToggle: document.getElementById("themeToggle"),
   cartToggle: document.getElementById("cartToggle"),
@@ -420,6 +465,10 @@ const elements = {
   promoPrev: document.getElementById("promoPrev"),
   promoNext: document.getElementById("promoNext"),
   shoppingRows: document.getElementById("shoppingRows"),
+  selectedBranchName: document.getElementById("selectedBranchName"),
+  selectedBranchAddress: document.getElementById("selectedBranchAddress"),
+  branchHighlights: document.getElementById("branchHighlights"),
+  heroBranchCount: document.getElementById("heroBranchCount"),
 };
 
 const PRODUCT_FALLBACK_IMAGE = "assets/product-fallback.svg";
@@ -427,9 +476,13 @@ const PRODUCT_FALLBACK_IMAGE = "assets/product-fallback.svg";
 document.addEventListener("DOMContentLoaded", initStorefront);
 
 async function initStorefront() {
+  appState.cart = window.SIMBA_BRANCHES
+    ? window.SIMBA_BRANCHES.normalizeCart(appState.cart, appState.selectedBranchId)
+    : appState.cart;
   applyTheme();
   applyLanguage();
   bindGlobalControls();
+  renderBranchControls();
   updatePriceLabel();
   renderCart();
   await loadProducts();
@@ -437,8 +490,11 @@ async function initStorefront() {
 
 async function loadProducts() {
   try {
-    const response = await fetch("products.json");
-    appState.products = await response.json();
+    appState.products = await loadProductCatalog();
+    renderBranchControls();
+    renderBranchHighlights();
+    syncCartWithInventory();
+    persistCart();
     populateCategoryFilter();
     renderDepartmentMenu();
     renderCategoryShowcase();
@@ -460,10 +516,27 @@ async function loadProducts() {
 
 function bindGlobalControls() {
   const promoScrollTarget = document.getElementById("catalog");
+  const availableBranches = window.SIMBA_BRANCHES?.getBranches() || [];
 
   elements.languageSelect.value = appState.language;
   elements.priceFilter.value = appState.maxPrice;
   elements.departmentSearchInput.value = appState.departmentQuery;
+  if (elements.branchSelect && availableBranches.length) {
+    elements.branchSelect.innerHTML = availableBranches
+      .map((branch) => `<option value="${branch.id}">${branch.name}</option>`)
+      .join("");
+    elements.branchSelect.value = appState.selectedBranchId || availableBranches[0].id;
+    elements.branchSelect.addEventListener("change", async (event) => {
+      appState.selectedBranchId = event.target.value;
+      window.SIMBA_BRANCHES?.saveSelectedBranch(appState.selectedBranchId);
+      appState.cart = window.SIMBA_BRANCHES
+        ? window.SIMBA_BRANCHES.normalizeCart(appState.cart, appState.selectedBranchId)
+        : appState.cart;
+      renderBranchControls();
+      persistCart();
+      await loadProducts();
+    });
+  }
 
   elements.languageSelect.addEventListener("change", (event) => {
     appState.language = event.target.value;
@@ -554,6 +627,55 @@ function applyLanguage() {
 
 function applyTheme() {
   elements.body.classList.toggle("dark", appState.theme === "dark");
+}
+
+function renderBranchControls() {
+  if (!window.SIMBA_BRANCHES) return;
+  const selectedBranch = window.SIMBA_BRANCHES.getBranchById(appState.selectedBranchId);
+  if (elements.branchSelect) elements.branchSelect.value = selectedBranch.id;
+  if (elements.selectedBranchName) elements.selectedBranchName.textContent = selectedBranch.name;
+  if (elements.selectedBranchAddress) elements.selectedBranchAddress.textContent = selectedBranch.address;
+  if (elements.heroBranchCount) {
+    elements.heroBranchCount.textContent = String(window.SIMBA_BRANCHES.getBranches().length);
+  }
+}
+
+function renderBranchHighlights() {
+  if (!elements.branchHighlights || !window.SIMBA_BRANCHES) return;
+  const selectedBranch = window.SIMBA_BRANCHES.getBranchById(appState.selectedBranchId);
+  elements.branchHighlights.innerHTML = window.SIMBA_BRANCHES
+    .getBranches()
+    .slice(0, 3)
+    .map(
+      (branch) => `
+        <article class="branch-highlight-card ${branch.id === selectedBranch.id ? "branch-highlight-active" : ""}">
+          <div class="toolbar-header compact-header">
+            <div>
+              <p class="eyebrow">${branch.city}</p>
+              <h3>${branch.name}</h3>
+            </div>
+            <span class="chip">${branch.deliveryFee ? formatCurrency(branch.deliveryFee) : ""}</span>
+          </div>
+          <p class="toolbar-note">${branch.address}</p>
+          <div class="showcase-footer">
+            <a class="ghost-button" href="branches.html">Details</a>
+            <button class="primary-button" type="button" data-branch-highlight="${branch.id}">
+              ${branch.id === selectedBranch.id ? "Selected" : "Select"}
+            </button>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+
+  elements.branchHighlights.querySelectorAll("[data-branch-highlight]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      appState.selectedBranchId = button.dataset.branchHighlight;
+      window.SIMBA_BRANCHES.saveSelectedBranch(appState.selectedBranchId);
+      renderBranchControls();
+      await loadProducts();
+    });
+  });
 }
 
 function populateCategoryFilter() {
@@ -825,7 +947,7 @@ function renderFeaturedShelf() {
             <p>${product.category}</p>
             <div class="featured-meta">
               <strong>${formatCurrency(product.price)}</strong>
-              <button class="primary-button featured-add" type="button" data-id="${product.id}">${copy.addToCart}</button>
+              <button class="primary-button featured-add" type="button" data-id="${product.id}" ${!canAddProductToCart(product.id) ? "disabled" : ""}>${canAddProductToCart(product.id) ? copy.addToCart : copy.outOfStock}</button>
             </div>
           </div>
         </article>
@@ -917,7 +1039,7 @@ function createRowProductCard(product, copy, badgeLabel, rowIndex) {
         <div class="row-product-footer">
           <strong>${formatCurrency(product.price)}</strong>
           <div class="row-product-actions">
-            <button class="primary-button row-add" type="button" data-id="${product.id}">${copy.addToCart}</button>
+            <button class="primary-button row-add" type="button" data-id="${product.id}" ${!canAddProductToCart(product.id) ? "disabled" : ""}>${canAddProductToCart(product.id) ? copy.addToCart : copy.outOfStock}</button>
             <a class="ghost-button" href="product.html?id=${product.id}">${copy.details}</a>
           </div>
         </div>
@@ -949,7 +1071,7 @@ function renderElectronicsSpotlight() {
             <div class="featured-meta">
               <strong>${formatCurrency(product.price)}</strong>
               <div class="electronics-actions">
-                <button class="primary-button electronics-add" type="button" data-id="${product.id}">${copy.addToCart}</button>
+                <button class="primary-button electronics-add" type="button" data-id="${product.id}" ${!canAddProductToCart(product.id) ? "disabled" : ""}>${canAddProductToCart(product.id) ? copy.addToCart : copy.outOfStock}</button>
                 <a class="ghost-button" href="product.html?id=${product.id}">${copy.details}</a>
               </div>
             </div>
@@ -1018,6 +1140,8 @@ function renderProducts() {
 }
 
 function createProductCard(product, copy) {
+  const branchId = appState.selectedBranchId;
+  const branchLabel = window.SIMBA_BRANCHES?.getBranchById(branchId).name || "";
   const card = document.createElement("article");
   card.className = "product-card";
   card.innerHTML = `
@@ -1025,11 +1149,12 @@ function createProductCard(product, copy) {
       <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
       <div class="chip-row">
         <span class="chip">${product.badge}</span>
-        <span class="chip">${copy.inStock}</span>
+        <span class="chip">${getAvailabilityLabel(product, copy)}</span>
       </div>
       <div>
         <h4 class="product-name">${product.name}</h4>
         <p class="product-meta">${product.category}</p>
+        <p class="product-meta">${copy.branchForItem}: ${branchLabel}</p>
       </div>
     </div>
     <p class="product-snippet">${product.description}</p>
@@ -1037,19 +1162,20 @@ function createProductCard(product, copy) {
       <div>
         <div class="price">${formatCurrency(product.price)}</div>
       </div>
-      <button class="primary-button" type="button">${copy.addToCart}</button>
+      <button class="primary-button" type="button" ${!canAddProductToCart(product.id, branchId) ? "disabled" : ""}>${canAddProductToCart(product.id, branchId) ? copy.addToCart : copy.outOfStock}</button>
     </div>
     <a class="ghost-button full-width" href="product.html?id=${product.id}">${copy.details}</a>
   `;
 
-  card.querySelector(".primary-button").addEventListener("click", () => addToCart(product.id));
+  card.querySelector(".primary-button").addEventListener("click", () => addToCart(product.id, branchId));
   return card;
 }
 
-function addToCart(productId) {
-  const existingItem = appState.cart.find((item) => item.id === productId);
+function addToCart(productId, branchId = appState.selectedBranchId) {
+  if (!canAddProductToCart(productId, branchId)) return;
+  const existingItem = appState.cart.find((item) => item.id === productId && item.branchId === branchId);
   if (existingItem) existingItem.quantity += 1;
-  else appState.cart.push({ id: productId, quantity: 1 });
+  else appState.cart.push({ id: productId, quantity: 1, branchId });
 
   persistCart();
   renderCart();
@@ -1070,18 +1196,28 @@ function renderCart() {
     .map((item) => {
       const product = appState.products.find((entry) => entry.id === item.id);
       if (!product) return "";
+      const branches = window.SIMBA_BRANCHES?.getBranches() || [];
+      const branchName = window.SIMBA_BRANCHES?.getBranchById(item.branchId).name || "";
       return `
         <article class="cart-item">
           <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
           <div>
             <strong>${product.name}</strong>
-            <p class="cart-item-meta">${formatCurrency(product.price)}</p>
+            <p class="cart-item-meta">${formatCurrency(product.price)} | ${copy.branchForItem}: ${branchName}</p>
+            <label class="field cart-branch-field">
+              <span>${copy.switchBranch}</span>
+              <select data-action="change-branch" data-id="${product.id}" data-branch-id="${item.branchId}">
+                ${branches
+                  .map((branch) => `<option value="${branch.id}" ${branch.id === item.branchId ? "selected" : ""}>${branch.name}</option>`)
+                  .join("")}
+              </select>
+            </label>
             <div class="qty-controls">
-              <button class="qty-button" type="button" data-action="decrease" data-id="${product.id}">-</button>
+              <button class="qty-button" type="button" data-action="decrease" data-id="${product.id}" data-branch-id="${item.branchId}">-</button>
               <span>${copy.quantity}: ${item.quantity}</span>
-              <button class="qty-button" type="button" data-action="increase" data-id="${product.id}">+</button>
+              <button class="qty-button" type="button" data-action="increase" data-id="${product.id}" data-branch-id="${item.branchId}">+</button>
             </div>
-            <button class="remove-button" type="button" data-action="remove" data-id="${product.id}">${copy.remove}</button>
+            <button class="remove-button" type="button" data-action="remove" data-id="${product.id}" data-branch-id="${item.branchId}">${copy.remove}</button>
           </div>
         </article>
       `;
@@ -1095,19 +1231,34 @@ function renderCart() {
 
   elements.cartSubtotal.textContent = formatCurrency(subtotal);
 
-  elements.cartItems.querySelectorAll("[data-action]").forEach((button) => {
-    button.addEventListener("click", () => updateCartItem(button.dataset.id, button.dataset.action));
+  elements.cartItems.querySelectorAll('button[data-action]').forEach((button) => {
+    button.addEventListener("click", () => updateCartItem(button.dataset.id, button.dataset.action, button.dataset.branchId));
+  });
+  elements.cartItems.querySelectorAll('select[data-action="change-branch"]').forEach((select) => {
+    select.addEventListener("change", () =>
+      updateCartItem(select.dataset.id, "change-branch", select.dataset.branchId, select.value)
+    );
   });
 }
 
-function updateCartItem(productId, action) {
-  const item = appState.cart.find((entry) => entry.id === productId);
+function updateCartItem(productId, action, branchId, nextBranchId) {
+  const item = appState.cart.find((entry) => entry.id === productId && entry.branchId === branchId);
   if (!item) return;
 
-  if (action === "increase") item.quantity += 1;
+  if (action === "change-branch") {
+    const targetBranchId = nextBranchId || branchId;
+    const existingTarget = appState.cart.find((entry) => entry.id === productId && entry.branchId === targetBranchId);
+    if (existingTarget && existingTarget !== item) {
+      existingTarget.quantity += item.quantity;
+      appState.cart = appState.cart.filter((entry) => entry !== item);
+    } else {
+      item.branchId = targetBranchId;
+    }
+  }
+  if (action === "increase" && canAddProductToCart(productId, branchId)) item.quantity += 1;
   if (action === "decrease") item.quantity -= 1;
   if (action === "remove" || item.quantity <= 0) {
-    appState.cart = appState.cart.filter((entry) => entry.id !== productId);
+    appState.cart = appState.cart.filter((entry) => !(entry.id === productId && entry.branchId === branchId));
   }
 
   persistCart();
@@ -1115,6 +1266,9 @@ function updateCartItem(productId, action) {
 }
 
 function persistCart() {
+  appState.cart = window.SIMBA_BRANCHES
+    ? window.SIMBA_BRANCHES.normalizeCart(appState.cart, appState.selectedBranchId)
+    : appState.cart;
   saveToStorage(STORAGE_KEYS.cart, appState.cart);
 }
 
@@ -1151,4 +1305,69 @@ function loadFromStorage(key, fallback) {
 
 function saveToStorage(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
+}
+
+function syncCartWithInventory() {
+  appState.cart = appState.cart
+    .map((item) => {
+      const product = appState.products.find((entry) => entry.id === item.id);
+      const stock = getProductStockForBranch(product, item.branchId);
+      if (!product || stock <= 0) return null;
+      return {
+        ...item,
+        quantity: Math.min(item.quantity, stock),
+      };
+    })
+    .filter(Boolean);
+}
+
+function canAddProductToCart(productId, branchId = appState.selectedBranchId) {
+  const product = appState.products.find((entry) => entry.id === productId);
+  const stock = getProductStockForBranch(product, branchId);
+  if (!product || stock <= 0) return false;
+  const cartItem = appState.cart.find((entry) => entry.id === productId && entry.branchId === branchId);
+  return (cartItem?.quantity || 0) < stock;
+}
+
+function getAvailabilityLabel(product, copy, branchId = appState.selectedBranchId) {
+  const stock = getProductStockForBranch(product, branchId);
+  if (stock <= 0) return copy.outOfStock;
+  if (stock <= 5) return copy.onlyLeft.replace("{count}", stock);
+  return copy.inStock;
+}
+
+async function loadProductCatalog() {
+  const branchId = encodeURIComponent(appState.selectedBranchId || "");
+  try {
+    const response = await fetch(apiUrl(`/api/products${branchId ? `?branchId=${branchId}` : ""}`));
+    if (response.ok) {
+      const payload = await response.json();
+      if (Array.isArray(payload.products)) return payload.products;
+    }
+  } catch {
+    // Fall back to bundled product data when the backend is unavailable.
+  }
+
+  if (Array.isArray(window.SIMBA_PRODUCTS) && window.SIMBA_PRODUCTS.length) {
+    return window.SIMBA_PRODUCTS.map((product) =>
+      window.SIMBA_BRANCHES ? window.SIMBA_BRANCHES.mergeProductForBranch(product, appState.selectedBranchId) : product
+    );
+  }
+
+  const response = await fetch("products.json");
+  const products = await response.json();
+  return products.map((product) =>
+    window.SIMBA_BRANCHES ? window.SIMBA_BRANCHES.mergeProductForBranch(product, appState.selectedBranchId) : product
+  );
+}
+
+function apiUrl(path) {
+  const baseUrl = window.SIMBA_CONFIG?.API_BASE_URL?.trim();
+  return baseUrl ? `${baseUrl}${path}` : path;
+}
+
+function getProductStockForBranch(product, branchId) {
+  if (!product) return 0;
+  if (window.SIMBA_BRANCHES) return window.SIMBA_BRANCHES.getProductBranchStock(product, branchId);
+  return Number(product.stock || 0);
 }
