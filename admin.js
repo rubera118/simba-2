@@ -1,9 +1,13 @@
 const ADMIN_STORAGE_KEYS = {
   token: "simba-admin-token",
+  mode: "simba-admin-mode",
+  demoProducts: "simba-admin-demo-products",
+  demoBranches: "simba-admin-demo-branches",
 };
 
 const adminState = {
   token: loadFromStorage(ADMIN_STORAGE_KEYS.token, ""),
+  mode: loadFromStorage(ADMIN_STORAGE_KEYS.mode, ""),
   orders: [],
   products: [],
   branches: [],
@@ -11,6 +15,8 @@ const adminState = {
 };
 
 const ORDER_STATUSES = ["received", "packed", "out-for-delivery", "delivered", "cancelled"];
+const DEMO_ADMIN_PASSWORD = "simba-admin-2026";
+const CUSTOMER_ORDER_STORAGE_KEY = "simba-orders";
 
 document.addEventListener("DOMContentLoaded", initAdminPage);
 
@@ -37,23 +43,36 @@ function bindAdminControls() {
     message.textContent = "Signing in...";
 
     try {
-      const response = await fetch(apiUrl("/api/admin/login"), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          password: String(formData.get("password") || ""),
-        }),
-      });
+      const password = String(formData.get("password") || "");
 
-      const payload = await response.json();
-      if (!response.ok) {
-        throw new Error(payload.error || "Login failed");
+      if (shouldUseDemoAdmin()) {
+        if (password !== DEMO_ADMIN_PASSWORD) {
+          throw new Error("Invalid admin password");
+        }
+
+        adminState.token = "demo-admin-token";
+        adminState.mode = "demo";
+        saveToStorage(ADMIN_STORAGE_KEYS.token, adminState.token);
+        saveToStorage(ADMIN_STORAGE_KEYS.mode, adminState.mode);
+      } else {
+        const response = await fetch(apiUrl("/api/admin/login"), {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ password }),
+        });
+
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload.error || "Login failed");
+        }
+
+        adminState.token = payload.token;
+        adminState.mode = "server";
+        saveToStorage(ADMIN_STORAGE_KEYS.token, adminState.token);
+        saveToStorage(ADMIN_STORAGE_KEYS.mode, adminState.mode);
       }
-
-      adminState.token = payload.token;
-      saveToStorage(ADMIN_STORAGE_KEYS.token, adminState.token);
       message.textContent = "";
       form.reset();
       await loadDashboard();
@@ -68,9 +87,11 @@ function bindAdminControls() {
 
   logoutButton?.addEventListener("click", () => {
     adminState.token = "";
+    adminState.mode = "";
     adminState.orders = [];
     adminState.products = [];
     localStorage.removeItem(ADMIN_STORAGE_KEYS.token);
+    localStorage.removeItem(ADMIN_STORAGE_KEYS.mode);
     document.getElementById("adminDashboard").classList.add("hidden");
     document.getElementById("adminLoginCard").classList.remove("hidden");
   });
@@ -87,29 +108,21 @@ function bindAdminControls() {
     message.textContent = "Creating product...";
 
     try {
-      const response = await fetch(apiUrl("/api/admin/products"), {
-        method: "POST",
-        headers: {
-          ...getAuthHeaders(),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: String(formData.get("name") || ""),
-          category: String(formData.get("category") || ""),
-          subcategory: String(formData.get("subcategory") || ""),
-          price: Number(formData.get("price") || 0),
-          stock: Number(formData.get("stock") || 0),
-          badge: String(formData.get("badge") || "New"),
-          image: String(formData.get("image") || "assets/product-fallback.svg"),
-          description: String(formData.get("description") || ""),
-          active: formData.get("active") === "on",
-        }),
-      });
+      const payload = {
+        name: String(formData.get("name") || ""),
+        category: String(formData.get("category") || ""),
+        subcategory: String(formData.get("subcategory") || ""),
+        price: Number(formData.get("price") || 0),
+        stock: Number(formData.get("stock") || 0),
+        badge: String(formData.get("badge") || "New"),
+        image: String(formData.get("image") || "assets/product-fallback.svg"),
+        description: String(formData.get("description") || ""),
+        active: formData.get("active") === "on",
+      };
 
-      const body = await response.json();
-      if (!response.ok) {
-        throw new Error(body.error || "Could not create product");
-      }
+      const body = adminState.mode === "demo"
+        ? createDemoProduct(payload)
+        : await createServerProduct(payload);
 
       createProductForm.reset();
       createProductForm.elements.badge.value = "New";
@@ -129,25 +142,18 @@ function bindAdminControls() {
     message.textContent = "Creating branch...";
 
     try {
-      const response = await fetch(apiUrl("/api/admin/branches"), {
-        method: "POST",
-        headers: {
-          ...getAuthHeaders(),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: String(formData.get("name") || ""),
-          address: String(formData.get("address") || ""),
-          city: String(formData.get("city") || ""),
-          deliveryFee: Number(formData.get("deliveryFee") || 0),
-          hours: String(formData.get("hours") || ""),
-          phone: String(formData.get("phone") || ""),
-          pickup: formData.get("pickup") === "on",
-        }),
-      });
-
-      const body = await response.json();
-      if (!response.ok) throw new Error(body.error || "Could not create branch");
+      const payload = {
+        name: String(formData.get("name") || ""),
+        address: String(formData.get("address") || ""),
+        city: String(formData.get("city") || ""),
+        deliveryFee: Number(formData.get("deliveryFee") || 0),
+        hours: String(formData.get("hours") || ""),
+        phone: String(formData.get("phone") || ""),
+        pickup: formData.get("pickup") === "on",
+      };
+      const body = adminState.mode === "demo"
+        ? createDemoBranch(payload)
+        : await createServerBranch(payload);
       createBranchForm.reset();
       createBranchForm.elements.deliveryFee.value = "2000";
       createBranchForm.elements.hours.value = "Open daily";
@@ -166,6 +172,22 @@ async function loadDashboard() {
   const ordersContainer = document.getElementById("adminOrders");
 
   try {
+    if (adminState.mode === "demo") {
+      const demoData = loadDemoDashboardData();
+      adminState.orders = demoData.orders;
+      adminState.products = demoData.products;
+      adminState.branches = demoData.branches;
+
+      renderStats(demoData.stats);
+      renderOrders(adminState.orders);
+      renderProducts(adminState.products);
+      renderBranches(adminState.branches);
+
+      loginCard.classList.add("hidden");
+      dashboard.classList.remove("hidden");
+      return;
+    }
+
     const [statsResponse, ordersResponse, productsResponse, branchesResponse] = await Promise.all([
       fetch(apiUrl("/api/admin/stats"), { headers: getAuthHeaders() }),
       fetch(apiUrl("/api/admin/orders"), { headers: getAuthHeaders() }),
@@ -199,7 +221,9 @@ async function loadDashboard() {
     loginCard.classList.add("hidden");
     if (error.message.includes("expired")) {
       adminState.token = "";
+      adminState.mode = "";
       localStorage.removeItem(ADMIN_STORAGE_KEYS.token);
+      localStorage.removeItem(ADMIN_STORAGE_KEYS.mode);
       loginCard.classList.remove("hidden");
     }
   }
@@ -297,7 +321,10 @@ function renderOrders(orders) {
 
   container.querySelectorAll("[data-order-status]").forEach((select) => {
     select.addEventListener("change", async () => {
-      await patchAdmin(apiUrl(`/api/admin/orders/${select.dataset.orderStatus}`), { status: select.value });
+      await patchAdmin(apiUrl(`/api/admin/orders/${select.dataset.orderStatus}`), {
+        status: select.value,
+        id: select.dataset.orderStatus,
+      });
       await loadDashboard();
     });
   });
@@ -388,7 +415,7 @@ function renderProducts(products) {
       button.disabled = true;
       button.textContent = "Saving...";
       try {
-        await patchAdmin(apiUrl(`/api/admin/products/${productId}`), payload);
+        await patchAdmin(apiUrl(`/api/admin/products/${productId}`), { ...payload, id: productId });
         await loadDashboard();
       } finally {
         button.disabled = false;
@@ -483,7 +510,10 @@ function renderBranches(branches) {
       button.disabled = true;
       button.textContent = "Saving...";
       try {
-        await patchAdmin(apiUrl(`/api/admin/branches/${branchId}`), gatherBranchPayload(branchId));
+        await patchAdmin(apiUrl(`/api/admin/branches/${branchId}`), {
+          ...gatherBranchPayload(branchId),
+          id: branchId,
+        });
         await loadDashboard();
       } finally {
         button.disabled = false;
@@ -509,6 +539,10 @@ function gatherBranchPayload(branchId) {
 }
 
 async function patchAdmin(url, payload) {
+  if (adminState.mode === "demo") {
+    return patchDemo(payload);
+  }
+
   const response = await fetch(url, {
     method: "PATCH",
     headers: {
@@ -570,4 +604,176 @@ function saveToStorage(key, value) {
 function apiUrl(path) {
   const baseUrl = window.SIMBA_CONFIG?.API_BASE_URL?.trim();
   return baseUrl ? `${baseUrl}${path}` : path;
+}
+
+function shouldUseDemoAdmin() {
+  return !window.SIMBA_CONFIG?.API_BASE_URL?.trim();
+}
+
+function loadDemoDashboardData() {
+  const orders = loadFromStorage(CUSTOMER_ORDER_STORAGE_KEY, []);
+  const products = loadDemoProducts();
+  const branches = loadDemoBranches();
+
+  return {
+    orders,
+    products,
+    branches,
+    stats: {
+      orderCount: orders.length,
+      totalRevenue: orders.reduce((sum, order) => sum + Number(order.total || 0), 0),
+      productCount: products.length,
+      branchCount: branches.length,
+      activeCount: products.filter((product) => product.active !== false).length,
+      lowStockCount: products.filter((product) => Number(product.stock || 0) > 0 && Number(product.stock || 0) <= 5).length,
+      outOfStockCount: products.filter((product) => Number(product.stock || 0) <= 0).length,
+    },
+  };
+}
+
+function loadDemoProducts() {
+  const stored = loadFromStorage(ADMIN_STORAGE_KEYS.demoProducts, null);
+  if (Array.isArray(stored) && stored.length) return stored;
+
+  const source = Array.isArray(window.SIMBA_PRODUCTS) ? window.SIMBA_PRODUCTS : [];
+  const branches = loadDemoBranches();
+  const products = source.map((product) => {
+    const branchStock = product.branchStock && typeof product.branchStock === "object"
+      ? product.branchStock
+      : Object.fromEntries(
+          branches.map((branch, index) => [
+            branch.id,
+            Math.max(0, Math.floor(Number(product.stock || 25) / Math.max(branches.length, 1)) + (index === 0 ? 1 : 0)),
+          ])
+        );
+    const stock = Object.values(branchStock).reduce((sum, value) => sum + Number(value || 0), 0);
+    return {
+      ...product,
+      branchStock,
+      stock,
+      active: product.active !== false,
+    };
+  });
+
+  saveToStorage(ADMIN_STORAGE_KEYS.demoProducts, products);
+  return products;
+}
+
+function saveDemoProducts(products) {
+  saveToStorage(ADMIN_STORAGE_KEYS.demoProducts, products);
+}
+
+function loadDemoBranches() {
+  const stored = loadFromStorage(ADMIN_STORAGE_KEYS.demoBranches, null);
+  if (Array.isArray(stored) && stored.length) return stored;
+
+  const branches = window.SIMBA_BRANCHES?.getBranches() || [];
+  saveToStorage(ADMIN_STORAGE_KEYS.demoBranches, branches);
+  return branches;
+}
+
+function saveDemoBranches(branches) {
+  saveToStorage(ADMIN_STORAGE_KEYS.demoBranches, branches);
+}
+
+function createDemoProduct(payload) {
+  const products = loadDemoProducts();
+  const branches = loadDemoBranches();
+  const branchStock = Object.fromEntries(branches.map((branch) => [branch.id, 0]));
+  const product = {
+    id: String(Date.now()),
+    ...payload,
+    branchStock,
+    featured: false,
+    updatedAt: new Date().toISOString(),
+  };
+  products.unshift(product);
+  saveDemoProducts(products);
+  return { product };
+}
+
+function createDemoBranch(payload) {
+  const branches = loadDemoBranches();
+  const branch = {
+    id: payload.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+    ...payload,
+    active: true,
+  };
+  branches.unshift(branch);
+  saveDemoBranches(branches);
+
+  const products = loadDemoProducts().map((product) => ({
+    ...product,
+    branchStock: {
+      ...(product.branchStock || {}),
+      [branch.id]: 0,
+    },
+  }));
+  saveDemoProducts(products);
+  return { branch };
+}
+
+function patchDemo(payload) {
+  if (payload.status && payload.id) {
+    const orders = loadFromStorage(CUSTOMER_ORDER_STORAGE_KEY, []).map((order) =>
+      order.id === payload.id ? { ...order, status: payload.status } : order
+    );
+    saveToStorage(CUSTOMER_ORDER_STORAGE_KEY, orders);
+    return { ok: true };
+  }
+
+  if (payload.branchStock && payload.id) {
+    const products = loadDemoProducts().map((product) => {
+      if (product.id !== payload.id) return product;
+      const branchStock = payload.branchStock;
+      return {
+        ...product,
+        ...payload,
+        branchStock,
+        stock: Object.values(branchStock).reduce((sum, value) => sum + Number(value || 0), 0),
+      };
+    });
+    saveDemoProducts(products);
+    return { ok: true };
+  }
+
+  if (payload.address && payload.id) {
+    const branches = loadDemoBranches().map((branch) =>
+      branch.id === payload.id ? { ...branch, ...payload } : branch
+    );
+    saveDemoBranches(branches);
+    return { ok: true };
+  }
+
+  return { ok: true };
+}
+
+async function createServerProduct(payload) {
+  const response = await fetch(apiUrl("/api/admin/products"), {
+    method: "POST",
+    headers: {
+      ...getAuthHeaders(),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const body = await response.json();
+  if (!response.ok) throw new Error(body.error || "Could not create product");
+  return body;
+}
+
+async function createServerBranch(payload) {
+  const response = await fetch(apiUrl("/api/admin/branches"), {
+    method: "POST",
+    headers: {
+      ...getAuthHeaders(),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const body = await response.json();
+  if (!response.ok) throw new Error(body.error || "Could not create branch");
+  return body;
 }
