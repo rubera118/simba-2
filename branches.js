@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <div class="topbar-actions">
           <a class="ghost-button" href="${currentBranch.mapUrl}" target="_blank" rel="noreferrer">Open map</a>
-          <a class="primary-button" href="index.html#catalog">Shop this branch</a>
+          <a class="primary-button" href="./index.html#catalog">Shop this branch</a>
         </div>
       </div>
       <div class="admin-order-grid">
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <button class="primary-button" type="button" data-branch-select="${branch.id}">
                 ${branch.id === currentBranch.id ? "Selected branch" : "Select branch"}
               </button>
-              <a class="ghost-button" href="index.html#catalog" data-branch-shop="${branch.id}">Select and shop</a>
+              <a class="ghost-button" href="./index.html#catalog" data-branch-shop="${branch.id}">Select and shop</a>
             </div>
           </article>
         `
