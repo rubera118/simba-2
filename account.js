@@ -23,6 +23,7 @@ const GOOGLE_DEMO_PROFILE = {
 document.addEventListener("DOMContentLoaded", initAccountPage);
 
 function initAccountPage() {
+  renderAccountServiceNotice();
   bindAccountControls();
 
   if (accountState.token) {
@@ -82,10 +83,7 @@ function bindAccountControls() {
         body: JSON.stringify(GOOGLE_DEMO_PROFILE),
       });
 
-      const body = await response.json();
-      if (!response.ok) {
-        throw new Error(body.error || "Google sign-in failed");
-      }
+      const body = await parseApiResponse(response, "Google sign-in is not available right now.");
 
       accountState.token = body.token;
       accountState.profile = body.customer;
@@ -122,10 +120,7 @@ async function authenticateCustomer(url, payload, messageId) {
       body: JSON.stringify(payload),
     });
 
-    const body = await response.json();
-    if (!response.ok) {
-      throw new Error(body.error || "Authentication failed");
-    }
+    const body = await parseApiResponse(response, "Account request failed.");
 
     accountState.token = body.token;
     accountState.profile = body.customer;
@@ -149,8 +144,8 @@ async function loadAccountDashboard() {
       throw new Error("Your account session expired. Sign in again.");
     }
 
-    const profilePayload = await profileResponse.json();
-    const ordersPayload = await ordersResponse.json();
+    const profilePayload = await parseApiResponse(profileResponse, "Could not load your account profile.");
+    const ordersPayload = await parseApiResponse(ordersResponse, "Could not load your order history.");
     accountState.profile = profilePayload.customer;
     accountState.orders = ordersPayload.orders || [];
     saveToStorage(ACCOUNT_STORAGE_KEYS.profile, accountState.profile);
@@ -321,12 +316,15 @@ async function requestPasswordReset(email) {
       body: JSON.stringify({ email }),
     });
 
-    if (!response.ok) {
-      throw new Error("Could not prepare a reset link right now.");
-    }
+    await parseApiResponse(response, "Could not prepare a reset link right now.");
 
     message.textContent = "If that account exists, a reset link has been prepared for demo use.";
-  } catch {
+  } catch (error) {
+    if (shouldShowBackendConfigurationHint(error)) {
+      message.textContent = error.message;
+      return;
+    }
+
     const requests = loadFromStorage(ACCOUNT_STORAGE_KEYS.passwordResets, []);
     requests.unshift({
       email,
@@ -419,4 +417,70 @@ function saveToStorage(key, value) {
 function apiUrl(path) {
   const baseUrl = window.SIMBA_CONFIG?.API_BASE_URL?.trim();
   return baseUrl ? `${baseUrl}${path}` : path;
+}
+
+function renderAccountServiceNotice() {
+  const notice = document.getElementById("accountServiceNotice");
+  if (!notice) return;
+
+  const message = getBackendConfigurationMessage();
+  notice.textContent = message;
+  notice.classList.toggle("hidden", !message);
+}
+
+function getBackendConfigurationMessage() {
+  const baseUrl = window.SIMBA_CONFIG?.API_BASE_URL?.trim();
+  const isGitHubPages = window.location.hostname.endsWith("github.io");
+
+  if (baseUrl) {
+    return `Account services are connected to ${baseUrl}.`;
+  }
+
+  if (isGitHubPages) {
+    return "Account services are not connected on this live site yet. Set window.SIMBA_CONFIG.API_BASE_URL to your deployed Node backend so signup, login, and password reset can work.";
+  }
+
+  return "";
+}
+
+function shouldShowBackendConfigurationHint(error) {
+  return Boolean(error?.message && error.message.includes("API backend"));
+}
+
+async function parseApiResponse(response, fallbackMessage) {
+  const contentType = response.headers.get("content-type") || "";
+
+  if (contentType.includes("application/json")) {
+    const body = await response.json();
+    if (!response.ok) {
+      throw new Error(body.error || fallbackMessage);
+    }
+    return body;
+  }
+
+  const text = await response.text();
+  if (!response.ok) {
+    throw new Error(extractResponseErrorMessage(text) || fallbackMessage);
+  }
+
+  if (text.trim().startsWith("<")) {
+    throw new Error(getNonJsonResponseMessage());
+  }
+
+  throw new Error(fallbackMessage);
+}
+
+function extractResponseErrorMessage(text) {
+  if (!text) return "";
+  if (text.trim().startsWith("<")) return getNonJsonResponseMessage();
+  return text.trim();
+}
+
+function getNonJsonResponseMessage() {
+  const baseUrl = window.SIMBA_CONFIG?.API_BASE_URL?.trim();
+  if (!baseUrl) {
+    return "The account API backend is not configured for this site. Add your deployed backend URL in config.js so signup and login can work.";
+  }
+
+  return "The account service returned an invalid response. Check that the backend is running and reachable from this site.";
 }
