@@ -14,9 +14,11 @@ const adminState = {
   productQuery: "",
 };
 
-const ORDER_STATUSES = ["received", "packed", "out-for-delivery", "delivered", "cancelled"];
+const ORDER_STATUSES = ["received", "accepted", "preparing", "ready-for-pickup", "completed", "cancelled", "delivered"];
 const DEMO_ADMIN_PASSWORD = "simba-admin-2026";
 const CUSTOMER_ORDER_STORAGE_KEY = "simba-orders";
+const MANAGER_OPTIONS = ["Alice", "Claude", "Diane", "Eric"];
+const STAFF_OPTIONS = ["Grace", "Jean", "Kevin", "Merveille", "Sandrine"];
 
 document.addEventListener("DOMContentLoaded", initAdminPage);
 
@@ -297,10 +299,42 @@ function renderOrders(orders) {
               <span>Placed</span>
               <strong>${formatDate(order.createdAt)}</strong>
             </div>
+            <div class="summary-box">
+              <span>Pickup time</span>
+              <strong>${order.fulfilment?.pickupTime || "Not selected"}</strong>
+            </div>
+            <div class="summary-box">
+              <span>MoMo deposit</span>
+              <strong>${formatCurrency(order.payment?.deposit || 0)}</strong>
+            </div>
           </div>
           <div class="summary-box">
             <span>Delivery address</span>
             <strong>${order.customer.address}</strong>
+          </div>
+          <div class="admin-product-grid">
+            <label class="field">
+              <span>Branch manager</span>
+              <select data-order-field="managerName" data-order-id="${order.id}">
+                <option value="">Select manager</option>
+                ${MANAGER_OPTIONS.map(
+                  (name) => `<option value="${name}" ${order.managerName === name ? "selected" : ""}>${name}</option>`
+                ).join("")}
+              </select>
+            </label>
+            <label class="field">
+              <span>Assigned staff</span>
+              <select data-order-field="staffName" data-order-id="${order.id}">
+                <option value="">Select staff</option>
+                ${STAFF_OPTIONS.map(
+                  (name) => `<option value="${name}" ${order.staffName === name ? "selected" : ""}>${name}</option>`
+                ).join("")}
+              </select>
+            </label>
+          </div>
+          <div class="admin-product-actions">
+            <button class="ghost-button" type="button" data-assign-order="${order.id}">Assign team</button>
+            <button class="primary-button" type="button" data-ready-order="${order.id}">Mark ready for pickup</button>
           </div>
           <div class="admin-order-items">
             ${order.items
@@ -328,6 +362,54 @@ function renderOrders(orders) {
       await loadDashboard();
     });
   });
+
+  container.querySelectorAll("[data-assign-order]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const orderId = button.dataset.assignOrder;
+      button.disabled = true;
+      button.textContent = "Saving...";
+      try {
+        await patchAdmin(apiUrl(`/api/admin/orders/${orderId}`), {
+          id: orderId,
+          managerName: getOrderFieldValue(orderId, "managerName"),
+          staffName: getOrderFieldValue(orderId, "staffName"),
+          status: getOrderStatusValue(orderId),
+        });
+        await loadDashboard();
+      } finally {
+        button.disabled = false;
+        button.textContent = "Assign team";
+      }
+    });
+  });
+
+  container.querySelectorAll("[data-ready-order]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const orderId = button.dataset.readyOrder;
+      button.disabled = true;
+      button.textContent = "Updating...";
+      try {
+        await patchAdmin(apiUrl(`/api/admin/orders/${orderId}`), {
+          id: orderId,
+          managerName: getOrderFieldValue(orderId, "managerName"),
+          staffName: getOrderFieldValue(orderId, "staffName"),
+          status: "ready-for-pickup",
+        });
+        await loadDashboard();
+      } finally {
+        button.disabled = false;
+        button.textContent = "Mark ready for pickup";
+      }
+    });
+  });
+}
+
+function getOrderFieldValue(orderId, field) {
+  return document.querySelector(`[data-order-field="${field}"][data-order-id="${orderId}"]`)?.value || "";
+}
+
+function getOrderStatusValue(orderId) {
+  return document.querySelector(`[data-order-status="${orderId}"]`)?.value || "received";
 }
 
 function renderProducts(products) {
@@ -716,7 +798,14 @@ function createDemoBranch(payload) {
 function patchDemo(payload) {
   if (payload.status && payload.id) {
     const orders = loadFromStorage(CUSTOMER_ORDER_STORAGE_KEY, []).map((order) =>
-      order.id === payload.id ? { ...order, status: payload.status } : order
+      order.id === payload.id
+        ? {
+            ...order,
+            status: payload.status,
+            managerName: payload.managerName !== undefined ? payload.managerName : order.managerName,
+            staffName: payload.staffName !== undefined ? payload.staffName : order.staffName,
+          }
+        : order
     );
     saveToStorage(CUSTOMER_ORDER_STORAGE_KEY, orders);
     return { ok: true };

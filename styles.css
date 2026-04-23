@@ -167,8 +167,8 @@ button:disabled {
   position: sticky;
   top: 1rem;
   z-index: 30;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 1rem;
   padding: 1rem 1.25rem;
@@ -235,6 +235,7 @@ button:disabled {
 
 .nav-links,
 .topbar-actions,
+.topbar-panel,
 .hero-cta,
 .toolbar-controls,
 .status-row,
@@ -242,19 +243,48 @@ button:disabled {
 .summary-row,
 .search-suggestions,
 .showcase-footer,
-.featured-meta {
+.featured-meta,
+.conversation-form {
   display: flex;
   align-items: center;
   gap: 0.85rem;
 }
 
-.nav-links {
-  display: none;
-}
-
 .topbar-actions {
   flex-wrap: wrap;
   justify-content: flex-end;
+}
+
+.topbar-panel {
+  display: none;
+  width: 100%;
+}
+
+.topbar.menu-open .topbar-panel {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 0.9rem;
+}
+
+.nav-links {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.nav-links a {
+  padding: 0.55rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
+  border-color: var(--line);
+  background: var(--bg-secondary);
+}
+
+.nav-toggle {
+  justify-self: end;
 }
 
 .lang-picker select,
@@ -271,7 +301,7 @@ button:disabled {
 }
 
 .branch-picker {
-  min-width: 190px;
+  min-width: 170px;
 }
 
 .icon-button,
@@ -556,6 +586,35 @@ button:disabled {
   background: var(--surface);
 }
 
+.pickup-priority-panel {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.pickup-priority-card {
+  padding: 1.15rem;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(circle at top right, rgba(217, 107, 34, 0.1), transparent 32%),
+    var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.pickup-priority-card h2,
+.pickup-priority-card strong {
+  margin: 0 0 0.45rem;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.pickup-priority-card p,
+.pickup-priority-card span {
+  margin: 0;
+  color: var(--muted);
+}
+
 .showcase-panel,
 .toolbar,
 .state-panel,
@@ -604,6 +663,59 @@ button:disabled {
   display: grid;
   gap: 1rem;
   margin-top: 1.25rem;
+}
+
+.conversation-panel {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top right, rgba(15, 118, 110, 0.08), transparent 30%),
+    linear-gradient(135deg, rgba(217, 107, 34, 0.06), rgba(255, 255, 255, 0.72));
+}
+
+.conversation-form {
+  margin-top: 1rem;
+  flex-wrap: wrap;
+  align-items: end;
+}
+
+.conversation-field {
+  flex: 1 1 320px;
+}
+
+.assistant-response {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: var(--bg-secondary);
+}
+
+.assistant-match-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+}
+
+.assistant-match {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.assistant-match span {
+  color: var(--muted);
+}
+
+.auth-separator {
+  display: grid;
+  gap: 0.75rem;
 }
 
 .field {
@@ -1593,10 +1705,6 @@ button:disabled {
 }
 
 @media (min-width: 720px) {
-  .nav-links {
-    display: flex;
-  }
-
   .hero {
     grid-template-columns: 1.15fr 0.85fr;
     align-items: stretch;
@@ -1638,6 +1746,39 @@ button:disabled {
   }
 }
 
+@media (min-width: 1180px) {
+  .topbar {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+
+  .topbar-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  .topbar.menu-open .topbar-panel {
+    display: flex;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+
+  .topbar-actions {
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+}
+
 @media (min-width: 960px) {
   .featured-shelf {
     grid-template-columns: repeat(4, 1fr);
@@ -1659,7 +1800,9 @@ button:disabled {
 @media (max-width: 719px) {
   .announcement-inner,
   .topbar,
+  .topbar-panel,
   .topbar-actions,
+  .nav-links,
   .hero-cta,
   .promo-carousel-header,
   .promo-slide-card,

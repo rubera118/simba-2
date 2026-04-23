@@ -17,7 +17,9 @@ const BRANCHES_PATH = path.join(DATA_DIR, "branches.json");
 const DELIVERY_FEE = 2000;
 const ADMIN_PASSWORD = process.env.SIMBA_ADMIN_PASSWORD || "simba-admin-2026";
 const TOKEN_SECRET = process.env.SIMBA_TOKEN_SECRET || "simba-demo-secret";
-const ORDER_STATUSES = ["received", "packed", "out-for-delivery", "delivered", "cancelled"];
+const GROQ_API_KEY = process.env.SIMBA_GROQ_API_KEY || "";
+const GROQ_MODEL = process.env.SIMBA_GROQ_MODEL || "llama-3.3-70b-versatile";
+const ORDER_STATUSES = ["received", "accepted", "preparing", "ready-for-pickup", "completed", "cancelled", "delivered"];
 const ALLOWED_ORIGINS = (process.env.SIMBA_ALLOWED_ORIGINS || "*")
   .split(",")
   .map((entry) => entry.trim())
@@ -47,8 +49,8 @@ const STATIC_FILES = {
 
 const DEFAULT_BRANCHES = [
   {
-    id: "utc-kigali",
-    name: "Union Trade Centre",
+    id: "remera",
+    name: "Simba Supermarket Remera",
     address: "3336+MHV Union Trade Centre, 1 KN 4 Ave, Kigali",
     city: "Kigali",
     hours: "Open daily, 7:00 AM - 10:00 PM",
@@ -58,19 +60,19 @@ const DEFAULT_BRANCHES = [
     active: true,
   },
   {
-    id: "kn5-kigali",
-    name: "KN 5 Road Branch",
-    address: "KN 5 Rd, Kigali",
+    id: "kimironko",
+    name: "Simba Supermarket Kimironko",
+    address: "24XF+XVV, KG 192 St, Kigali",
     city: "Kigali",
     hours: "Open daily, 7:00 AM - 10:00 PM",
-    deliveryFee: 2000,
+    deliveryFee: 1800,
     pickup: true,
     phone: "+250 788 000 002",
     active: true,
   },
   {
-    id: "kg541-kigali",
-    name: "KG 541 Street Branch",
+    id: "kacyiru",
+    name: "Simba Supermarket Kacyiru",
     address: "KG 541 St, Kigali",
     city: "Kigali",
     hours: "Open daily, 7:30 AM - 9:30 PM",
@@ -80,80 +82,69 @@ const DEFAULT_BRANCHES = [
     active: true,
   },
   {
-    id: "city-center-kigali",
-    name: "City Centre Branch",
-    address: "24Q5+R2R, Kigali",
+    id: "nyamirambo",
+    name: "Simba Supermarket Nyamirambo",
+    address: "23H4+26V, Kigali",
     city: "Kigali",
     hours: "Open daily, 7:00 AM - 9:30 PM",
-    deliveryFee: 2000,
+    deliveryFee: 2200,
     pickup: true,
     phone: "+250 788 000 004",
     active: true,
   },
   {
-    id: "kimironko-kigali",
-    name: "Kimironko Branch",
-    address: "24XF+XVV, KG 192 St, Kigali",
-    city: "Kigali",
-    hours: "Open daily, 7:00 AM - 10:00 PM",
-    deliveryFee: 1800,
-    pickup: true,
-    phone: "+250 788 000 005",
-    active: true,
-  },
-  {
-    id: "nyamirambo-kigali",
-    name: "Nyamirambo Branch",
-    address: "23H4+26V, Kigali",
-    city: "Kigali",
-    hours: "Open daily, 7:30 AM - 9:30 PM",
-    deliveryFee: 2200,
-    pickup: true,
-    phone: "+250 788 000 006",
-    active: true,
-  },
-  {
-    id: "kicukiro-kigali",
-    name: "Kicukiro Branch",
+    id: "gikondo",
+    name: "Simba Supermarket Gikondo",
     address: "24G3+MCV, Kigali",
     city: "Kigali",
     hours: "Open daily, 7:30 AM - 9:30 PM",
     deliveryFee: 2200,
     pickup: true,
-    phone: "+250 788 000 007",
+    phone: "+250 788 000 005",
     active: true,
   },
   {
-    id: "kk35-kigali",
-    name: "KK 35 Avenue Branch",
+    id: "kanombe",
+    name: "Simba Supermarket Kanombe",
+    address: "KN 5 Rd, Kigali",
+    city: "Kigali",
+    hours: "Open daily, 7:00 AM - 10:00 PM",
+    deliveryFee: 2000,
+    pickup: true,
+    phone: "+250 788 000 006",
+    active: true,
+  },
+  {
+    id: "kinyinya",
+    name: "Simba Supermarket Kinyinya",
     address: "KK 35 Ave, Kigali",
     city: "Kigali",
     hours: "Open daily, 7:30 AM - 9:30 PM",
     deliveryFee: 2300,
     pickup: true,
+    phone: "+250 788 000 007",
+    active: true,
+  },
+  {
+    id: "kibagabaga",
+    name: "Simba Supermarket Kibagabaga",
+    address: "24Q5+R2R, Kigali",
+    city: "Kigali",
+    hours: "Open daily, 7:00 AM - 9:30 PM",
+    deliveryFee: 2000,
+    pickup: true,
     phone: "+250 788 000 008",
     active: true,
   },
   {
-    id: "beka-kigali",
-    name: "Beka Area Branch",
+    id: "nyanza",
+    name: "Simba Supermarket Nyanza",
     address: "24J3+Q3, Kigali",
     city: "Kigali",
     hours: "Open daily, 7:00 AM - 9:30 PM",
     deliveryFee: 2100,
     pickup: true,
     phone: "+250 788 000 009",
-    active: true,
-  },
-  {
-    id: "gisenyi",
-    name: "Gisenyi Branch",
-    address: "8754+P7W, Gisenyi",
-    city: "Gisenyi",
-    hours: "Open daily, 8:00 AM - 9:00 PM",
-    deliveryFee: 3000,
-    pickup: true,
-    phone: "+250 788 000 010",
     active: true,
   },
 ];
@@ -526,11 +517,14 @@ async function handleCreateOrder(request, response) {
   const body = await collectRequestBody(request);
   const customer = body.customer || {};
   const payment = body.payment || {};
+  const fulfilment = body.fulfilment || {};
   const items = Array.isArray(body.items) ? body.items : [];
   const branches = await readBranches();
   const fallbackBranch = getBranchById(branches, String(body.branchId || ""));
+  const mode = String(fulfilment.mode || "pickup");
+  const resolvedAddress = String(customer.address || "").trim() || (mode === "pickup" ? fallbackBranch?.address || "" : "");
 
-  if (!customer.name || !customer.phone || !customer.address || !payment.network || !payment.momoNumber) {
+  if (!customer.name || !customer.phone || !resolvedAddress || !payment.network || !payment.momoNumber) {
     sendJson(request, response, 400, { error: "Missing customer or payment details" });
     return;
   }
@@ -586,7 +580,8 @@ async function handleCreateOrder(request, response) {
 
   const subtotal = orderItems.reduce((sum, item) => sum + item.lineTotal, 0);
   const orderBranch = getBranchById(branches, String(body.branchId || orderItems[0]?.branchId || ""));
-  const deliveryFee = orderBranch?.deliveryFee ?? DELIVERY_FEE;
+  const deliveryFee = mode === "delivery" ? orderBranch?.deliveryFee ?? DELIVERY_FEE : 0;
+  const deposit = Math.max(0, Number(payment.deposit || 0));
   const order = normalizeOrder({
     id: createOrderId(),
     customerId,
@@ -595,20 +590,27 @@ async function handleCreateOrder(request, response) {
     customer: {
       name: customer.name,
       phone: customer.phone,
-      address: customer.address,
+      address: resolvedAddress,
       email: customer.email || "",
     },
     notes: customer.notes || "",
     payment: {
       network: payment.network,
       momoNumber: payment.momoNumber,
+      deposit,
       status: "simulated-authorized",
+    },
+    fulfilment: {
+      mode,
+      pickupTime: String(fulfilment.pickupTime || ""),
     },
     items: orderItems,
     subtotal,
     deliveryFee,
-    total: subtotal + deliveryFee,
+    total: subtotal + deliveryFee + deposit,
     status: "received",
+    managerName: "",
+    staffName: "",
     source: "web",
   });
 
@@ -687,6 +689,261 @@ async function handleCustomerLogin(request, response) {
     token,
     customer: sanitizeCustomer(customer),
   });
+}
+
+async function handleCustomerForgotPassword(request, response) {
+  const body = await collectRequestBody(request);
+  const email = String(body.email || "").trim().toLowerCase();
+
+  if (!email) {
+    sendJson(request, response, 400, { error: "Email is required" });
+    return;
+  }
+
+  sendJson(request, response, 200, {
+    message: "If that account exists, a password reset link has been prepared for demo use.",
+  });
+}
+
+async function handleCustomerGoogleAuth(request, response) {
+  const body = await collectRequestBody(request);
+  const email = String(body.email || "").trim().toLowerCase();
+  const name = String(body.name || "").trim() || "Simba Google Customer";
+  const phone = String(body.phone || "").trim();
+  const address = String(body.address || "").trim();
+
+  if (!email) {
+    sendJson(request, response, 400, { error: "Google account email is required" });
+    return;
+  }
+
+  const customers = await readCustomers();
+  let customer = customers.find((entry) => entry.email === email);
+
+  if (!customer) {
+    customer = normalizeCustomer({
+      id: createCustomerId(),
+      name,
+      email,
+      phone,
+      address,
+      passwordHash: hashPassword(`google-demo-${email}`),
+    });
+    customers.unshift(customer);
+    await writeCustomers(customers);
+  }
+
+  const token = getAuthToken({
+    role: "customer",
+    customerId: customer.id,
+    exp: Date.now() + 1000 * 60 * 60 * 24 * 7,
+  });
+
+  sendJson(request, response, 200, {
+    token,
+    customer: sanitizeCustomer(customer),
+  });
+}
+
+function buildAssistantFallback(query, products, language = "en") {
+  const normalizedQuery = String(query || "").trim().toLowerCase();
+  const intentMap = [
+    {
+      pattern: /breakfast|morning|tea|coffee|bread|cereal/,
+      keywords: ["milk", "bread", "tea", "coffee", "juice"],
+      category: "Food Products",
+      message: {
+        en: "Breakfast options are ready for quick shopping.",
+        fr: "Les options de petit-dejeuner sont pretes pour un achat rapide.",
+        rw: "Ibyo kurya bya breakfast byateguwe kugira ngo ubibone vuba.",
+      },
+    },
+    {
+      pattern: /fresh|fruit|vegetable|produce|milk/,
+      keywords: ["fresh", "fruit", "vegetable", "tomato", "banana", "apple", "milk"],
+      category: null,
+      message: {
+        en: "Here are fresher everyday picks from the selected branch.",
+        fr: "Voici des choix plus frais de la branche selectionnee.",
+        rw: "Dore amahitamo mashya ava ku ishami wahisemo.",
+      },
+    },
+    {
+      pattern: /clean|detergent|soap|sanitary|laundry/,
+      keywords: ["detergent", "soap", "clean", "laundry"],
+      category: "Cleaning and Sanitary",
+      message: {
+        en: "I filtered the catalog to cleaning and sanitary essentials.",
+        fr: "J'ai filtre le catalogue vers les essentiels d'entretien et sanitaires.",
+        rw: "Nayunguruye catalog kugira ngo yerekane ibikoresho by'isuku gusa.",
+      },
+    },
+    {
+      pattern: /drink|juice|water|soda|beverage/,
+      keywords: ["juice", "water", "drink", "soda"],
+      category: "Non-Alcoholic Drinks",
+      message: {
+        en: "These drink options match refreshment needs at this branch.",
+        fr: "Ces boissons correspondent aux besoins de rafraichissement de cette branche.",
+        rw: "Ibi binyobwa bihuye n'ibyo ushakira kuri iri shami.",
+      },
+    },
+    {
+      pattern: /beauty|cosmetic|shampoo|lotion|skin/,
+      keywords: ["shampoo", "lotion", "beauty", "cosmetic"],
+      category: "Cosmetics",
+      message: {
+        en: "I narrowed the view to beauty and personal care products.",
+        fr: "J'ai reduit la vue aux produits de beaute et de soin personnel.",
+        rw: "Nashyize imbere ibicuruzwa by'ubwiza n'isuku bw'umubiri.",
+      },
+    },
+  ];
+
+  const matchedIntent = intentMap.find((intent) => intent.pattern.test(normalizedQuery));
+  const keywords = new Set(
+    normalizedQuery
+      .replace(/[^a-z0-9\s]/g, " ")
+      .split(/\s+/)
+      .filter((token) => token.length > 2)
+  );
+  (matchedIntent?.keywords || []).forEach((keyword) => keywords.add(keyword));
+
+  const searchQuery = Array.from(keywords).join(" ").trim();
+  const category = matchedIntent?.category || "all";
+  const matches = products
+    .map((product) => {
+      const haystack = `${product.name} ${product.category} ${product.subcategory} ${product.description} ${product.badge}`.toLowerCase();
+      let score = 0;
+      keywords.forEach((keyword) => {
+        if (haystack.includes(keyword)) score += 3;
+      });
+      if (matchedIntent?.category && product.category === matchedIntent.category) score += 4;
+      if (product.stock > 0) score += 1;
+      return { product, score };
+    })
+    .filter(({ product, score }) => {
+      const categoryMatch = category === "all" || product.category === category;
+      return categoryMatch && (score > 0 || !keywords.size);
+    })
+    .sort((a, b) => b.score - a.score || a.product.price - b.product.price)
+    .slice(0, 6)
+    .map(({ product }) => product);
+
+  const fallbackMessage = {
+    en: `Simba found ${matches.length} matching product(s).`,
+    fr: `Simba a trouve ${matches.length} produit(s) correspondants.`,
+    rw: `Simba yabonye ibicuruzwa ${matches.length} bihuye n'ibyo ushaka.`,
+  };
+  const baseMessage = matchedIntent?.message?.[language] || fallbackMessage[language] || fallbackMessage.en;
+
+  return {
+    query: normalizedQuery,
+    searchQuery,
+    category,
+    matches,
+    message: baseMessage,
+    source: "fallback",
+  };
+}
+
+async function requestGroqAssistantResult(query, branch, products, language) {
+  if (!GROQ_API_KEY || typeof fetch !== "function") {
+    return null;
+  }
+
+  const catalogContext = products.slice(0, 30).map((product) => ({
+    id: product.id,
+    name: product.name,
+    category: product.category,
+    description: product.description,
+    price: product.price,
+    stock: product.stock,
+  }));
+
+  const completionResponse = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${GROQ_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: GROQ_MODEL,
+      temperature: 0.2,
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are Simba Supermarket's shopping assistant. Reply with JSON only using keys: message, category, searchQuery, productIds. productIds must be an array of ids from the catalog context.",
+        },
+        {
+          role: "user",
+          content: JSON.stringify({
+            language,
+            branch: branch?.name || "",
+            query,
+            catalog: catalogContext,
+          }),
+        },
+      ],
+      response_format: { type: "json_object" },
+    }),
+  });
+
+  if (!completionResponse.ok) {
+    throw new Error("Groq request failed");
+  }
+
+  const completionBody = await completionResponse.json();
+  const rawContent = completionBody.choices?.[0]?.message?.content || "{}";
+  const parsed = JSON.parse(rawContent);
+  const requestedIds = Array.isArray(parsed.productIds) ? parsed.productIds.map((value) => String(value)) : [];
+  const matches = requestedIds
+    .map((productId) => products.find((product) => product.id === productId))
+    .filter(Boolean)
+    .slice(0, 6);
+
+  return {
+    query: String(query || ""),
+    searchQuery: String(parsed.searchQuery || ""),
+    category: String(parsed.category || "all"),
+    matches,
+    message: String(parsed.message || ""),
+    source: "groq",
+  };
+}
+
+async function handleAssistantSearch(request, response) {
+  const body = await collectRequestBody(request);
+  const query = String(body.query || "").trim();
+  const language = String(body.language || "en").toLowerCase();
+  const branchId = String(body.branchId || "");
+
+  if (!query) {
+    sendJson(request, response, 400, { error: "Search query is required" });
+    return;
+  }
+
+  const [products, branches] = await Promise.all([readProducts(), readBranches()]);
+  const branch = getBranchById(branches, branchId);
+  const branchProducts = products
+    .filter((product) => product.active)
+    .map((product) => withBranchContext(product, branch?.id || ""))
+    .filter((product) => Number(product.stock || 0) > 0);
+
+  const fallback = buildAssistantFallback(query, branchProducts, language);
+
+  try {
+    const groqResult = await requestGroqAssistantResult(query, branch, branchProducts, language);
+    if (groqResult) {
+      sendJson(request, response, 200, groqResult);
+      return;
+    }
+  } catch {
+    // Fall back silently so demo usage keeps working.
+  }
+
+  sendJson(request, response, 200, fallback);
 }
 
 async function handleAccountGet(request, response, pathname) {
@@ -783,6 +1040,8 @@ async function handleAdminPatch(request, response, pathname) {
       }
 
     order.status = status;
+    if (body.managerName !== undefined) order.managerName = String(body.managerName || "");
+    if (body.staffName !== undefined) order.staffName = String(body.staffName || "");
     await writeOrders(orders);
     sendJson(request, response, 200, { order });
     return;
@@ -1017,6 +1276,11 @@ async function requestListener(request, response) {
       return;
     }
 
+    if (request.method === "POST" && pathname === "/api/assistant-search") {
+      await handleAssistantSearch(request, response);
+      return;
+    }
+
     if (request.method === "POST" && pathname === "/api/customers/register") {
       await handleCustomerRegister(request, response);
       return;
@@ -1024,6 +1288,16 @@ async function requestListener(request, response) {
 
     if (request.method === "POST" && pathname === "/api/customers/login") {
       await handleCustomerLogin(request, response);
+      return;
+    }
+
+    if (request.method === "POST" && pathname === "/api/customers/forgot-password") {
+      await handleCustomerForgotPassword(request, response);
+      return;
+    }
+
+    if (request.method === "POST" && pathname === "/api/customers/google") {
+      await handleCustomerGoogleAuth(request, response);
       return;
     }
 

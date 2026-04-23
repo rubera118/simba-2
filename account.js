@@ -1,11 +1,23 @@
 const ACCOUNT_STORAGE_KEYS = {
   token: "simba-customer-token",
   profile: "simba-customer-profile",
+  branchReviews: "simba-branch-reviews",
+  passwordResets: "simba-password-resets",
 };
+
+const REVIEW_ELIGIBLE_STATUSES = ["ready-for-pickup", "completed", "delivered"];
 
 const accountState = {
   token: loadFromStorage(ACCOUNT_STORAGE_KEYS.token, ""),
   profile: loadFromStorage(ACCOUNT_STORAGE_KEYS.profile, null),
+  orders: [],
+};
+
+const GOOGLE_DEMO_PROFILE = {
+  name: "Aline Simba",
+  email: "aline.google@simba-demo.rw",
+  phone: "+250 788 555 100",
+  address: "Kigali, KG 11 Ave",
 };
 
 document.addEventListener("DOMContentLoaded", initAccountPage);
@@ -21,7 +33,9 @@ function initAccountPage() {
 function bindAccountControls() {
   const loginForm = document.getElementById("loginForm");
   const registerForm = document.getElementById("registerForm");
+  const forgotPasswordForm = document.getElementById("forgotPasswordForm");
   const logoutButton = document.getElementById("logoutAccount");
+  const googleSignInButton = document.getElementById("googleSignInButton");
 
   loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -48,9 +62,46 @@ function bindAccountControls() {
     );
   });
 
+  forgotPasswordForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(forgotPasswordForm);
+    await requestPasswordReset(String(formData.get("email") || ""));
+    forgotPasswordForm.reset();
+  });
+
+  googleSignInButton?.addEventListener("click", async () => {
+    const message = document.getElementById("googleSignInMessage");
+    message.textContent = "Connecting Google account...";
+
+    try {
+      const response = await fetch(apiUrl("/api/customers/google"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(GOOGLE_DEMO_PROFILE),
+      });
+
+      const body = await response.json();
+      if (!response.ok) {
+        throw new Error(body.error || "Google sign-in failed");
+      }
+
+      accountState.token = body.token;
+      accountState.profile = body.customer;
+      saveToStorage(ACCOUNT_STORAGE_KEYS.token, accountState.token);
+      saveToStorage(ACCOUNT_STORAGE_KEYS.profile, accountState.profile);
+      message.textContent = "";
+      await loadAccountDashboard();
+    } catch (error) {
+      message.textContent = error.message;
+    }
+  });
+
   logoutButton?.addEventListener("click", () => {
     accountState.token = "";
     accountState.profile = null;
+    accountState.orders = [];
     localStorage.removeItem(ACCOUNT_STORAGE_KEYS.token);
     localStorage.removeItem(ACCOUNT_STORAGE_KEYS.profile);
     document.getElementById("accountDashboard").classList.add("hidden");
@@ -101,16 +152,18 @@ async function loadAccountDashboard() {
     const profilePayload = await profileResponse.json();
     const ordersPayload = await ordersResponse.json();
     accountState.profile = profilePayload.customer;
+    accountState.orders = ordersPayload.orders || [];
     saveToStorage(ACCOUNT_STORAGE_KEYS.profile, accountState.profile);
 
     renderProfile(accountState.profile);
-    renderOrders(ordersPayload.orders || []);
+    renderOrders(accountState.orders);
 
     document.getElementById("accountAuthView").classList.add("hidden");
     document.getElementById("accountDashboard").classList.remove("hidden");
   } catch (error) {
     accountState.token = "";
     accountState.profile = null;
+    accountState.orders = [];
     localStorage.removeItem(ACCOUNT_STORAGE_KEYS.token);
     localStorage.removeItem(ACCOUNT_STORAGE_KEYS.profile);
     document.getElementById("accountAuthView").classList.remove("hidden");
@@ -168,6 +221,10 @@ function renderOrders(orders) {
               <span>Branch</span>
               <strong>${order.branch?.name || order.branchId || "Not set"}</strong>
             </div>
+            <div class="summary-box">
+              <span>Fulfilment</span>
+              <strong>${formatFulfilment(order)}</strong>
+            </div>
           </div>
           <div class="admin-order-items">
             ${order.items
@@ -181,16 +238,156 @@ function renderOrders(orders) {
               )
               .join("")}
           </div>
+          ${renderReviewPanel(order)}
         </article>
       `
     )
     .join("");
+
+  container.querySelectorAll("[data-submit-review]").forEach((button) => {
+    button.addEventListener("click", () => submitReview(button.dataset.submitReview));
+  });
+}
+
+function renderReviewPanel(order) {
+  const existingReview = getReviewByOrderId(order.id);
+  if (existingReview) {
+    return `
+      <div class="summary-box">
+        <span>Branch review</span>
+        <strong>${"★".repeat(existingReview.rating)}${"☆".repeat(5 - existingReview.rating)}</strong>
+        <p>${existingReview.comment || "Thank you for sharing your pickup experience."}</p>
+      </div>
+    `;
+  }
+
+  if (!REVIEW_ELIGIBLE_STATUSES.includes(order.status)) {
+    return `
+      <div class="summary-box">
+        <span>Branch review</span>
+        <strong>Available after pickup is completed</strong>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="summary-box">
+      <span>Rate your branch experience</span>
+      <div class="checkout-form">
+        <label class="field">
+          <span>Rating</span>
+          <select data-review-field="rating" data-order-id="${order.id}">
+            <option value="5">5 stars</option>
+            <option value="4">4 stars</option>
+            <option value="3">3 stars</option>
+            <option value="2">2 stars</option>
+            <option value="1">1 star</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Comment</span>
+          <textarea rows="3" data-review-field="comment" data-order-id="${order.id}" placeholder="Tell Simba how the pickup went."></textarea>
+        </label>
+        <button class="ghost-button" type="button" data-submit-review="${order.id}">Submit review</button>
+        <p class="checkout-message" id="reviewMessage-${order.id}" aria-live="polite"></p>
+      </div>
+    </div>
+  `;
 }
 
 function getAuthHeaders() {
   return {
     Authorization: `Bearer ${accountState.token}`,
   };
+}
+
+async function requestPasswordReset(email) {
+  const message = document.getElementById("forgotPasswordMessage");
+  if (!message) return;
+
+  if (!email.trim()) {
+    message.textContent = "Enter your email address first.";
+    return;
+  }
+
+  message.textContent = "Preparing reset link...";
+
+  try {
+    const response = await fetch(apiUrl("/api/customers/forgot-password"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Could not prepare a reset link right now.");
+    }
+
+    message.textContent = "If that account exists, a reset link has been prepared for demo use.";
+  } catch {
+    const requests = loadFromStorage(ACCOUNT_STORAGE_KEYS.passwordResets, []);
+    requests.unshift({
+      email,
+      createdAt: new Date().toISOString(),
+    });
+    saveToStorage(ACCOUNT_STORAGE_KEYS.passwordResets, requests);
+    message.textContent = "Demo reset saved locally. In production this would email a secure reset link.";
+  }
+}
+
+function submitReview(orderId) {
+  const message = document.getElementById(`reviewMessage-${orderId}`);
+  const ratingField = document.querySelector(`[data-review-field="rating"][data-order-id="${orderId}"]`);
+  const commentField = document.querySelector(`[data-review-field="comment"][data-order-id="${orderId}"]`);
+  const targetOrder = accountState.orders.find((entry) => entry.id === orderId);
+
+  if (!message || !ratingField || !commentField || !targetOrder) {
+    return;
+  }
+
+  const rating = Math.max(1, Math.min(5, Number(ratingField.value || 0)));
+  if (!rating) {
+    message.textContent = "Choose a rating before submitting.";
+    return;
+  }
+
+  const reviews = loadReviews().filter((entry) => entry.orderId !== orderId);
+  reviews.unshift({
+    orderId,
+    branchId: targetOrder.branchId,
+    branchName: targetOrder.branch?.name || "",
+    customerId: accountState.profile?.id || "",
+    customerName: accountState.profile?.name || "Simba customer",
+    rating,
+    comment: commentField.value.trim(),
+    createdAt: new Date().toISOString(),
+  });
+  saveReviews(reviews);
+  message.textContent = "Thanks. Your branch review has been saved.";
+  renderOrders(accountState.orders);
+}
+
+function loadReviews() {
+  return loadFromStorage(ACCOUNT_STORAGE_KEYS.branchReviews, []);
+}
+
+function saveReviews(reviews) {
+  saveToStorage(ACCOUNT_STORAGE_KEYS.branchReviews, reviews);
+}
+
+function getReviewByOrderId(orderId) {
+  return loadReviews().find((review) => review.orderId === orderId) || null;
+}
+
+function formatFulfilment(order) {
+  const mode = order.fulfilment?.mode || "delivery";
+  const pickupTime = order.fulfilment?.pickupTime || "";
+  if (mode === "pickup") {
+    return pickupTime ? `Pickup | ${pickupTime}` : "Pickup";
+  }
+  return "Delivery";
 }
 
 function formatCurrency(value) {

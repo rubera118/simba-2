@@ -6,19 +6,31 @@ const STORAGE_KEYS = {
   customerToken: "simba-customer-token",
   customerProfile: "simba-customer-profile",
   selectedBranch: "simba-selected-branch",
+  reviews: "simba-branch-reviews",
 };
+
+const PICKUP_DEPOSIT = 500;
 
 const translations = {
   en: {
     theme: "Theme",
     checkoutBadge: "Safe and simple checkout",
     deliveryInfo: "Delivery details",
+    pickupDetails: "Pickup details",
     checkoutTitle: "Complete your order",
+    pickupBadge: "Pick-up first",
+    pickupTitle: "Choose your branch and pick-up time",
+    pickupBranch: "Pick-up branch",
+    pickupTime: "Pick-up time",
+    pickupMode: "Fulfilment mode",
+    pickupOption: "Pick-up",
+    deliveryOption: "Delivery",
     fullName: "Full name",
     phoneNumber: "Phone number",
     address: "Delivery address",
     notes: "Delivery notes",
-    paymentTitle: "Simulated Mobile Money payment",
+    paymentTitle: "MoMo deposit to confirm your order",
+    depositText: "A small non-refundable deposit confirms the order so branch staff can start preparing it.",
     network: "Network",
     momoNumber: "MoMo number",
     placeOrder: "Place order",
@@ -40,6 +52,7 @@ const translations = {
     quantity: "Quantity",
     branchLabel: "Branch",
     branchSummary: "Selected branch",
+    depositLabel: "MoMo deposit",
     formError: "Please complete all delivery and payment fields before placing the order.",
     checkoutError: "We could not place the order right now. Please make sure the backend server is running.",
   },
@@ -47,12 +60,21 @@ const translations = {
     theme: "Theme",
     checkoutBadge: "Paiement simple et sur",
     deliveryInfo: "Informations de livraison",
+    pickupDetails: "Informations de retrait",
     checkoutTitle: "Finalisez votre commande",
+    pickupBadge: "Retrait d'abord",
+    pickupTitle: "Choisissez votre branche et l'heure de retrait",
+    pickupBranch: "Branche de retrait",
+    pickupTime: "Heure de retrait",
+    pickupMode: "Mode de retrait",
+    pickupOption: "Retrait",
+    deliveryOption: "Livraison",
     fullName: "Nom complet",
     phoneNumber: "Numero de telephone",
     address: "Adresse de livraison",
     notes: "Notes de livraison",
-    paymentTitle: "Paiement Mobile Money simule",
+    paymentTitle: "Depot MoMo pour confirmer la commande",
+    depositText: "Un petit depot non remboursable confirme la commande pour que l'equipe commence la preparation.",
     network: "Reseau",
     momoNumber: "Numero MoMo",
     placeOrder: "Valider la commande",
@@ -74,6 +96,7 @@ const translations = {
     quantity: "Quantite",
     branchLabel: "Branche",
     branchSummary: "Branche choisie",
+    depositLabel: "Depot MoMo",
     formError: "Veuillez remplir toutes les informations de livraison et de paiement avant de valider.",
     checkoutError: "Impossible d'envoyer la commande maintenant. Verifiez que le serveur backend fonctionne.",
   },
@@ -81,12 +104,21 @@ const translations = {
     theme: "Insanganyamatsiko",
     checkoutBadge: "Kwishyura byoroshye kandi bitekanye",
     deliveryInfo: "Aho woherezwa",
+    pickupDetails: "Amakuru ya pickup",
     checkoutTitle: "Rangiza gutumiza",
+    pickupBadge: "Banza pickup",
+    pickupTitle: "Hitamo ishami n'igihe cyo gufatiraho",
+    pickupBranch: "Ishami ryo gufatiraho",
+    pickupTime: "Igihe cyo gufatiraho",
+    pickupMode: "Uburyo bwo guhabwa",
+    pickupOption: "Pickup",
+    deliveryOption: "Delivery",
     fullName: "Amazina yose",
     phoneNumber: "Numero ya telefone",
     address: "Aderesi yo koherezaho",
     notes: "Ubutumwa bwo kohereza",
-    paymentTitle: "Kwishyura kwa Mobile Money ko kwigereranya",
+    paymentTitle: "Kubitsa MoMo kugira ngo wemeze order",
+    depositText: "Ubwishyu buto butagaruka bwemeza order kugira ngo abakozi batangire kuyitegura.",
     network: "Umuyoboro",
     momoNumber: "Numero ya MoMo",
     placeOrder: "Ohereza itumiza",
@@ -108,6 +140,7 @@ const translations = {
     quantity: "Ingano",
     branchLabel: "Ishami",
     branchSummary: "Ishami ryatoranyijwe",
+    depositLabel: "Ubwizigame bwa MoMo",
     formError: "Uzuza amakuru yose yo kohereza no kwishyura mbere yo kohereza itumiza.",
     checkoutError: "Ntitwabashije kohereza itumiza ubu. Reba niba server ya backend iri gukora.",
   },
@@ -124,7 +157,10 @@ const state = {
   customerToken: loadFromStorage(STORAGE_KEYS.customerToken, ""),
   customerProfile: loadFromStorage(STORAGE_KEYS.customerProfile, null),
   selectedBranchId: window.SIMBA_BRANCHES?.getSelectedBranch()?.id || "",
+  deposit: PICKUP_DEPOSIT,
 };
+
+const DEFAULT_DELIVERY_FEE = 2000;
 
 const PRODUCT_FALLBACK_IMAGE = "assets/product-fallback.svg";
 
@@ -142,6 +178,8 @@ function bindControls() {
   const languageSelect = document.getElementById("languageSelect");
   const themeToggle = document.getElementById("themeToggle");
   const form = document.getElementById("checkoutForm");
+  populatePickupBranches();
+  syncPickupSummary();
 
   languageSelect.value = state.language;
 
@@ -162,6 +200,21 @@ function bindControls() {
     event.preventDefault();
     await submitOrder(form);
   });
+
+  form.elements.pickupBranch?.addEventListener("change", (event) => {
+    state.selectedBranchId = event.target.value;
+    window.SIMBA_BRANCHES?.saveSelectedBranch(state.selectedBranchId);
+    syncPickupSummary();
+    renderCheckoutItems();
+  });
+
+  form.elements.pickupTime?.addEventListener("change", syncPickupSummary);
+  form.elements.fulfilmentMode?.addEventListener("change", () => {
+    applyFulfilmentMode();
+    syncPickupSummary();
+    renderCheckoutItems();
+  });
+  applyFulfilmentMode();
 }
 
 function applyTheme() {
@@ -180,6 +233,7 @@ function applyLanguage() {
   if (state.lastOrder && !confirmation.classList.contains("hidden")) {
     renderOrderConfirmation();
   }
+  applyFulfilmentMode();
 }
 
 async function renderCheckoutItems() {
@@ -188,7 +242,11 @@ async function renderCheckoutItems() {
   const subtotalNode = document.getElementById("checkoutSubtotal");
   const totalNode = document.getElementById("checkoutTotal");
   const submitButton = document.querySelector('#checkoutForm button[type="submit"]');
-  const deliveryFee = 2000;
+  const deliveryNode = document.getElementById("deliveryFee");
+  const depositNode = document.getElementById("depositFee");
+  const branchSummary = document.getElementById("summaryBranch");
+  const pickupSummary = document.getElementById("summaryPickupTime");
+  const deliveryFee = getDeliveryFee();
 
   try {
     state.products = await loadProducts();
@@ -213,7 +271,11 @@ async function renderCheckoutItems() {
         </div>
       `;
       subtotalNode.textContent = formatCurrency(0);
-      totalNode.textContent = formatCurrency(deliveryFee);
+      deliveryNode.textContent = formatCurrency(deliveryFee);
+      depositNode.textContent = formatCurrency(state.deposit);
+      branchSummary.textContent = window.SIMBA_BRANCHES?.getBranchById(state.selectedBranchId).name || "-";
+      pickupSummary.textContent = document.getElementById("pickupTimeSelect")?.value || "-";
+      totalNode.textContent = formatCurrency(deliveryFee + state.deposit);
       if (submitButton) submitButton.disabled = true;
       return;
     }
@@ -258,7 +320,11 @@ async function renderCheckoutItems() {
 
     itemsContainer.innerHTML = itemsMarkup;
     subtotalNode.textContent = formatCurrency(subtotal);
-    totalNode.textContent = formatCurrency(subtotal + deliveryFee);
+    deliveryNode.textContent = formatCurrency(deliveryFee);
+    depositNode.textContent = formatCurrency(state.deposit);
+    branchSummary.textContent = window.SIMBA_BRANCHES?.getBranchById(state.selectedBranchId).name || "-";
+    pickupSummary.textContent = document.getElementById("pickupTimeSelect")?.value || "-";
+    totalNode.textContent = formatCurrency(subtotal + deliveryFee + state.deposit);
     itemsContainer.querySelectorAll('button[data-action]').forEach((button) => {
       button.addEventListener("click", () => updateCartItem(button.dataset.id, button.dataset.action, button.dataset.branchId));
     });
@@ -289,6 +355,12 @@ function updateCartItem(productId, action, branchId, nextBranchId) {
     } else {
       item.branchId = nextBranchId;
     }
+    if (state.selectedBranchId === branchId) {
+      state.selectedBranchId = nextBranchId;
+      window.SIMBA_BRANCHES?.saveSelectedBranch(nextBranchId);
+      populatePickupBranches();
+      syncPickupSummary();
+    }
   }
   if (action === "decrease") item.quantity -= 1;
   if (action === "remove" || item.quantity <= 0) {
@@ -318,6 +390,7 @@ async function submitOrder(form) {
   }
 
   const formData = new FormData(form);
+  const fulfilmentMode = String(formData.get("fulfilmentMode") || "pickup");
   const orderPayload = {
     customer: {
       name: String(formData.get("name") || ""),
@@ -328,8 +401,13 @@ async function submitOrder(form) {
     payment: {
       network: String(formData.get("network") || ""),
       momoNumber: String(formData.get("momoNumber") || ""),
+      deposit: state.deposit,
     },
     branchId: state.selectedBranchId,
+    fulfilment: {
+      mode: fulfilmentMode,
+      pickupTime: String(formData.get("pickupTime") || ""),
+    },
     items: state.cart.map((item) => ({
       id: item.id,
       quantity: item.quantity,
@@ -367,6 +445,8 @@ async function submitOrder(form) {
     state.cart = [];
     saveToStorage(STORAGE_KEYS.cart, state.cart);
     form.reset();
+    populatePickupBranches();
+    applyFulfilmentMode();
     await renderCheckoutItems();
   } catch (error) {
     message.textContent = error.message || copy.checkoutError;
@@ -399,7 +479,7 @@ function renderOrderConfirmation() {
       </div>
       <div class="summary-row">
         <span>${copy.orderPayment}</span>
-        <strong>${state.lastOrder.payment?.network || state.lastOrder.network}</strong>
+        <strong>${state.lastOrder.payment?.network || state.lastOrder.network} | ${copy.depositLabel}: ${formatCurrency(state.lastOrder.payment?.deposit || state.deposit)}</strong>
       </div>
       <div class="summary-row">
         <span>${copy.orderDelivery}</span>
@@ -408,6 +488,10 @@ function renderOrderConfirmation() {
       <div class="summary-row">
         <span>${copy.branchSummary}</span>
         <strong>${state.lastOrder.branch?.name || window.SIMBA_BRANCHES?.getBranchById(state.lastOrder.branchId).name || ""}</strong>
+      </div>
+      <div class="summary-row">
+        <span>${copy.pickupTime}</span>
+        <strong>${state.lastOrder.fulfilment?.pickupTime || document.getElementById("pickupTimeSelect")?.value || ""}</strong>
       </div>
       <div class="summary-row total-row">
         <span>${copy.total}</span>
@@ -427,6 +511,67 @@ function hydrateCustomerDetails() {
   if (!form.elements.name.value) form.elements.name.value = state.customerProfile.name || "";
   if (!form.elements.phone.value) form.elements.phone.value = state.customerProfile.phone || "";
   if (!form.elements.address.value) form.elements.address.value = state.customerProfile.address || "";
+}
+
+function populatePickupBranches() {
+  const select = document.getElementById("pickupBranchSelect");
+  if (!select || !window.SIMBA_BRANCHES) return;
+
+  const branches = window.SIMBA_BRANCHES.getBranches();
+  select.innerHTML = branches
+    .map((branch) => `<option value="${branch.id}" ${branch.id === state.selectedBranchId ? "selected" : ""}>${branch.name}</option>`)
+    .join("");
+}
+
+function syncPickupSummary() {
+  const branchSummary = document.getElementById("summaryBranch");
+  const pickupSummary = document.getElementById("summaryPickupTime");
+  const pickupBranch = document.getElementById("pickupBranchSelect");
+  const pickupTime = document.getElementById("pickupTimeSelect");
+
+  if (pickupBranch?.value) {
+    state.selectedBranchId = pickupBranch.value;
+  }
+
+  if (branchSummary) {
+    branchSummary.textContent = window.SIMBA_BRANCHES?.getBranchById(state.selectedBranchId).name || "-";
+  }
+  if (pickupSummary) {
+    pickupSummary.textContent = pickupTime?.value || "-";
+  }
+}
+
+function applyFulfilmentMode() {
+  const form = document.getElementById("checkoutForm");
+  if (!form) return;
+
+  const mode = form.elements.fulfilmentMode?.value || "pickup";
+  const copy = translations[state.language] || translations.en;
+  const deliveryLabel = document.querySelector('[data-i18n="deliveryInfo"]');
+  const addressField = form.elements.address;
+  const notesField = form.elements.notes;
+
+  if (deliveryLabel) {
+    deliveryLabel.textContent = mode === "pickup" ? copy.pickupDetails : copy.deliveryInfo;
+  }
+
+  if (addressField) {
+    addressField.required = mode === "delivery";
+    addressField.placeholder = mode === "pickup" ? "Optional pickup note or meeting point" : "Kigali, KG 11 Ave";
+  }
+
+  if (notesField) {
+    notesField.placeholder =
+      mode === "pickup"
+        ? "Pickup contact, vehicle info, or any note for the branch team"
+        : "Apartment number, landmarks, preferred time";
+  }
+}
+
+function getDeliveryFee() {
+  const mode = document.getElementById("checkoutForm")?.elements.fulfilmentMode?.value || "pickup";
+  if (mode !== "delivery") return 0;
+  return window.SIMBA_BRANCHES?.getBranchById(state.selectedBranchId)?.deliveryFee ?? DEFAULT_DELIVERY_FEE;
 }
 
 async function loadProducts() {

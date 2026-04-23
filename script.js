@@ -17,6 +17,8 @@ const translations = {
     navAbout: "About",
     navContact: "Contact",
     navCheckout: "Checkout",
+    navAccount: "Account",
+    menu: "Menu",
     branchLabel: "Branch",
     theme: "Theme",
     cart: "Cart",
@@ -58,6 +60,16 @@ const translations = {
     trustTwoText: "Selected branch stock, pickup, and delivery context carried into cart and checkout",
     trustThreeTitle: "Everyday convenience",
     trustThreeText: "Mobile-friendly browsing, account tools, and quick checkout with Mobile Money",
+    pickupPriorityBadge: "Demo-day flow",
+    pickupPriorityTitle: "Pick-up first, then delivery",
+    pickupPriorityText:
+      "Choose a Kigali branch, select a pickup time, confirm with a small MoMo deposit, and let the branch team prepare your basket.",
+    pickupPriorityDepositTitle: "MoMo deposit",
+    pickupPriorityDepositText: "A 500 RWF confirmation deposit protects branch staff time before prep starts.",
+    pickupPriorityStockTitle: "Branch-level stock",
+    pickupPriorityStockText: "Each Simba branch tracks its own stock, so Remera orders do not affect Kimironko inventory.",
+    pickupPriorityOpsTitle: "Manager to staff flow",
+    pickupPriorityOpsText: "Orders land in the branch dashboard, managers assign staff, and teams mark orders ready for pickup.",
     branchesShowcaseBadge: "Branches",
     branchesShowcaseTitle: "Shop from the branch that works best for you",
     branchesShowcaseText:
@@ -78,6 +90,13 @@ const translations = {
     catalogTitle: "Search, filter, and add to cart quickly",
     catalogNote:
       "The catalog below keeps the power of the old store, but packages it in a cleaner and more responsive layout.",
+    assistantBadge: "Smart search",
+    assistantTitle: "Ask Simba what you need",
+    assistantNote: 'Try phrases like "I need breakfast", "show fresh milk", or "cheap cleaning products".',
+    assistantInputLabel: "Your request",
+    assistantPlaceholder: "I need something for breakfast",
+    assistantAction: "Ask Simba",
+    assistantEmpty: "Ask for a meal, product, branch need, or budget and Simba will guide you.",
     searchLabel: "Search products",
     searchPlaceholder: "Search rice, juice, shampoo...",
     categoryLabel: "Category",
@@ -118,6 +137,8 @@ const translations = {
     familyRowText: "Bigger-need items for family kitchens, laundry rooms, and routines.",
     quickView: "Quick view",
     browseCatalog: "Browse catalog",
+    assistantFound: "Simba found {count} matching product(s).",
+    assistantUnavailable: "Smart search is temporarily using local catalog matching.",
   },
   fr: {
     announceText: "Shopping moderne pour les familles, bureaux et besoins du quotidien a Kigali.",
@@ -130,6 +151,8 @@ const translations = {
     navAbout: "A propos",
     navContact: "Contact",
     navCheckout: "Paiement",
+    navAccount: "Compte",
+    menu: "Menu",
     branchLabel: "Branche",
     theme: "Theme",
     cart: "Panier",
@@ -171,6 +194,16 @@ const translations = {
     trustTwoText: "Le stock, le retrait et la livraison suivent la branche choisie",
     trustThreeTitle: "Confort au quotidien",
     trustThreeText: "Navigation mobile, compte client et paiement rapide par Mobile Money",
+    pickupPriorityBadge: "Flux de demo",
+    pickupPriorityTitle: "Retrait d'abord, livraison ensuite",
+    pickupPriorityText:
+      "Choisissez une branche a Kigali, une heure de retrait, confirmez avec un petit depot MoMo et laissez l'equipe preparer votre panier.",
+    pickupPriorityDepositTitle: "Depot MoMo",
+    pickupPriorityDepositText: "Un depot de confirmation de 500 RWF protege le temps de preparation de l'equipe.",
+    pickupPriorityStockTitle: "Stock par branche",
+    pickupPriorityStockText: "Chaque branche Simba suit son propre stock, donc une commande a Remera n'affecte pas Kimironko.",
+    pickupPriorityOpsTitle: "Flux manager vers staff",
+    pickupPriorityOpsText: "Les commandes arrivent au tableau de bord, les managers assignent, puis l'equipe marque pret pour retrait.",
     branchesShowcaseBadge: "Branches",
     branchesShowcaseTitle: "Achetez depuis la branche qui vous convient",
     branchesShowcaseText:
@@ -191,6 +224,13 @@ const translations = {
     catalogTitle: "Recherchez, filtrez et ajoutez rapidement au panier",
     catalogNote:
       "Le catalogue garde la richesse de l'ancien site mais avec une presentation plus propre et responsive.",
+    assistantBadge: "Recherche intelligente",
+    assistantTitle: "Demandez a Simba ce qu'il vous faut",
+    assistantNote: 'Essayez "je veux un petit dejeuner", "montre du lait frais" ou "produits de nettoyage pas chers".',
+    assistantInputLabel: "Votre demande",
+    assistantPlaceholder: "Je veux quelque chose pour le petit dejeuner",
+    assistantAction: "Demander a Simba",
+    assistantEmpty: "Demandez un repas, un produit, un besoin de branche ou un budget et Simba vous guide.",
     searchLabel: "Rechercher des produits",
     searchPlaceholder: "Chercher riz, jus, shampoing...",
     categoryLabel: "Categorie",
@@ -231,6 +271,8 @@ const translations = {
     familyRowText: "Des indispensables pour la cuisine, la lessive et la maison.",
     quickView: "Voir vite",
     browseCatalog: "Voir le catalogue",
+    assistantFound: "Simba a trouve {count} produit(s) correspondants.",
+    assistantUnavailable: "La recherche intelligente utilise temporairement le catalogue local.",
   },
   rw: {
     announceText: "Kwamamaza gushya ku miryango, ibiro n'ibikenerwa buri munsi i Kigali.",
@@ -243,6 +285,8 @@ const translations = {
     navAbout: "Ibyerekeye",
     navContact: "Twandikire",
     navCheckout: "Kwishyura",
+    navAccount: "Konti",
+    menu: "Menu",
     branchLabel: "Ishami",
     theme: "Insanganyamatsiko",
     cart: "Agaseke",
@@ -284,6 +328,16 @@ const translations = {
     trustTwoText: "Stock, pickup na delivery bikurikira ishami wahisemo",
     trustThreeTitle: "Byoroheye buri munsi",
     trustThreeText: "Gukoresha neza kuri telefoni, konti y'umukiriya na Mobile Money",
+    pickupPriorityBadge: "Uko demo ikora",
+    pickupPriorityTitle: "Banza pickup, delivery ikurikire",
+    pickupPriorityText:
+      "Hitamo ishami rya Kigali, ushyireho igihe cya pickup, wemeze na MoMo deposit nto, hanyuma ishami ritangire gutegura agaseke kawe.",
+    pickupPriorityDepositTitle: "MoMo deposit",
+    pickupPriorityDepositText: "Deposit ya 500 RWF ifasha kurinda igihe cy'abakozi mbere yo gutegura order.",
+    pickupPriorityStockTitle: "Stock kuri buri shami",
+    pickupPriorityStockText: "Buri shami rya Simba rikurikirana stock yaryo, bityo order ya Remera ntigabanye iya Kimironko.",
+    pickupPriorityOpsTitle: "Uko manager ahereza staff",
+    pickupPriorityOpsText: "Order ijya kuri dashboard y'ishami, manager akayiha staff, hanyuma bagashyira kuri ready for pickup.",
     branchesShowcaseBadge: "Amashami",
     branchesShowcaseTitle: "Gura ukoresheje ishami rikubereye",
     branchesShowcaseText:
@@ -304,6 +358,13 @@ const translations = {
     catalogTitle: "Shakisha, muyungurure kandi ushyire mu gaseke vuba",
     catalogNote:
       "Catalog igumana imbaraga z'urubuga rushaje ariko mu miterere isukuye kandi ikora neza kuri telefoni.",
+    assistantBadge: "Ubushakashatsi bw'ubwenge",
+    assistantTitle: "Baza Simba icyo ukeneye",
+    assistantNote: 'Gerageza nka "ndashaka breakfast", "nyereka fresh milk", cyangwa "cleaning products zihendutse".',
+    assistantInputLabel: "Icyo ushaka",
+    assistantPlaceholder: "Ndashaka ikintu cya breakfast",
+    assistantAction: "Baza Simba",
+    assistantEmpty: "Baza ifunguro, igicuruzwa, ishami cyangwa budget Simba ikuyobore.",
     searchLabel: "Shakisha ibicuruzwa",
     searchPlaceholder: "Shaka umuceri, umutobe, shampoo...",
     categoryLabel: "Icyiciro",
@@ -344,6 +405,8 @@ const translations = {
     familyRowText: "Ibyo mu gikoni, isuku n'ibikenerwa mu rugo.",
     quickView: "Reba vuba",
     browseCatalog: "Reba katalogi",
+    assistantFound: "Simba yabonye ibicuruzwa {count} bihuye n'ibyo ushaka.",
+    assistantUnavailable: "Smart search iri gukoresha local catalog by'igihe gito.",
   },
 };
 
@@ -436,6 +499,9 @@ let appState = {
 
 const elements = {
   body: document.body,
+  topbar: document.querySelector(".topbar"),
+  topbarPanel: document.getElementById("topbarPanel"),
+  navToggle: document.getElementById("navToggle"),
   branchSelect: document.getElementById("branchSelect"),
   languageSelect: document.getElementById("languageSelect"),
   themeToggle: document.getElementById("themeToggle"),
@@ -469,6 +535,9 @@ const elements = {
   selectedBranchAddress: document.getElementById("selectedBranchAddress"),
   branchHighlights: document.getElementById("branchHighlights"),
   heroBranchCount: document.getElementById("heroBranchCount"),
+  assistantSearchInput: document.getElementById("assistantSearchInput"),
+  assistantSearchButton: document.getElementById("assistantSearchButton"),
+  assistantResponse: document.getElementById("assistantResponse"),
 };
 
 const PRODUCT_FALLBACK_IMAGE = "assets/product-fallback.svg";
@@ -482,6 +551,7 @@ async function initStorefront() {
   applyTheme();
   applyLanguage();
   bindGlobalControls();
+  syncHeaderMenu();
   renderBranchControls();
   updatePriceLabel();
   renderCart();
@@ -518,6 +588,17 @@ function bindGlobalControls() {
   const promoScrollTarget = document.getElementById("catalog");
   const availableBranches = window.SIMBA_BRANCHES?.getBranches() || [];
 
+  elements.navToggle?.addEventListener("click", () => {
+    const nextState = !elements.topbar?.classList.contains("menu-open");
+    elements.topbar?.classList.toggle("menu-open", nextState);
+    elements.navToggle?.setAttribute("aria-expanded", String(nextState));
+  });
+
+  window.addEventListener("resize", syncHeaderMenu);
+  document.querySelectorAll(".nav-links a").forEach((link) => {
+    link.addEventListener("click", () => closeHeaderMenuOnMobile());
+  });
+
   elements.languageSelect.value = appState.language;
   elements.priceFilter.value = appState.maxPrice;
   elements.departmentSearchInput.value = appState.departmentQuery;
@@ -532,6 +613,7 @@ function bindGlobalControls() {
       appState.cart = window.SIMBA_BRANCHES
         ? window.SIMBA_BRANCHES.normalizeCart(appState.cart, appState.selectedBranchId)
         : appState.cart;
+      closeHeaderMenuOnMobile();
       renderBranchControls();
       persistCart();
       await loadProducts();
@@ -606,8 +688,31 @@ function bindGlobalControls() {
     });
   });
 
+  elements.assistantSearchButton?.addEventListener("click", () => {
+    handleAssistantSearch();
+  });
+  elements.assistantSearchInput?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleAssistantSearch();
+    }
+  });
+
   elements.promoPrev?.addEventListener("click", () => rotatePromo(-1));
   elements.promoNext?.addEventListener("click", () => rotatePromo(1));
+}
+
+function syncHeaderMenu() {
+  if (!elements.topbar || !elements.navToggle) return;
+  const desktop = window.innerWidth >= 1180;
+  elements.topbar.classList.toggle("menu-open", desktop);
+  elements.navToggle.setAttribute("aria-expanded", String(desktop));
+}
+
+function closeHeaderMenuOnMobile() {
+  if (!elements.topbar || !elements.navToggle || window.innerWidth >= 1180) return;
+  elements.topbar.classList.remove("menu-open");
+  elements.navToggle.setAttribute("aria-expanded", "false");
 }
 
 function applyLanguage() {
@@ -623,6 +728,10 @@ function applyLanguage() {
     const key = node.dataset.i18nPlaceholder;
     if (copy[key]) node.placeholder = copy[key];
   });
+
+  if (elements.assistantResponse && !elements.assistantResponse.classList.contains("hidden")) {
+    renderAssistantResponse(elements.assistantResponse.dataset.message || copy.assistantEmpty, []);
+  }
 }
 
 function applyTheme() {
@@ -1137,6 +1246,134 @@ function renderProducts() {
     products.forEach((product) => productContainer.appendChild(createProductCard(product, copy)));
     elements.productsByCategory.appendChild(section);
   });
+}
+
+async function handleAssistantSearch() {
+  const query = String(elements.assistantSearchInput?.value || "").trim();
+  const copy = translations[appState.language] || translations.en;
+  if (!query) {
+    renderAssistantResponse(copy.assistantEmpty, []);
+    return;
+  }
+
+  const result = await requestAssistantRecommendation(query);
+  appState.searchQuery = result.searchQuery;
+  appState.departmentQuery = result.searchQuery;
+  appState.selectedCategory = result.category || "all";
+
+  if (elements.searchInput) elements.searchInput.value = result.searchQuery;
+  if (elements.departmentSearchInput) elements.departmentSearchInput.value = result.searchQuery;
+  if (elements.categoryFilter) elements.categoryFilter.value = appState.selectedCategory;
+
+  renderDepartmentMenu();
+  renderProducts();
+  renderAssistantResponse(result.message, result.matches);
+  document.getElementById("catalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+async function requestAssistantRecommendation(query) {
+  try {
+    const response = await fetch(apiUrl("/api/assistant-search"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        branchId: appState.selectedBranchId,
+        language: appState.language,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Assistant API unavailable");
+    }
+
+    const payload = await response.json();
+    return {
+      searchQuery: String(payload.searchQuery || ""),
+      category: String(payload.category || "all"),
+      matches: Array.isArray(payload.matches) ? payload.matches : [],
+      message: String(payload.message || ""),
+    };
+  } catch {
+    const fallback = interpretAssistantQuery(query);
+    const copy = translations[appState.language] || translations.en;
+    return {
+      ...fallback,
+      message: `${fallback.message} ${copy.assistantUnavailable}`.trim(),
+    };
+  }
+}
+
+function interpretAssistantQuery(query) {
+  const normalizedQuery = query.toLowerCase();
+  const intentMap = [
+    { pattern: /breakfast|morning|tea|coffee|bread|cereal/, keywords: ["milk", "bread", "tea", "coffee", "juice"], category: "Food Products", message: "Breakfast options are ready, with pantry staples and drinks that suit morning shopping." },
+    { pattern: /fresh|fruit|vegetable|produce/, keywords: ["fresh", "fruit", "vegetable", "tomato", "banana", "apple"], category: "Vegetable and Fruits", message: "These fresh picks focus on fruit and vegetable shopping for the selected branch." },
+    { pattern: /clean|detergent|soap|sanitary|laundry/, keywords: ["detergent", "soap", "clean", "laundry"], category: "Cleaning and Sanitary", message: "I filtered the catalog to cleaning and sanitary items for quick household restocking." },
+    { pattern: /drink|juice|water|soda|beverage/, keywords: ["juice", "water", "drink", "soda"], category: "Non-Alcoholic Drinks", message: "These drink options match the refreshment products available in this branch." },
+    { pattern: /beauty|cosmetic|shampoo|lotion|skin/, keywords: ["shampoo", "lotion", "beauty", "cosmetic"], category: "Cosmetics", message: "I narrowed the view to beauty and personal care products." },
+    { pattern: /cheap|budget|affordable|low price/, keywords: [], category: null, message: "I kept the search broad and you can use the price slider for the most affordable picks." },
+  ];
+
+  const matchedIntent = intentMap.find((intent) => intent.pattern.test(normalizedQuery));
+  const keywords = new Set(
+    normalizedQuery
+      .replace(/[^a-z0-9\s]/g, " ")
+      .split(/\s+/)
+      .filter((token) => token.length > 2)
+  );
+
+  (matchedIntent?.keywords || []).forEach((keyword) => keywords.add(keyword));
+
+  const searchQuery = Array.from(keywords).join(" ").trim();
+  const category = matchedIntent?.category || "all";
+
+  const matches = appState.products.filter((product) => {
+    const haystack = `${product.name} ${product.category} ${product.subcategory} ${product.description} ${product.badge}`.toLowerCase();
+    const keywordMatch = !keywords.size || Array.from(keywords).some((keyword) => haystack.includes(keyword));
+    const categoryMatch = category === "all" || product.category === category;
+    return keywordMatch && categoryMatch;
+  }).slice(0, 4);
+
+  const copy = translations[appState.language] || translations.en;
+  const defaultMessage = copy.assistantFound.replace("{count}", matches.length);
+  const suffix = matches.length
+    ? ` ${matches.map((product) => product.name).slice(0, 3).join(", ")}`
+    : ` ${copy.emptyText}`;
+
+  return {
+    searchQuery,
+    category,
+    matches,
+    message: `${matchedIntent?.message || defaultMessage}${suffix}`.trim(),
+  };
+}
+
+function renderAssistantResponse(message, matches) {
+  if (!elements.assistantResponse) return;
+
+  const cards = matches.length
+    ? matches
+        .map(
+          (product) => `
+            <article class="assistant-match">
+              <strong>${product.name}</strong>
+              <span>${product.category}</span>
+              <strong>${formatCurrency(product.price)}</strong>
+            </article>
+          `
+        )
+        .join("")
+    : "";
+
+  elements.assistantResponse.classList.remove("hidden");
+  elements.assistantResponse.dataset.message = message;
+  elements.assistantResponse.innerHTML = `
+    <p>${message}</p>
+    <div class="assistant-match-grid">${cards}</div>
+  `;
 }
 
 function createProductCard(product, copy) {

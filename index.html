@@ -33,41 +33,46 @@
             <small data-i18n="brandTagline">Fresh groceries, home essentials, and fast shopping in Rwanda</small>
           </span>
         </a>
+        <button id="navToggle" class="icon-button nav-toggle" type="button" aria-expanded="false" aria-controls="topbarPanel">
+          <span data-i18n="menu">Menu</span>
+        </button>
 
-        <nav class="nav-links">
-          <a href="./index.html#aisles" data-i18n="navAisles">Aisles</a>
-          <a href="./index.html#featured" data-i18n="navFeatured">Featured</a>
-          <a href="./index.html#catalog" data-i18n="navShop">Products</a>
-          <a href="./branches.html" data-i18n="navBranches">Branches</a>
-          <a href="./about.html" data-i18n="navAbout">About</a>
-          <a href="./contact.html" data-i18n="navContact">Contact</a>
-          <a href="./checkout.html" data-i18n="navCheckout">Checkout</a>
-          <a href="./account.html">Account</a>
-        </nav>
+        <div id="topbarPanel" class="topbar-panel">
+          <nav class="nav-links">
+            <a href="./index.html#aisles" data-i18n="navAisles">Aisles</a>
+            <a href="./index.html#featured" data-i18n="navFeatured">Featured</a>
+            <a href="./index.html#catalog" data-i18n="navShop">Products</a>
+            <a href="./branches.html" data-i18n="navBranches">Branches</a>
+            <a href="./about.html" data-i18n="navAbout">About</a>
+            <a href="./contact.html" data-i18n="navContact">Contact</a>
+            <a href="./checkout.html" data-i18n="navCheckout">Checkout</a>
+            <a href="./account.html" data-i18n="navAccount">Account</a>
+          </nav>
 
-        <div class="topbar-actions">
-          <label class="lang-picker branch-picker">
-            <span data-i18n="branchLabel">Branch</span>
-            <select id="branchSelect" aria-label="Select branch"></select>
-          </label>
+          <div class="topbar-actions">
+            <label class="lang-picker branch-picker">
+              <span data-i18n="branchLabel">Branch</span>
+              <select id="branchSelect" aria-label="Select branch"></select>
+            </label>
 
-          <label class="lang-picker">
-            <span class="sr-only">Language</span>
-            <select id="languageSelect" aria-label="Select language">
-              <option value="en">English</option>
-              <option value="fr">Francais</option>
-              <option value="rw">Kinyarwanda</option>
-            </select>
-          </label>
+            <label class="lang-picker">
+              <span class="sr-only">Language</span>
+              <select id="languageSelect" aria-label="Select language">
+                <option value="en">English</option>
+                <option value="fr">Francais</option>
+                <option value="rw">Kinyarwanda</option>
+              </select>
+            </label>
 
-          <button id="themeToggle" class="icon-button" type="button" aria-label="Toggle dark mode">
-            <span class="theme-label" data-i18n="theme">Theme</span>
-          </button>
+            <button id="themeToggle" class="icon-button" type="button" aria-label="Toggle dark mode">
+              <span class="theme-label" data-i18n="theme">Theme</span>
+            </button>
 
-          <button id="cartToggle" class="cart-button" type="button" aria-label="Open shopping cart">
-            <span data-i18n="cart">Cart</span>
-            <strong id="cartCount">0</strong>
-          </button>
+            <button id="cartToggle" class="cart-button" type="button" aria-label="Open shopping cart">
+              <span data-i18n="cart">Cart</span>
+              <strong id="cartCount">0</strong>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -207,6 +212,28 @@
           </article>
         </section>
 
+        <section class="pickup-priority-panel">
+          <article class="pickup-priority-card">
+            <p class="eyebrow" data-i18n="pickupPriorityBadge">Demo-day flow</p>
+            <h2 data-i18n="pickupPriorityTitle">Pick-up first, then delivery</h2>
+            <p data-i18n="pickupPriorityText">
+              Choose a Kigali branch, select a pickup time, confirm with a small MoMo deposit, and let the branch team prepare your basket.
+            </p>
+          </article>
+          <article class="pickup-priority-card">
+            <strong data-i18n="pickupPriorityDepositTitle">MoMo deposit</strong>
+            <span data-i18n="pickupPriorityDepositText">A 500 RWF confirmation deposit protects branch staff time before prep starts.</span>
+          </article>
+          <article class="pickup-priority-card">
+            <strong data-i18n="pickupPriorityStockTitle">Branch-level stock</strong>
+            <span data-i18n="pickupPriorityStockText">Each Simba branch tracks its own stock, so Remera orders do not affect Kimironko inventory.</span>
+          </article>
+          <article class="pickup-priority-card">
+            <strong data-i18n="pickupPriorityOpsTitle">Manager to staff flow</strong>
+            <span data-i18n="pickupPriorityOpsText">Orders land in the branch dashboard, managers assign staff, and teams mark orders ready for pickup.</span>
+          </article>
+        </section>
+
         <section id="aisles" class="showcase-panel">
           <div class="toolbar-header">
             <div>
@@ -282,6 +309,24 @@
               The catalog below keeps the power of the old store, but packages it in a cleaner and more responsive layout.
             </p>
           </div>
+
+          <section class="conversation-panel">
+            <div class="toolbar-header compact-header">
+              <div>
+                <p class="eyebrow" data-i18n="assistantBadge">Smart search</p>
+                <h3 data-i18n="assistantTitle">Ask Simba what you need</h3>
+              </div>
+              <p class="toolbar-note" data-i18n="assistantNote">Try phrases like "I need breakfast", "show fresh milk", or "cheap cleaning products".</p>
+            </div>
+            <div class="conversation-form">
+              <label class="field conversation-field">
+                <span data-i18n="assistantInputLabel">Your request</span>
+                <input id="assistantSearchInput" type="search" placeholder="I need something for breakfast" data-i18n-placeholder="assistantPlaceholder" />
+              </label>
+              <button id="assistantSearchButton" class="primary-button" type="button" data-i18n="assistantAction">Ask Simba</button>
+            </div>
+            <div id="assistantResponse" class="assistant-response hidden" aria-live="polite"></div>
+          </section>
 
           <div class="toolbar-controls">
             <label class="field">

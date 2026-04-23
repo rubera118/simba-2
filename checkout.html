@@ -45,6 +45,39 @@
           </div>
 
           <form id="checkoutForm" class="checkout-form">
+            <div class="payment-panel">
+              <div class="section-heading">
+                <p class="eyebrow" data-i18n="pickupBadge">Pick-up first</p>
+                <h2 data-i18n="pickupTitle">Choose your branch and pick-up time</h2>
+              </div>
+
+              <label class="field">
+                <span data-i18n="pickupBranch">Pick-up branch</span>
+                <select name="pickupBranch" id="pickupBranchSelect"></select>
+              </label>
+
+              <label class="field">
+                <span data-i18n="pickupTime">Pick-up time</span>
+                <select name="pickupTime" id="pickupTimeSelect">
+                  <option value="08:00-09:00">08:00 - 09:00</option>
+                  <option value="09:00-10:00">09:00 - 10:00</option>
+                  <option value="10:00-11:00">10:00 - 11:00</option>
+                  <option value="12:00-13:00">12:00 - 13:00</option>
+                  <option value="14:00-15:00">14:00 - 15:00</option>
+                  <option value="16:00-17:00">16:00 - 17:00</option>
+                  <option value="18:00-19:00">18:00 - 19:00</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span data-i18n="pickupMode">Fulfilment mode</span>
+                <select name="fulfilmentMode">
+                  <option value="pickup" selected data-i18n="pickupOption">Pick-up</option>
+                  <option value="delivery" data-i18n="deliveryOption">Delivery</option>
+                </select>
+              </label>
+            </div>
+
             <label class="field">
               <span data-i18n="fullName">Full name</span>
               <input type="text" name="name" placeholder="Aline Uwimana" required />
@@ -68,8 +101,10 @@
             <div class="payment-panel">
               <div class="section-heading">
                 <p class="eyebrow">MoMo</p>
-                <h2 data-i18n="paymentTitle">Simulated Mobile Money payment</h2>
+                <h2 data-i18n="paymentTitle">MoMo deposit to confirm your order</h2>
               </div>
+
+              <p class="toolbar-note" data-i18n="depositText">A small non-refundable deposit confirms the order so branch staff can start preparing it.</p>
 
               <label class="field">
                 <span data-i18n="network">Network</span>
@@ -106,6 +141,18 @@
             <div class="summary-row">
               <span data-i18n="deliveryFee">Delivery fee</span>
               <strong id="deliveryFee">RWF 2,000</strong>
+            </div>
+            <div class="summary-row">
+              <span data-i18n="depositLabel">MoMo deposit</span>
+              <strong id="depositFee">RWF 500</strong>
+            </div>
+            <div class="summary-row">
+              <span data-i18n="pickupBranch">Pick-up branch</span>
+              <strong id="summaryBranch">-</strong>
+            </div>
+            <div class="summary-row">
+              <span data-i18n="pickupTime">Pick-up time</span>
+              <strong id="summaryPickupTime">-</strong>
             </div>
             <div class="summary-row total-row">
               <span data-i18n="total">Total</span>
