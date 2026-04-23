@@ -3,6 +3,7 @@ const ACCOUNT_STORAGE_KEYS = {
   profile: "simba-customer-profile",
   branchReviews: "simba-branch-reviews",
   passwordResets: "simba-password-resets",
+  customers: "simba-local-customers",
 };
 
 const REVIEW_ELIGIBLE_STATUSES = ["ready-for-pickup", "completed", "delivered"];
@@ -92,6 +93,22 @@ function bindAccountControls() {
       message.textContent = "";
       await loadAccountDashboard();
     } catch (error) {
+      if (shouldUseLocalAccountFallback(error)) {
+        try {
+          const body = await signInWithLocalGoogleProfile(GOOGLE_DEMO_PROFILE);
+          accountState.token = body.token;
+          accountState.profile = body.customer;
+          saveToStorage(ACCOUNT_STORAGE_KEYS.token, accountState.token);
+          saveToStorage(ACCOUNT_STORAGE_KEYS.profile, accountState.profile);
+          message.textContent = "";
+          await loadAccountDashboard();
+          return;
+        } catch (fallbackError) {
+          message.textContent = fallbackError.message;
+          return;
+        }
+      }
+
       message.textContent = error.message;
     }
   });
@@ -112,6 +129,7 @@ async function authenticateCustomer(url, payload, messageId) {
   message.textContent = "Working...";
 
   try {
+    validateAuthPayload(url, payload);
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -129,12 +147,34 @@ async function authenticateCustomer(url, payload, messageId) {
     message.textContent = "";
     await loadAccountDashboard();
   } catch (error) {
+    if (shouldUseLocalAccountFallback(error)) {
+      try {
+        const body = await handleLocalAccountAuth(url, payload);
+        accountState.token = body.token;
+        accountState.profile = body.customer;
+        saveToStorage(ACCOUNT_STORAGE_KEYS.token, accountState.token);
+        saveToStorage(ACCOUNT_STORAGE_KEYS.profile, accountState.profile);
+        message.textContent = getLocalModeSuccessMessage(url);
+        await loadAccountDashboard();
+        message.textContent = "";
+        return;
+      } catch (fallbackError) {
+        message.textContent = fallbackError.message;
+        return;
+      }
+    }
+
     message.textContent = error.message;
   }
 }
 
 async function loadAccountDashboard() {
   try {
+    if (isLocalAccountToken(accountState.token)) {
+      loadLocalAccountDashboard();
+      return;
+    }
+
     const [profileResponse, ordersResponse] = await Promise.all([
       fetch(apiUrl("/api/account/profile"), { headers: getAuthHeaders() }),
       fetch(apiUrl("/api/account/orders"), { headers: getAuthHeaders() }),
@@ -156,6 +196,15 @@ async function loadAccountDashboard() {
     document.getElementById("accountAuthView").classList.add("hidden");
     document.getElementById("accountDashboard").classList.remove("hidden");
   } catch (error) {
+    if (accountState.profile && shouldUseLocalAccountFallback(error)) {
+      try {
+        loadLocalAccountDashboard();
+        return;
+      } catch {
+        // Fall through to sign-out cleanup if local recovery fails.
+      }
+    }
+
     accountState.token = "";
     accountState.profile = null;
     accountState.orders = [];
@@ -437,7 +486,7 @@ function getBackendConfigurationMessage() {
   }
 
   if (isGitHubPages) {
-    return "Account services are not connected on this live site yet. Set window.SIMBA_CONFIG.API_BASE_URL to your deployed Node backend so signup, login, and password reset can work.";
+    return "Account creation and sign-in will use browser storage on this live site until a backend URL is connected in config.js.";
   }
 
   return "";
@@ -445,6 +494,25 @@ function getBackendConfigurationMessage() {
 
 function shouldShowBackendConfigurationHint(error) {
   return Boolean(error?.message && error.message.includes("API backend"));
+}
+
+function shouldUseLocalAccountFallback(error) {
+  const message = String(error?.message || "");
+  return (
+    isBackendUnavailableMessage(message) ||
+    message.includes("Failed to fetch") ||
+    message.includes("Load failed") ||
+    message.includes("NetworkError")
+  );
+}
+
+function isBackendUnavailableMessage(message) {
+  return (
+    message.includes("account API backend is not configured") ||
+    message.includes("account service returned an invalid response") ||
+    message.includes("backend is running and reachable") ||
+    message.includes("backend URL")
+  );
 }
 
 async function parseApiResponse(response, fallbackMessage) {
@@ -483,4 +551,202 @@ function getNonJsonResponseMessage() {
   }
 
   return "The account service returned an invalid response. Check that the backend is running and reachable from this site.";
+}
+
+function validateAuthPayload(url, payload) {
+  const email = String(payload.email || "").trim().toLowerCase();
+  if (!email) {
+    throw new Error("Email address is required.");
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    throw new Error("Enter a valid email address.");
+  }
+
+  if (url.includes("/register")) {
+    if (!String(payload.name || "").trim()) {
+      throw new Error("Full name is required.");
+    }
+    if (String(payload.password || "").length < 6) {
+      throw new Error("Password must be at least 6 characters long.");
+    }
+  }
+
+  if (url.includes("/login") && !String(payload.password || "")) {
+    throw new Error("Password is required.");
+  }
+}
+
+function getLocalModeSuccessMessage(url) {
+  if (url.includes("/register")) {
+    return "Account created in browser storage for this device.";
+  }
+  if (url.includes("/login")) {
+    return "Signed in using browser storage for this device.";
+  }
+  return "Signed in on this device.";
+}
+
+async function handleLocalAccountAuth(url, payload) {
+  if (url.includes("/register")) {
+    return registerLocalCustomer(payload);
+  }
+
+  if (url.includes("/login")) {
+    return loginLocalCustomer(payload);
+  }
+
+  throw new Error("Local account mode does not support this action.");
+}
+
+async function registerLocalCustomer(payload) {
+  const customers = loadLocalCustomers();
+  const email = String(payload.email || "").trim().toLowerCase();
+
+  if (customers.some((customer) => customer.email === email)) {
+    throw new Error("An account with that email already exists on this device.");
+  }
+
+  const customer = {
+    id: createLocalCustomerId(),
+    name: String(payload.name || "").trim(),
+    email,
+    phone: String(payload.phone || "").trim(),
+    address: String(payload.address || "").trim(),
+    passwordHash: await hashLocalPassword(String(payload.password || "")),
+    createdAt: new Date().toISOString(),
+    provider: "password",
+  };
+
+  customers.unshift(customer);
+  saveLocalCustomers(customers);
+
+  return {
+    token: createLocalAccountToken(customer),
+    customer: sanitizeLocalCustomer(customer),
+  };
+}
+
+async function loginLocalCustomer(payload) {
+  const customers = loadLocalCustomers();
+  const email = String(payload.email || "").trim().toLowerCase();
+  const customer = customers.find((entry) => entry.email === email);
+
+  if (!customer) {
+    throw new Error("No account was found with that email on this device.");
+  }
+
+  const passwordHash = await hashLocalPassword(String(payload.password || ""));
+  if (customer.passwordHash !== passwordHash) {
+    throw new Error("Incorrect password. Please try again.");
+  }
+
+  return {
+    token: createLocalAccountToken(customer),
+    customer: sanitizeLocalCustomer(customer),
+  };
+}
+
+async function signInWithLocalGoogleProfile(profile) {
+  const customers = loadLocalCustomers();
+  const email = String(profile.email || "").trim().toLowerCase();
+  let customer = customers.find((entry) => entry.email === email);
+
+  if (!customer) {
+    customer = {
+      id: createLocalCustomerId(),
+      name: String(profile.name || "").trim() || "Simba Google Customer",
+      email,
+      phone: String(profile.phone || "").trim(),
+      address: String(profile.address || "").trim(),
+      passwordHash: "",
+      createdAt: new Date().toISOString(),
+      provider: "google-demo",
+    };
+    customers.unshift(customer);
+    saveLocalCustomers(customers);
+  }
+
+  return {
+    token: createLocalAccountToken(customer),
+    customer: sanitizeLocalCustomer(customer),
+  };
+}
+
+function loadLocalAccountDashboard() {
+  const customer = getCustomerFromLocalToken(accountState.token) || accountState.profile;
+  if (!customer?.id) {
+    throw new Error("Your account session expired. Sign in again.");
+  }
+
+  const fullCustomer = loadLocalCustomers().find((entry) => entry.id === customer.id);
+  if (!fullCustomer) {
+    throw new Error("This local account could not be found on this device anymore.");
+  }
+
+  accountState.profile = sanitizeLocalCustomer(fullCustomer);
+  accountState.orders = loadLocalAccountOrders(accountState.profile);
+  saveToStorage(ACCOUNT_STORAGE_KEYS.profile, accountState.profile);
+
+  renderProfile(accountState.profile);
+  renderOrders(accountState.orders);
+  document.getElementById("accountAuthView").classList.add("hidden");
+  document.getElementById("accountDashboard").classList.remove("hidden");
+}
+
+function loadLocalAccountOrders(profile) {
+  const orders = loadFromStorage("simba-orders", []);
+  return orders.filter((order) => {
+    const customerIdMatch = order.customerId && order.customerId === profile.id;
+    const emailMatch = order.customer?.email && order.customer.email === profile.email;
+    return customerIdMatch || emailMatch;
+  });
+}
+
+function loadLocalCustomers() {
+  return loadFromStorage(ACCOUNT_STORAGE_KEYS.customers, []);
+}
+
+function saveLocalCustomers(customers) {
+  saveToStorage(ACCOUNT_STORAGE_KEYS.customers, customers);
+}
+
+function sanitizeLocalCustomer(customer) {
+  return {
+    id: customer.id,
+    name: customer.name,
+    email: customer.email,
+    phone: customer.phone,
+    address: customer.address,
+    createdAt: customer.createdAt,
+  };
+}
+
+function createLocalCustomerId() {
+  return `local-customer-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function createLocalAccountToken(customer) {
+  return `local-demo.${btoa(JSON.stringify(sanitizeLocalCustomer(customer)))}`;
+}
+
+function isLocalAccountToken(token) {
+  return String(token || "").startsWith("local-demo.");
+}
+
+function getCustomerFromLocalToken(token) {
+  if (!isLocalAccountToken(token)) return null;
+  try {
+    const encoded = String(token).slice("local-demo.".length);
+    return JSON.parse(atob(encoded));
+  } catch {
+    return null;
+  }
+}
+
+async function hashLocalPassword(password) {
+  const content = new TextEncoder().encode(password);
+  const digest = await crypto.subtle.digest("SHA-256", content);
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
 }
