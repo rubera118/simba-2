@@ -70,6 +70,25 @@ const translations = {
     pickupPriorityStockText: "Each Simba branch tracks its own stock, so Remera orders do not affect Kimironko inventory.",
     pickupPriorityOpsTitle: "Manager to staff flow",
     pickupPriorityOpsText: "Orders land in the branch dashboard, managers assign staff, and teams mark orders ready for pickup.",
+    proofBadge: "Why Simba feels trusted",
+    proofTitle: "Built around real Kigali shopping, not generic grocery UI",
+    proofText:
+      "Real branch names, branch-level stock, MoMo-friendly checkout, and multilingual browsing make Simba feel like a local brand customers already know.",
+    proofMomoTitle: "MoMo ready",
+    proofMomoText: "Customers see the deposit clearly before checkout confirmation.",
+    proofLanguageTitle: "Trilingual journey",
+    proofLanguageText: "English, Kinyarwanda, and French stay persistent across the storefront flow.",
+    proofBranchTitle: "Real branch coverage",
+    proofBranchText: "Each Kigali branch has its own pickup context, map view, and inventory story.",
+    workflowBadge: "How Simba works",
+    workflowTitle: "A smoother pick-up journey from basket to branch counter",
+    workflowText: "The homepage now explains the demo-day flow clearly before users ever hit checkout.",
+    workflowStepOneTitle: "Shop your branch",
+    workflowStepOneText: "Choose Remera, Kimironko, Kacyiru, or another Simba branch before adding items.",
+    workflowStepTwoTitle: "Confirm with MoMo deposit",
+    workflowStepTwoText: "A small non-refundable deposit protects staff time and confirms serious orders.",
+    workflowStepThreeTitle: "Branch team prepares fast",
+    workflowStepThreeText: "Managers assign staff, stock updates at that branch, and the order moves to ready for pickup.",
     branchesShowcaseBadge: "Branches",
     branchesShowcaseTitle: "Shop from the branch that works best for you",
     branchesShowcaseText:
@@ -204,6 +223,25 @@ const translations = {
     pickupPriorityStockText: "Chaque branche Simba suit son propre stock, donc une commande a Remera n'affecte pas Kimironko.",
     pickupPriorityOpsTitle: "Flux manager vers staff",
     pickupPriorityOpsText: "Les commandes arrivent au tableau de bord, les managers assignent, puis l'equipe marque pret pour retrait.",
+    proofBadge: "Pourquoi Simba inspire confiance",
+    proofTitle: "Construit autour du vrai shopping a Kigali, pas d'une interface generique",
+    proofText:
+      "De vraies branches, le stock par branche, un checkout adapte a MoMo et la navigation multilingue rendent Simba plus credible.",
+    proofMomoTitle: "Pret pour MoMo",
+    proofMomoText: "Les clients voient clairement le depot avant de confirmer la commande.",
+    proofLanguageTitle: "Parcours trilingue",
+    proofLanguageText: "Anglais, kinyarwanda et francais restent persistants dans tout le parcours.",
+    proofBranchTitle: "Vraies branches",
+    proofBranchText: "Chaque branche de Kigali a son contexte de retrait, sa carte et son propre stock.",
+    workflowBadge: "Comment Simba fonctionne",
+    workflowTitle: "Un parcours retrait plus fluide du panier au comptoir",
+    workflowText: "La page d'accueil explique maintenant clairement le flux de demo avant le checkout.",
+    workflowStepOneTitle: "Achetez par branche",
+    workflowStepOneText: "Choisissez Remera, Kimironko, Kacyiru ou une autre branche Simba avant d'ajouter des articles.",
+    workflowStepTwoTitle: "Confirmez avec un depot MoMo",
+    workflowStepTwoText: "Un petit depot non remboursable protege le temps du personnel et confirme une commande serieuse.",
+    workflowStepThreeTitle: "L'equipe prepare vite",
+    workflowStepThreeText: "Les managers assignent le staff, le stock baisse dans cette branche et la commande passe en pret pour retrait.",
     branchesShowcaseBadge: "Branches",
     branchesShowcaseTitle: "Achetez depuis la branche qui vous convient",
     branchesShowcaseText:
@@ -338,6 +376,25 @@ const translations = {
     pickupPriorityStockText: "Buri shami rya Simba rikurikirana stock yaryo, bityo order ya Remera ntigabanye iya Kimironko.",
     pickupPriorityOpsTitle: "Uko manager ahereza staff",
     pickupPriorityOpsText: "Order ijya kuri dashboard y'ishami, manager akayiha staff, hanyuma bagashyira kuri ready for pickup.",
+    proofBadge: "Impamvu Simba yizewe",
+    proofTitle: "Yubakiye ku guhaha nyako kwa Kigali, si grocery UI isanzwe",
+    proofText:
+      "Amazina nyayo y'amashami, stock kuri buri shami, checkout ijyanye na MoMo, n'indimi nyinshi bituma Simba isa n'ikirango abantu basanzwe bizeye.",
+    proofMomoTitle: "MoMo irateguwe",
+    proofMomoText: "Umukiriya abona neza deposit mbere yo kwemeza order.",
+    proofLanguageTitle: "Urugendo rw'indimi eshatu",
+    proofLanguageText: "English, Kinyarwanda na Francais bikomeza kubikwa mu rugendo rwose rwo guhaha.",
+    proofBranchTitle: "Amashami nyayo",
+    proofBranchText: "Buri shami rya Kigali rifite pickup context, map, n'inkuru ya stock yaryo.",
+    workflowBadge: "Uko Simba ikora",
+    workflowTitle: "Urugendo rwa pickup ryoroshye kuva ku gaseke kugeza ku ishami",
+    workflowText: "Home page isobanura neza uko demo ikora mbere y'uko umuntu ajya kuri checkout.",
+    workflowStepOneTitle: "Gura ukoresheje ishami",
+    workflowStepOneText: "Hitamo Remera, Kimironko, Kacyiru cyangwa irindi shami rya Simba mbere yo kongera mu gaseke.",
+    workflowStepTwoTitle: "Emeza na MoMo deposit",
+    workflowStepTwoText: "Deposit nto itagaruka irinda igihe cy'abakozi kandi ikemeza ko order ari serious.",
+    workflowStepThreeTitle: "Abakozi bitegura vuba",
+    workflowStepThreeText: "Manager ahitamo staff, stock ikagabanuka kuri iryo shami, order igashyirwa kuri ready for pickup.",
     branchesShowcaseBadge: "Amashami",
     branchesShowcaseTitle: "Gura ukoresheje ishami rikubereye",
     branchesShowcaseText:
@@ -483,6 +540,72 @@ const categoryMeta = {
   },
 };
 
+const localizedCategoryNames = {
+  en: {
+    "Alcoholic Drinkings": "Alcoholic Drinks",
+    "Cleaning and Sanitary": "Cleaning and Sanitary",
+    Cosmetics: "Cosmetics",
+    "Electronics and Electrical Equipments": "Electronics and Electrical Equipment",
+    "Food Products": "Food Products",
+    Kitchenware: "Kitchenware",
+    "Non-Alcoholic Drinks": "Non-Alcoholic Drinks",
+    "Pet Care": "Pet Care",
+    Toys: "Toys",
+    "Vegetable and Fruits": "Vegetables and Fruits",
+  },
+  fr: {
+    "Alcoholic Drinkings": "Boissons alcoolisees",
+    "Cleaning and Sanitary": "Entretien et sanitaire",
+    Cosmetics: "Cosmetiques",
+    "Electronics and Electrical Equipments": "Electronique et equipements electriques",
+    "Food Products": "Produits alimentaires",
+    Kitchenware: "Articles de cuisine",
+    "Non-Alcoholic Drinks": "Boissons non alcoolisees",
+    "Pet Care": "Soins pour animaux",
+    Toys: "Jouets",
+    "Vegetable and Fruits": "Fruits et legumes",
+  },
+  rw: {
+    "Alcoholic Drinkings": "Ibinyobwa bisembuye",
+    "Cleaning and Sanitary": "Isuku n'isukura",
+    Cosmetics: "Ubwiza n'amavuta",
+    "Electronics and Electrical Equipments": "Electronics n'ibikoresho by'amashanyarazi",
+    "Food Products": "Ibiribwa",
+    Kitchenware: "Ibikoresho byo mu gikoni",
+    "Non-Alcoholic Drinks": "Ibinyobwa bidasembuye",
+    "Pet Care": "Kwita ku matungo",
+    Toys: "Ibikinisho",
+    "Vegetable and Fruits": "Imboga n'imbuto",
+  },
+};
+
+const localizedCategorySummaries = {
+  fr: {
+    "Food Products": "Riz, pain, produits du placard, petit-dejeuner et repas du quotidien.",
+    "Cleaning and Sanitary": "Lessive, vaisselle, hygiene et essentiels d'entretien.",
+    "Vegetable and Fruits": "Fruits et legumes frais pour les achats de tous les jours.",
+    Cosmetics: "Soin des cheveux, du corps, de la peau et essentiels personnels.",
+    "Alcoholic Drinkings": "Bieres, vins et selections pour les celebrations.",
+    Kitchenware: "Service, rangement et aides utiles pour la cuisine.",
+    "Electronics and Electrical Equipments": "Appareils et outils electriques du quotidien pour la maison.",
+    "Non-Alcoholic Drinks": "Jus, eau et boissons rafraichissantes pour la famille.",
+    "Pet Care": "Aliments, accessoires et soins de base pour animaux.",
+    Toys: "Produits ludiques pour cadeaux, apprentissage et amusement.",
+  },
+  rw: {
+    "Food Products": "Umuceri, umugati, ibiribwa byo mu bubiko, breakfast n'ifunguro rya buri munsi.",
+    "Cleaning and Sanitary": "Isabune z'imyenda, ibyo koza ibikoresho, hygiene n'ibikoresho by'isuku byo mu rugo.",
+    "Vegetable and Fruits": "Imboga n'imbuto bishya byo guhaha buri munsi.",
+    Cosmetics: "Ibyo kwita ku musatsi, umubiri, uruhu n'ibikenerwa bwite.",
+    "Alcoholic Drinkings": "Inzoga, divayi n'ibinyobwa byo kwizihiza.",
+    Kitchenware: "Ibikoresho byo gutegura no kubika ibintu byo mu gikoni.",
+    "Electronics and Electrical Equipments": "Appareils n'ibikoresho by'amashanyarazi byo mu rugo.",
+    "Non-Alcoholic Drinks": "Jus, amazi n'ibinyobwa bikonjesha umuryango.",
+    "Pet Care": "Ibiryo by'amatungo, accessories n'ibikoresho byo kuyitaho buri munsi.",
+    Toys: "Ibikinisho byo kwidagadura, kwiga no gutanga nk'impano.",
+  },
+};
+
 let appState = {
   products: [],
   cart: loadFromStorage(STORAGE_KEYS.cart, []),
@@ -534,6 +657,7 @@ const elements = {
   selectedBranchName: document.getElementById("selectedBranchName"),
   selectedBranchAddress: document.getElementById("selectedBranchAddress"),
   branchHighlights: document.getElementById("branchHighlights"),
+  heroProductCount: document.getElementById("heroProductCount"),
   heroBranchCount: document.getElementById("heroBranchCount"),
   assistantSearchInput: document.getElementById("assistantSearchInput"),
   assistantSearchButton: document.getElementById("assistantSearchButton"),
@@ -715,6 +839,14 @@ function closeHeaderMenuOnMobile() {
   elements.navToggle.setAttribute("aria-expanded", "false");
 }
 
+function getLocalizedCategoryName(category, language = appState.language) {
+  return localizedCategoryNames[language]?.[category] || localizedCategoryNames.en?.[category] || category;
+}
+
+function getLocalizedCategorySummary(category, language = appState.language) {
+  return localizedCategorySummaries[language]?.[category] || categoryMeta[category]?.summary || "";
+}
+
 function applyLanguage() {
   const copy = translations[appState.language] || translations.en;
   document.documentElement.lang = appState.language;
@@ -744,6 +876,9 @@ function renderBranchControls() {
   if (elements.branchSelect) elements.branchSelect.value = selectedBranch.id;
   if (elements.selectedBranchName) elements.selectedBranchName.textContent = selectedBranch.name;
   if (elements.selectedBranchAddress) elements.selectedBranchAddress.textContent = selectedBranch.address;
+  if (elements.heroProductCount) {
+    elements.heroProductCount.textContent = new Intl.NumberFormat("en-RW").format(appState.products.length || window.SIMBA_PRODUCTS?.length || 0);
+  }
   if (elements.heroBranchCount) {
     elements.heroBranchCount.textContent = String(window.SIMBA_BRANCHES.getBranches().length);
   }
@@ -791,7 +926,7 @@ function populateCategoryFilter() {
   const copy = translations[appState.language] || translations.en;
   const categories = [...new Set(appState.products.map((product) => product.category))];
   const options = [`<option value="all">${copy.allCategories}</option>`]
-    .concat(categories.map((category) => `<option value="${category}">${category}</option>`))
+    .concat(categories.map((category) => `<option value="${category}">${getLocalizedCategoryName(category)}</option>`))
     .join("");
 
   elements.categoryFilter.innerHTML = options;
@@ -803,12 +938,14 @@ function renderDepartmentMenu() {
   const categories = [...new Set(appState.products.map((product) => product.category))];
   const filteredCategories = categories.filter((category) => {
     const meta = categoryMeta[category] || { summary: "" };
+    const categoryLabel = getLocalizedCategoryName(category);
+    const categorySummary = getLocalizedCategorySummary(category);
     const productNames = appState.products
       .filter((product) => product.category === category)
       .map((product) => `${product.name} ${product.description} ${product.badge}`)
       .join(" ")
       .toLowerCase();
-    const haystack = `${category} ${meta.summary} ${productNames}`.toLowerCase();
+    const haystack = `${category} ${categoryLabel} ${meta.summary} ${categorySummary} ${productNames}`.toLowerCase();
     return haystack.includes(appState.departmentQuery);
   });
 
@@ -821,13 +958,15 @@ function renderDepartmentMenu() {
     .map((category) => {
       const meta = categoryMeta[category] || { icon: "Shop", image: PRODUCT_FALLBACK_IMAGE, summary: "" };
       const count = appState.products.filter((product) => product.category === category).length;
+      const categoryLabel = getLocalizedCategoryName(category);
+      const categorySummary = getLocalizedCategorySummary(category);
       return `
         <button class="department-link" type="button" data-category-link="${category}">
-          <img class="department-photo" src="${meta.image}" alt="${category}" loading="lazy" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
+          <img class="department-photo" src="${meta.image}" alt="${categoryLabel}" loading="lazy" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
           <span class="department-copy">
             <span class="department-icon">${meta.icon}</span>
-            <strong>${category}</strong>
-            <small>${meta.summary}</small>
+            <strong>${categoryLabel}</strong>
+            <small>${categorySummary}</small>
             <small>${copy.departmentCount.replace("{count}", count)}</small>
           </span>
         </button>
@@ -858,16 +997,18 @@ function renderCategoryShowcase() {
         image: PRODUCT_FALLBACK_IMAGE,
       };
       const count = appState.products.filter((product) => product.category === category).length;
+      const categoryLabel = getLocalizedCategoryName(category);
+      const categorySummary = getLocalizedCategorySummary(category);
       return `
         <article class="showcase-card ${meta.colorClass}" data-category-card="${category}">
           <div class="showcase-media">
-            <img src="${meta.image}" alt="${category}" loading="lazy" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
+            <img src="${meta.image}" alt="${categoryLabel}" loading="lazy" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
           </div>
           <div class="showcase-icon">${meta.icon}</div>
           <div class="showcase-copy">
-            <p class="eyebrow">${category}</p>
-            <h3>${category}</h3>
-            <p>${meta.summary}</p>
+            <p class="eyebrow">${categoryLabel}</p>
+            <h3>${categoryLabel}</h3>
+            <p>${categorySummary}</p>
           </div>
           <div class="showcase-footer">
             <span class="chip">${copy.categoryItems.replace("{count}", count)}</span>
@@ -926,7 +1067,7 @@ function renderPromoSections() {
       <div class="promo-slide-card">
         <img src="${activeSlide.product.image}" alt="${activeSlide.product.name}" loading="lazy" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
         <div class="promo-card-copy">
-          <span class="eyebrow">${activeSlide.product.category}</span>
+          <span class="eyebrow">${getLocalizedCategoryName(activeSlide.product.category)}</span>
           <h4>${activeSlide.product.name}</h4>
           <p>${activeSlide.product.description}</p>
           <strong>${formatCurrency(activeSlide.product.price)}</strong>
@@ -1053,7 +1194,7 @@ function renderFeaturedShelf() {
           <div class="featured-overlay">
             <span class="chip">${copy.featuredShelfTitle}</span>
             <h3>${product.name}</h3>
-            <p>${product.category}</p>
+            <p>${getLocalizedCategoryName(product.category)}</p>
             <div class="featured-meta">
               <strong>${formatCurrency(product.price)}</strong>
               <button class="primary-button featured-add" type="button" data-id="${product.id}" ${!canAddProductToCart(product.id) ? "disabled" : ""}>${canAddProductToCart(product.id) ? copy.addToCart : copy.outOfStock}</button>
@@ -1229,13 +1370,14 @@ function renderProducts() {
   }, {});
 
   Object.entries(groupedProducts).forEach(([category, products]) => {
+    const categoryLabel = getLocalizedCategoryName(category);
     const section = document.createElement("section");
     section.className = "category-section";
     section.innerHTML = `
       <div class="category-heading">
         <div>
-          <p class="eyebrow">${category}</p>
-          <h3>${category}</h3>
+          <p class="eyebrow">${categoryLabel}</p>
+          <h3>${categoryLabel}</h3>
         </div>
         <span class="chip">${copy.categoryItems.replace("{count}", products.length)}</span>
       </div>
@@ -1360,7 +1502,7 @@ function renderAssistantResponse(message, matches) {
           (product) => `
             <article class="assistant-match">
               <strong>${product.name}</strong>
-              <span>${product.category}</span>
+              <span>${getLocalizedCategoryName(product.category)}</span>
               <strong>${formatCurrency(product.price)}</strong>
             </article>
           `
@@ -1379,6 +1521,7 @@ function renderAssistantResponse(message, matches) {
 function createProductCard(product, copy) {
   const branchId = appState.selectedBranchId;
   const branchLabel = window.SIMBA_BRANCHES?.getBranchById(branchId).name || "";
+  const categoryLabel = getLocalizedCategoryName(product.category);
   const card = document.createElement("article");
   card.className = "product-card";
   card.innerHTML = `
@@ -1390,7 +1533,7 @@ function createProductCard(product, copy) {
       </div>
       <div>
         <h4 class="product-name">${product.name}</h4>
-        <p class="product-meta">${product.category}</p>
+        <p class="product-meta">${categoryLabel}</p>
         <p class="product-meta">${copy.branchForItem}: ${branchLabel}</p>
       </div>
     </div>
