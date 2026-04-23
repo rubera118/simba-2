@@ -618,6 +618,8 @@ let appState = {
   maxPrice: 120000,
   promoIndex: 0,
   promoTimer: null,
+  cartAnimationTimer: null,
+  lastCartCount: null,
 };
 
 const elements = {
@@ -638,6 +640,7 @@ const elements = {
   priceValue: document.getElementById("priceValue"),
   productsByCategory: document.getElementById("productsByCategory"),
   resultsSummary: document.getElementById("resultsSummary"),
+  skeletonState: document.getElementById("skeletonState"),
   loadingState: document.getElementById("loadingState"),
   emptyState: document.getElementById("emptyState"),
   cartItems: document.getElementById("cartItems"),
@@ -676,6 +679,8 @@ async function initStorefront() {
   applyLanguage();
   bindGlobalControls();
   syncHeaderMenu();
+  setupTopbarScroll();
+  syncActiveNavLink();
   renderBranchControls();
   updatePriceLabel();
   renderCart();
@@ -700,6 +705,7 @@ async function loadProducts() {
     renderCart();
     startPromoAutoplay();
   } catch (error) {
+    elements.skeletonState?.classList.add("hidden");
     elements.loadingState.classList.add("hidden");
     elements.emptyState.classList.remove("hidden");
     elements.emptyState.querySelector("h3").textContent = "Could not load products";
@@ -837,6 +843,24 @@ function closeHeaderMenuOnMobile() {
   if (!elements.topbar || !elements.navToggle || window.innerWidth >= 1180) return;
   elements.topbar.classList.remove("menu-open");
   elements.navToggle.setAttribute("aria-expanded", "false");
+}
+
+function setupTopbarScroll() {
+  if (!elements.topbar) return;
+  const handleScroll = () => {
+    elements.topbar.classList.toggle("scrolled", window.scrollY > 60);
+  };
+  handleScroll();
+  window.addEventListener("scroll", handleScroll, { passive: true });
+}
+
+function syncActiveNavLink() {
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
+  document.querySelectorAll(".nav-links a").forEach((link) => {
+    const href = link.getAttribute("href") || "";
+    const targetPage = href.split("/").pop().split("#")[0] || "index.html";
+    link.classList.toggle("active", targetPage === currentPage);
+  });
 }
 
 function getLocalizedCategoryName(category, language = appState.language) {
@@ -1354,6 +1378,7 @@ function renderProducts() {
     return matchesSearch && matchesCategory && matchesPrice;
   });
 
+  elements.skeletonState?.classList.add("hidden");
   elements.loadingState.classList.add("hidden");
   elements.emptyState.classList.toggle("hidden", filteredProducts.length > 0);
   elements.productsByCategory.innerHTML = "";
@@ -1564,7 +1589,17 @@ function addToCart(productId, branchId = appState.selectedBranchId) {
 
 function renderCart() {
   const copy = translations[appState.language] || translations.en;
-  elements.cartCount.textContent = appState.cart.reduce((sum, item) => sum + item.quantity, 0);
+  const cartCount = appState.cart.reduce((sum, item) => sum + item.quantity, 0);
+  elements.cartCount.textContent = cartCount;
+
+  if (appState.lastCartCount !== null && appState.lastCartCount !== cartCount) {
+    elements.cartToggle?.classList.add("bump");
+    window.clearTimeout(appState.cartAnimationTimer);
+    appState.cartAnimationTimer = window.setTimeout(() => {
+      elements.cartToggle?.classList.remove("bump");
+    }, 400);
+  }
+  appState.lastCartCount = cartCount;
 
   if (!appState.cart.length) {
     elements.cartItems.innerHTML = `<div class="state-panel"><p>${copy.emptyCart}</p></div>`;

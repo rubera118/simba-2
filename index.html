@@ -402,7 +402,18 @@
           <p id="resultsSummary"></p>
         </section>
 
-        <section id="loadingState" class="state-panel loading-panel">
+        <section id="skeletonState" class="skeleton-grid" aria-hidden="true">
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+        </section>
+
+        <section id="loadingState" class="state-panel loading-panel hidden">
           <div class="loader"></div>
           <p data-i18n="loading">Loading products...</p>
         </section>
@@ -415,6 +426,78 @@
         <section id="productsByCategory" class="catalog-grid" aria-live="polite"></section>
       </main>
     </div>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div>
+            <div class="footer-brand">
+              <img class="footer-logo" src="assets/simba-logo.svg" alt="Simba Supermarket logo" />
+              <span class="footer-brand-name">Simba Supermarket</span>
+            </div>
+            <p class="footer-tagline">
+              Rwanda's modern online supermarket for groceries, home essentials, and branch-based pickup shopping.
+            </p>
+            <div class="payment-badges">
+              <span class="payment-badge">MTN MoMo</span>
+              <span class="payment-badge">Airtel Money</span>
+              <span class="payment-badge">Visa</span>
+              <span class="payment-badge">Mastercard</span>
+            </div>
+          </div>
+
+          <div>
+            <p class="footer-col-title">Quick links</p>
+            <ul class="footer-links">
+              <li><a href="./index.html#aisles">Shop aisles</a></li>
+              <li><a href="./index.html#catalog">All products</a></li>
+              <li><a href="./branches.html">Our branches</a></li>
+              <li><a href="./about.html">About us</a></li>
+              <li><a href="./contact.html">Contact</a></li>
+              <li><a href="./account.html">My account</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="footer-col-title">Popular branches</p>
+            <div class="footer-branch-item">
+              <strong>Union Trade Centre</strong>
+              <span>KN 4 Ave, Kigali</span>
+            </div>
+            <div class="footer-branch-item">
+              <strong>Remera</strong>
+              <span>KK 15 Rd, Kigali</span>
+            </div>
+            <div class="footer-branch-item">
+              <strong>Kimironko</strong>
+              <span>KG 11 Ave, Kigali</span>
+            </div>
+            <div class="footer-branch-item">
+              <strong>Kacyiru</strong>
+              <span>KG 7 Ave, Kigali</span>
+            </div>
+          </div>
+
+          <div>
+            <p class="footer-col-title">Support</p>
+            <ul class="footer-links">
+              <li><a href="./checkout.html">Checkout help</a></li>
+              <li><a href="./contact.html">Customer support</a></li>
+              <li><a href="./about.html">Store information</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>Copyright 2026 Simba Supermarket Rwanda. All rights reserved.</p>
+          <div class="footer-bottom-links">
+            <a href="./about.html">Privacy</a>
+            <a href="./contact.html">Support</a>
+            <a href="./branches.html">Branches</a>
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <aside id="cartDrawer" class="cart-drawer" aria-hidden="true">
       <div class="cart-header">
