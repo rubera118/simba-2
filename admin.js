@@ -4,6 +4,7 @@ const ADMIN_STORAGE_KEYS = {
   demoProducts: "simba-admin-demo-products",
   demoBranches: "simba-admin-demo-branches",
 };
+const ADMIN_LANGUAGE_KEY = "simba-language";
 
 const adminState = {
   token: loadFromStorage(ADMIN_STORAGE_KEYS.token, ""),
@@ -12,6 +13,7 @@ const adminState = {
   products: [],
   branches: [],
   productQuery: "",
+  language: loadFromStorage(ADMIN_LANGUAGE_KEY, "en"),
 };
 
 const ORDER_STATUSES = ["received", "accepted", "preparing", "ready-for-pickup", "completed", "cancelled", "delivered"];
@@ -20,14 +22,342 @@ const CUSTOMER_ORDER_STORAGE_KEY = "simba-orders";
 const MANAGER_OPTIONS = ["Alice", "Claude", "Diane", "Eric"];
 const STAFF_OPTIONS = ["Grace", "Jean", "Kevin", "Merveille", "Sandrine"];
 
+const adminTranslations = {
+  en: {
+    adminPageTitle: "Admin Dashboard | Simba Supermarket",
+    adminTagline: "Admin dashboard",
+    adminNavStorefront: "Storefront",
+    adminNavBranches: "Branches",
+    adminNavCheckout: "Checkout",
+    adminLanguageLabel: "Language",
+    adminAccessEyebrow: "Admin access",
+    adminLoginTitle: "Sign in to review orders",
+    adminPasswordLabel: "Admin password",
+    adminPasswordPlaceholder: "Enter admin password",
+    adminOpenDashboard: "Open dashboard",
+    adminPasswordNote: "Use the `SIMBA_ADMIN_PASSWORD` environment variable. For local demo only, the fallback password is `simba-admin-2026`.",
+    adminOperationsEyebrow: "Operations",
+    adminDashboardTitle: "Orders, inventory, and store controls",
+    adminRefreshAction: "Refresh",
+    adminLogoutAction: "Log out",
+    adminOrderDeskEyebrow: "Order desk",
+    adminOrderDeskTitle: "Incoming pickup orders",
+    adminOrderDeskNote: "Branch managers can assign staff, then staff can move orders to ready for pickup.",
+    adminCatalogEyebrow: "Catalog control",
+    adminCatalogTitle: "Products and stock",
+    adminNewItemEyebrow: "New item",
+    adminCreateProductTitle: "Create product",
+    adminFieldName: "Name",
+    adminFieldCategory: "Category",
+    adminFieldSubcategory: "Subcategory",
+    adminFieldPrice: "Price",
+    adminFieldStock: "Stock",
+    adminFieldBadge: "Badge",
+    adminFieldImagePath: "Image path",
+    adminFieldDescription: "Description",
+    adminVisibleInStore: "Visible in store",
+    adminCreateProductAction: "Create product",
+    adminSearchProductsPlaceholder: "Search products or categories",
+    adminBranchEyebrow: "Branch control",
+    adminBranchTitle: "Branches and delivery zones",
+    adminFieldAddress: "Address",
+    adminFieldCity: "City",
+    adminFieldDeliveryFee: "Delivery fee",
+    adminFieldHours: "Hours",
+    adminFieldPhone: "Phone",
+    adminPickupAvailable: "Pickup available",
+    adminCreateBranchAction: "Create branch",
+    adminSigningIn: "Signing in...",
+    adminInvalidPassword: "Invalid admin password",
+    adminLoginFailed: "Login failed",
+    adminCreatingProduct: "Creating product...",
+    adminProductCreated: "Created {name}",
+    adminCreatingBranch: "Creating branch...",
+    adminBranchCreated: "Created {name}",
+    adminSessionExpired: "Your admin session expired. Sign in again.",
+    adminStatOrders: "Orders",
+    adminStatRevenue: "Revenue",
+    adminStatProducts: "Products",
+    adminStatBranches: "Branches",
+    adminStatActive: "Active",
+    adminStatLowStock: "Low stock",
+    adminStatOutOfStock: "Out of stock",
+    adminNoOrders: "No orders yet. Place one from checkout to populate this dashboard.",
+    adminOrderPhone: "Phone",
+    adminOrderPayment: "Payment",
+    adminOrderTotal: "Total",
+    adminOrderBranch: "Branch",
+    adminOrderPlaced: "Placed",
+    adminOrderPickupTime: "Pickup time",
+    adminOrderDeposit: "MoMo deposit",
+    adminOrderDeliveryAddress: "Delivery address",
+    adminManagerLabel: "Branch manager",
+    adminManagerPlaceholder: "Select manager",
+    adminStaffLabel: "Assigned staff",
+    adminStaffPlaceholder: "Select staff",
+    adminAssignTeam: "Assign team",
+    adminMarkReady: "Mark ready for pickup",
+    adminSaving: "Saving...",
+    adminUpdating: "Updating...",
+    adminNoProducts: "No products match the current search.",
+    adminInStockSuffix: "in stock",
+    adminSaveProduct: "Save product",
+    adminNoBranches: "No branches created yet.",
+    adminActiveStatus: "Active",
+    adminHiddenStatus: "Hidden",
+    adminSaveBranch: "Save branch",
+    adminUpdateFailed: "Update failed",
+    adminNoOrderDate: "No orders yet",
+    adminCreateProductFailed: "Could not create product",
+    adminCreateBranchFailed: "Could not create branch",
+    adminStatusReceived: "Received",
+    adminStatusAccepted: "Accepted",
+    adminStatusPreparing: "Preparing",
+    adminStatusReady: "Ready for pickup",
+    adminStatusCompleted: "Completed",
+    adminStatusCancelled: "Cancelled",
+    adminStatusDelivered: "Delivered",
+  },
+  fr: {
+    adminPageTitle: "Tableau Admin | Simba Supermarket",
+    adminTagline: "Tableau admin",
+    adminNavStorefront: "Boutique",
+    adminNavBranches: "Branches",
+    adminNavCheckout: "Paiement",
+    adminLanguageLabel: "Langue",
+    adminAccessEyebrow: "Acces admin",
+    adminLoginTitle: "Connectez-vous pour verifier les commandes",
+    adminPasswordLabel: "Mot de passe admin",
+    adminPasswordPlaceholder: "Entrez le mot de passe admin",
+    adminOpenDashboard: "Ouvrir le tableau",
+    adminPasswordNote: "Utilisez la variable d'environnement `SIMBA_ADMIN_PASSWORD`. Pour la demo locale seulement, le mot de passe de secours est `simba-admin-2026`.",
+    adminOperationsEyebrow: "Operations",
+    adminDashboardTitle: "Commandes, stock et controles magasin",
+    adminRefreshAction: "Actualiser",
+    adminLogoutAction: "Se deconnecter",
+    adminOrderDeskEyebrow: "Poste commandes",
+    adminOrderDeskTitle: "Commandes retrait entrantes",
+    adminOrderDeskNote: "Les managers de branche peuvent assigner le staff, puis le staff peut passer a pret pour retrait.",
+    adminCatalogEyebrow: "Controle catalogue",
+    adminCatalogTitle: "Produits et stock",
+    adminNewItemEyebrow: "Nouvel article",
+    adminCreateProductTitle: "Creer un produit",
+    adminFieldName: "Nom",
+    adminFieldCategory: "Categorie",
+    adminFieldSubcategory: "Sous-categorie",
+    adminFieldPrice: "Prix",
+    adminFieldStock: "Stock",
+    adminFieldBadge: "Badge",
+    adminFieldImagePath: "Chemin d'image",
+    adminFieldDescription: "Description",
+    adminVisibleInStore: "Visible dans la boutique",
+    adminCreateProductAction: "Creer le produit",
+    adminSearchProductsPlaceholder: "Rechercher des produits ou categories",
+    adminBranchEyebrow: "Controle branches",
+    adminBranchTitle: "Branches et zones de livraison",
+    adminFieldAddress: "Adresse",
+    adminFieldCity: "Ville",
+    adminFieldDeliveryFee: "Frais de livraison",
+    adminFieldHours: "Horaires",
+    adminFieldPhone: "Telephone",
+    adminPickupAvailable: "Retrait disponible",
+    adminCreateBranchAction: "Creer la branche",
+    adminSigningIn: "Connexion...",
+    adminInvalidPassword: "Mot de passe admin invalide",
+    adminLoginFailed: "Connexion echouee",
+    adminCreatingProduct: "Creation du produit...",
+    adminProductCreated: "{name} cree",
+    adminCreatingBranch: "Creation de la branche...",
+    adminBranchCreated: "{name} creee",
+    adminSessionExpired: "Votre session admin a expire. Connectez-vous de nouveau.",
+    adminStatOrders: "Commandes",
+    adminStatRevenue: "Revenu",
+    adminStatProducts: "Produits",
+    adminStatBranches: "Branches",
+    adminStatActive: "Actifs",
+    adminStatLowStock: "Stock faible",
+    adminStatOutOfStock: "Rupture de stock",
+    adminNoOrders: "Aucune commande pour le moment. Passez une commande depuis le checkout pour remplir ce tableau.",
+    adminOrderPhone: "Telephone",
+    adminOrderPayment: "Paiement",
+    adminOrderTotal: "Total",
+    adminOrderBranch: "Branche",
+    adminOrderPlaced: "Creee le",
+    adminOrderPickupTime: "Heure de retrait",
+    adminOrderDeposit: "Depot MoMo",
+    adminOrderDeliveryAddress: "Adresse de livraison",
+    adminManagerLabel: "Manager de branche",
+    adminManagerPlaceholder: "Choisir un manager",
+    adminStaffLabel: "Staff assigne",
+    adminStaffPlaceholder: "Choisir le staff",
+    adminAssignTeam: "Assigner l'equipe",
+    adminMarkReady: "Marquer pret pour retrait",
+    adminSaving: "Enregistrement...",
+    adminUpdating: "Mise a jour...",
+    adminNoProducts: "Aucun produit ne correspond a la recherche actuelle.",
+    adminInStockSuffix: "en stock",
+    adminSaveProduct: "Enregistrer le produit",
+    adminNoBranches: "Aucune branche creee pour le moment.",
+    adminActiveStatus: "Active",
+    adminHiddenStatus: "Masquee",
+    adminSaveBranch: "Enregistrer la branche",
+    adminUpdateFailed: "Mise a jour echouee",
+    adminNoOrderDate: "Pas encore de commandes",
+    adminCreateProductFailed: "Impossible de creer le produit",
+    adminCreateBranchFailed: "Impossible de creer la branche",
+    adminStatusReceived: "Recue",
+    adminStatusAccepted: "Acceptee",
+    adminStatusPreparing: "Preparation",
+    adminStatusReady: "Pret pour le retrait",
+    adminStatusCompleted: "Terminee",
+    adminStatusCancelled: "Annulee",
+    adminStatusDelivered: "Livree",
+  },
+  rw: {
+    adminPageTitle: "Admin Dashboard | Simba Supermarket",
+    adminTagline: "Dashboard ya admin",
+    adminNavStorefront: "Iduka",
+    adminNavBranches: "Amashami",
+    adminNavCheckout: "Checkout",
+    adminLanguageLabel: "Ururimi",
+    adminAccessEyebrow: "Uburyo bwa admin",
+    adminLoginTitle: "Injira urebe ama-order",
+    adminPasswordLabel: "Ijambobanga rya admin",
+    adminPasswordPlaceholder: "Andika ijambobanga rya admin",
+    adminOpenDashboard: "Fungura dashboard",
+    adminPasswordNote: "Koresha environment variable `SIMBA_ADMIN_PASSWORD`. Ku demo ya local gusa, ijambobanga risanzwe ni `simba-admin-2026`.",
+    adminOperationsEyebrow: "Ibikorwa",
+    adminDashboardTitle: "Ama-order, stock n'igenzura ry'iduka",
+    adminRefreshAction: "Ongera usubize",
+    adminLogoutAction: "Sohoka",
+    adminOrderDeskEyebrow: "Aho order zicungwa",
+    adminOrderDeskTitle: "Ama-order ya pickup yinjiye",
+    adminOrderDeskNote: "Abayobozi b'amashami bashobora guha staff, hanyuma staff ikayashyira kuri ready for pickup.",
+    adminCatalogEyebrow: "Igenzura rya catalog",
+    adminCatalogTitle: "Ibicuruzwa na stock",
+    adminNewItemEyebrow: "Igicuruzwa gishya",
+    adminCreateProductTitle: "Kora igicuruzwa",
+    adminFieldName: "Izina",
+    adminFieldCategory: "Category",
+    adminFieldSubcategory: "Subcategory",
+    adminFieldPrice: "Igiciro",
+    adminFieldStock: "Stock",
+    adminFieldBadge: "Badge",
+    adminFieldImagePath: "Inzira y'ifoto",
+    adminFieldDescription: "Ibisobanuro",
+    adminVisibleInStore: "Kigaragara mu iduka",
+    adminCreateProductAction: "Kora igicuruzwa",
+    adminSearchProductsPlaceholder: "Shakisha ibicuruzwa cyangwa category",
+    adminBranchEyebrow: "Igenzura ry'amashami",
+    adminBranchTitle: "Amashami n'ahoherezwa",
+    adminFieldAddress: "Aderesi",
+    adminFieldCity: "Umujyi",
+    adminFieldDeliveryFee: "Amafaranga yo kohereza",
+    adminFieldHours: "Amasaha",
+    adminFieldPhone: "Telefone",
+    adminPickupAvailable: "Pickup irahari",
+    adminCreateBranchAction: "Kora ishami",
+    adminSigningIn: "Birimo kwinjira...",
+    adminInvalidPassword: "Ijambobanga rya admin si ryo",
+    adminLoginFailed: "Kwinjira byanze",
+    adminCreatingProduct: "Birimo gukora igicuruzwa...",
+    adminProductCreated: "{name} yakozwe",
+    adminCreatingBranch: "Birimo gukora ishami...",
+    adminBranchCreated: "{name} ryakozwe",
+    adminSessionExpired: "Session ya admin yarangiye. Ongera winjire.",
+    adminStatOrders: "Ama-order",
+    adminStatRevenue: "Amafaranga yinjiye",
+    adminStatProducts: "Ibicuruzwa",
+    adminStatBranches: "Amashami",
+    adminStatActive: "Bikora",
+    adminStatLowStock: "Stock iri hasi",
+    adminStatOutOfStock: "Ntibirimo",
+    adminNoOrders: "Nta ma-order arabonetse. Shyira order muri checkout kugira ngo dashboard yuzure.",
+    adminOrderPhone: "Telefone",
+    adminOrderPayment: "Kwishyura",
+    adminOrderTotal: "Igiteranyo",
+    adminOrderBranch: "Ishami",
+    adminOrderPlaced: "Byashyizweho",
+    adminOrderPickupTime: "Igihe cya pickup",
+    adminOrderDeposit: "Ubwizigame bwa MoMo",
+    adminOrderDeliveryAddress: "Aho byoherezwa",
+    adminManagerLabel: "Umuyobozi w'ishami",
+    adminManagerPlaceholder: "Hitamo umuyobozi",
+    adminStaffLabel: "Staff yahawe",
+    adminStaffPlaceholder: "Hitamo staff",
+    adminAssignTeam: "Ha ikipe",
+    adminMarkReady: "Shyira kuri ready for pickup",
+    adminSaving: "Birimo kubika...",
+    adminUpdating: "Birimo kuvugurura...",
+    adminNoProducts: "Nta bicuruzwa bihuye n'ibyo washakishije.",
+    adminInStockSuffix: "biri muri stock",
+    adminSaveProduct: "Bika igicuruzwa",
+    adminNoBranches: "Nta mashami arakorwa.",
+    adminActiveStatus: "Rikora",
+    adminHiddenStatus: "Rihishe",
+    adminSaveBranch: "Bika ishami",
+    adminUpdateFailed: "Ivugurura ryanzwe",
+    adminNoOrderDate: "Nta ma-order arabonetse",
+    adminCreateProductFailed: "Ntibishobotse gukora igicuruzwa",
+    adminCreateBranchFailed: "Ntibishobotse gukora ishami",
+    adminStatusReceived: "Byakiriwe",
+    adminStatusAccepted: "Byemejwe",
+    adminStatusPreparing: "Birategurwa",
+    adminStatusReady: "Byiteguye gufatwa",
+    adminStatusCompleted: "Byarangiye",
+    adminStatusCancelled: "Byahagaritswe",
+    adminStatusDelivered: "Byagejejwe",
+  },
+};
+
 document.addEventListener("DOMContentLoaded", initAdminPage);
 
 function initAdminPage() {
+  applyLanguage();
   bindAdminControls();
 
   if (adminState.token) {
     loadDashboard();
   }
+}
+
+function t(key, variables = {}) {
+  const copy = adminTranslations[adminState.language] || adminTranslations.en;
+  const template = copy[key] ?? adminTranslations.en[key] ?? key;
+  return Object.entries(variables).reduce(
+    (message, [name, value]) => message.replaceAll(`{${name}}`, String(value)),
+    template
+  );
+}
+
+function applyLanguage() {
+  document.documentElement.lang = adminState.language;
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    element.textContent = t(element.dataset.i18n);
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+    element.setAttribute("placeholder", t(element.dataset.i18nPlaceholder));
+  });
+  document.querySelectorAll("[data-i18n-document-title]").forEach((element) => {
+    const title = t(element.dataset.i18nDocumentTitle);
+    element.textContent = title;
+    document.title = title;
+  });
+  document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+    element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
+  });
+}
+
+function getCurrentStats() {
+  return {
+    orderCount: adminState.orders.length,
+    totalRevenue: adminState.orders.reduce((sum, order) => sum + Number(order.total || 0), 0),
+    productCount: adminState.products.length,
+    branchCount: adminState.branches.length,
+    activeCount: adminState.products.filter((product) => product.active !== false).length,
+    lowStockCount: adminState.products.filter((product) => Number(product.stock || 0) > 0 && Number(product.stock || 0) <= 5).length,
+    outOfStockCount: adminState.products.filter((product) => Number(product.stock || 0) <= 0).length,
+  };
 }
 
 function bindAdminControls() {
@@ -37,19 +367,33 @@ function bindAdminControls() {
   const productSearch = document.getElementById("productSearch");
   const createProductForm = document.getElementById("createProductForm");
   const createBranchForm = document.getElementById("createBranchForm");
+  const languageSelect = document.getElementById("languageSelect");
+
+  if (languageSelect) {
+    languageSelect.value = adminState.language;
+    languageSelect.addEventListener("change", (event) => {
+      adminState.language = event.target.value;
+      saveToStorage(ADMIN_LANGUAGE_KEY, adminState.language);
+      applyLanguage();
+      renderStats(getCurrentStats());
+      renderOrders(adminState.orders);
+      renderProducts(adminState.products);
+      renderBranches(adminState.branches);
+    });
+  }
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const message = document.getElementById("adminLoginMessage");
     const formData = new FormData(form);
-    message.textContent = "Signing in...";
+    message.textContent = t("adminSigningIn");
 
     try {
       const password = String(formData.get("password") || "");
 
       if (shouldUseDemoAdmin()) {
         if (password !== DEMO_ADMIN_PASSWORD) {
-          throw new Error("Invalid admin password");
+          throw new Error(t("adminInvalidPassword"));
         }
 
         adminState.token = "demo-admin-token";
@@ -67,7 +411,7 @@ function bindAdminControls() {
 
         const payload = await response.json();
         if (!response.ok) {
-          throw new Error(payload.error || "Login failed");
+          throw new Error(payload.error || t("adminLoginFailed"));
         }
 
         adminState.token = payload.token;
@@ -107,7 +451,7 @@ function bindAdminControls() {
     event.preventDefault();
     const message = document.getElementById("createProductMessage");
     const formData = new FormData(createProductForm);
-    message.textContent = "Creating product...";
+    message.textContent = t("adminCreatingProduct");
 
     try {
       const payload = {
@@ -130,7 +474,7 @@ function bindAdminControls() {
       createProductForm.elements.badge.value = "New";
       createProductForm.elements.image.value = "assets/product-fallback.svg";
       createProductForm.elements.active.checked = true;
-      message.textContent = `Created ${body.product.name}`;
+      message.textContent = t("adminProductCreated", { name: body.product.name });
       await loadDashboard();
     } catch (error) {
       message.textContent = error.message;
@@ -141,7 +485,7 @@ function bindAdminControls() {
     event.preventDefault();
     const message = document.getElementById("createBranchMessage");
     const formData = new FormData(createBranchForm);
-    message.textContent = "Creating branch...";
+    message.textContent = t("adminCreatingBranch");
 
     try {
       const payload = {
@@ -160,7 +504,7 @@ function bindAdminControls() {
       createBranchForm.elements.deliveryFee.value = "2000";
       createBranchForm.elements.hours.value = "Open daily";
       createBranchForm.elements.pickup.checked = true;
-      message.textContent = `Created ${body.branch.name}`;
+      message.textContent = t("adminBranchCreated", { name: body.branch.name });
       await loadDashboard();
     } catch (error) {
       message.textContent = error.message;
@@ -198,7 +542,7 @@ async function loadDashboard() {
     ]);
 
     if ([statsResponse, ordersResponse, productsResponse, branchesResponse].some((response) => response.status === 401)) {
-      throw new Error("Your admin session expired. Sign in again.");
+      throw new Error(t("adminSessionExpired"));
     }
 
     const statsPayload = await statsResponse.json();
@@ -234,13 +578,13 @@ async function loadDashboard() {
 function renderStats(stats = {}) {
   const container = document.getElementById("adminStats");
   const cards = [
-    { label: "Orders", value: String(stats.orderCount || 0) },
-    { label: "Revenue", value: formatCurrency(stats.totalRevenue || 0) },
-    { label: "Products", value: String(stats.productCount || 0) },
-    { label: "Branches", value: String(stats.branchCount || 0) },
-    { label: "Active", value: String(stats.activeCount || 0) },
-    { label: "Low stock", value: String(stats.lowStockCount || 0) },
-    { label: "Out of stock", value: String(stats.outOfStockCount || 0) },
+    { label: t("adminStatOrders"), value: String(stats.orderCount || 0) },
+    { label: t("adminStatRevenue"), value: formatCurrency(stats.totalRevenue || 0) },
+    { label: t("adminStatProducts"), value: String(stats.productCount || 0) },
+    { label: t("adminStatBranches"), value: String(stats.branchCount || 0) },
+    { label: t("adminStatActive"), value: String(stats.activeCount || 0) },
+    { label: t("adminStatLowStock"), value: String(stats.lowStockCount || 0) },
+    { label: t("adminStatOutOfStock"), value: String(stats.outOfStockCount || 0) },
   ];
 
   container.innerHTML = cards
@@ -259,7 +603,7 @@ function renderOrders(orders) {
   const container = document.getElementById("adminOrders");
 
   if (!orders.length) {
-    container.innerHTML = `<div class="state-panel"><p>No orders yet. Place one from checkout to populate this dashboard.</p></div>`;
+    container.innerHTML = `<div class="state-panel"><p>${t("adminNoOrders")}</p></div>`;
     return;
   }
 
@@ -274,58 +618,58 @@ function renderOrders(orders) {
             </div>
             <select class="admin-status-select" data-order-status="${order.id}">
               ${ORDER_STATUSES.map(
-                (status) => `<option value="${status}" ${status === order.status ? "selected" : ""}>${status}</option>`
+                (status) => `<option value="${status}" ${status === order.status ? "selected" : ""}>${formatOrderStatus(status)}</option>`
               ).join("")}
             </select>
           </div>
           <div class="admin-order-grid">
             <div class="summary-box">
-              <span>Phone</span>
+              <span>${t("adminOrderPhone")}</span>
               <strong>${order.customer.phone}</strong>
             </div>
             <div class="summary-box">
-              <span>Payment</span>
+              <span>${t("adminOrderPayment")}</span>
               <strong>${order.payment.network}</strong>
             </div>
             <div class="summary-box">
-              <span>Total</span>
+              <span>${t("adminOrderTotal")}</span>
               <strong>${formatCurrency(order.total)}</strong>
             </div>
             <div class="summary-box">
-              <span>Branch</span>
-              <strong>${order.branch?.name || order.branchId || "Not set"}</strong>
+              <span>${t("adminOrderBranch")}</span>
+              <strong>${order.branch?.name || order.branchId || "-"}</strong>
             </div>
             <div class="summary-box">
-              <span>Placed</span>
+              <span>${t("adminOrderPlaced")}</span>
               <strong>${formatDate(order.createdAt)}</strong>
             </div>
             <div class="summary-box">
-              <span>Pickup time</span>
-              <strong>${order.fulfilment?.pickupTime || "Not selected"}</strong>
+              <span>${t("adminOrderPickupTime")}</span>
+              <strong>${order.fulfilment?.pickupTime || "-"}</strong>
             </div>
             <div class="summary-box">
-              <span>MoMo deposit</span>
+              <span>${t("adminOrderDeposit")}</span>
               <strong>${formatCurrency(order.payment?.deposit || 0)}</strong>
             </div>
           </div>
           <div class="summary-box">
-            <span>Delivery address</span>
+            <span>${t("adminOrderDeliveryAddress")}</span>
             <strong>${order.customer.address}</strong>
           </div>
           <div class="admin-product-grid">
             <label class="field">
-              <span>Branch manager</span>
+              <span>${t("adminManagerLabel")}</span>
               <select data-order-field="managerName" data-order-id="${order.id}">
-                <option value="">Select manager</option>
+                <option value="">${t("adminManagerPlaceholder")}</option>
                 ${MANAGER_OPTIONS.map(
                   (name) => `<option value="${name}" ${order.managerName === name ? "selected" : ""}>${name}</option>`
                 ).join("")}
               </select>
             </label>
             <label class="field">
-              <span>Assigned staff</span>
+              <span>${t("adminStaffLabel")}</span>
               <select data-order-field="staffName" data-order-id="${order.id}">
-                <option value="">Select staff</option>
+                <option value="">${t("adminStaffPlaceholder")}</option>
                 ${STAFF_OPTIONS.map(
                   (name) => `<option value="${name}" ${order.staffName === name ? "selected" : ""}>${name}</option>`
                 ).join("")}
@@ -333,8 +677,8 @@ function renderOrders(orders) {
             </label>
           </div>
           <div class="admin-product-actions">
-            <button class="ghost-button" type="button" data-assign-order="${order.id}">Assign team</button>
-            <button class="primary-button" type="button" data-ready-order="${order.id}">Mark ready for pickup</button>
+            <button class="ghost-button" type="button" data-assign-order="${order.id}">${t("adminAssignTeam")}</button>
+            <button class="primary-button" type="button" data-ready-order="${order.id}">${t("adminMarkReady")}</button>
           </div>
           <div class="admin-order-items">
             ${order.items
@@ -367,7 +711,7 @@ function renderOrders(orders) {
     button.addEventListener("click", async () => {
       const orderId = button.dataset.assignOrder;
       button.disabled = true;
-      button.textContent = "Saving...";
+      button.textContent = t("adminSaving");
       try {
         await patchAdmin(apiUrl(`/api/admin/orders/${orderId}`), {
           id: orderId,
@@ -378,7 +722,7 @@ function renderOrders(orders) {
         await loadDashboard();
       } finally {
         button.disabled = false;
-        button.textContent = "Assign team";
+        button.textContent = t("adminAssignTeam");
       }
     });
   });
@@ -387,7 +731,7 @@ function renderOrders(orders) {
     button.addEventListener("click", async () => {
       const orderId = button.dataset.readyOrder;
       button.disabled = true;
-      button.textContent = "Updating...";
+      button.textContent = t("adminUpdating");
       try {
         await patchAdmin(apiUrl(`/api/admin/orders/${orderId}`), {
           id: orderId,
@@ -398,7 +742,7 @@ function renderOrders(orders) {
         await loadDashboard();
       } finally {
         button.disabled = false;
-        button.textContent = "Mark ready for pickup";
+        button.textContent = t("adminMarkReady");
       }
     });
   });
@@ -420,7 +764,7 @@ function renderProducts(products) {
   });
 
   if (!filteredProducts.length) {
-    container.innerHTML = `<div class="state-panel"><p>No products match the current search.</p></div>`;
+    container.innerHTML = `<div class="state-panel"><p>${t("adminNoProducts")}</p></div>`;
     return;
   }
 
@@ -453,24 +797,24 @@ function renderProducts(products) {
               <p class="eyebrow">${product.category}</p>
               <h3>${product.name}</h3>
             </div>
-            <span class="chip ${product.stock <= 0 ? "chip-warning" : ""}">${product.stock} in stock</span>
+            <span class="chip ${product.stock <= 0 ? "chip-warning" : ""}">${product.stock} ${t("adminInStockSuffix")}</span>
           </div>
           <div class="admin-product-grid">
             <label class="field">
-              <span>Price</span>
+              <span>${t("adminFieldPrice")}</span>
               <input type="number" min="0" step="100" value="${product.price}" data-product-field="price" data-product-id="${product.id}" />
             </label>
             <label class="field">
-              <span>Stock</span>
+              <span>${t("adminFieldStock")}</span>
               <input type="number" min="0" step="1" value="${product.stock}" data-product-field="stock" data-product-id="${product.id}" />
             </label>
             <label class="field">
-              <span>Badge</span>
+              <span>${t("adminFieldBadge")}</span>
               <input type="text" value="${escapeHtml(product.badge)}" data-product-field="badge" data-product-id="${product.id}" />
             </label>
           </div>
           <label class="field">
-            <span>Description</span>
+            <span>${t("adminFieldDescription")}</span>
             <textarea rows="3" data-product-field="description" data-product-id="${product.id}">${escapeHtml(
               product.description
             )}</textarea>
@@ -481,9 +825,9 @@ function renderProducts(products) {
           <div class="admin-product-actions">
             <label class="admin-toggle">
               <input type="checkbox" data-product-field="active" data-product-id="${product.id}" ${product.active ? "checked" : ""} />
-              <span>Visible in store</span>
+              <span>${t("adminVisibleInStore")}</span>
             </label>
-            <button class="primary-button" type="button" data-save-product="${product.id}">Save product</button>
+            <button class="primary-button" type="button" data-save-product="${product.id}">${t("adminSaveProduct")}</button>
           </div>
         </article>
       `
@@ -495,13 +839,13 @@ function renderProducts(products) {
       const productId = button.dataset.saveProduct;
       const payload = gatherProductPayload(productId);
       button.disabled = true;
-      button.textContent = "Saving...";
+      button.textContent = t("adminSaving");
       try {
         await patchAdmin(apiUrl(`/api/admin/products/${productId}`), { ...payload, id: productId });
         await loadDashboard();
       } finally {
         button.disabled = false;
-        button.textContent = "Save product";
+        button.textContent = t("adminSaveProduct");
       }
     });
   });
@@ -533,7 +877,7 @@ function renderBranches(branches) {
   if (!container) return;
 
   if (!branches.length) {
-    container.innerHTML = `<div class="state-panel"><p>No branches created yet.</p></div>`;
+    container.innerHTML = `<div class="state-panel"><p>${t("adminNoBranches")}</p></div>`;
     return;
   }
 
@@ -546,40 +890,40 @@ function renderBranches(branches) {
               <p class="eyebrow">${branch.city}</p>
               <h3>${branch.name}</h3>
             </div>
-            <span class="chip">${branch.active ? "Active" : "Hidden"}</span>
+            <span class="chip">${branch.active ? t("adminActiveStatus") : t("adminHiddenStatus")}</span>
           </div>
           <div class="admin-product-grid">
             <label class="field">
-              <span>Name</span>
+              <span>${t("adminFieldName")}</span>
               <input type="text" value="${escapeHtml(branch.name)}" data-branch-field="name" data-branch-id="${branch.id}" />
             </label>
             <label class="field">
-              <span>City</span>
+              <span>${t("adminFieldCity")}</span>
               <input type="text" value="${escapeHtml(branch.city)}" data-branch-field="city" data-branch-id="${branch.id}" />
             </label>
             <label class="field">
-              <span>Phone</span>
+              <span>${t("adminFieldPhone")}</span>
               <input type="text" value="${escapeHtml(branch.phone || "")}" data-branch-field="phone" data-branch-id="${branch.id}" />
             </label>
             <label class="field">
-              <span>Hours</span>
+              <span>${t("adminFieldHours")}</span>
               <input type="text" value="${escapeHtml(branch.hours || "")}" data-branch-field="hours" data-branch-id="${branch.id}" />
             </label>
             <label class="field">
-              <span>Delivery fee</span>
+              <span>${t("adminFieldDeliveryFee")}</span>
               <input type="number" min="0" step="100" value="${Number(branch.deliveryFee || 0)}" data-branch-field="deliveryFee" data-branch-id="${branch.id}" />
             </label>
           </div>
           <label class="field">
-            <span>Address</span>
+            <span>${t("adminFieldAddress")}</span>
             <textarea rows="2" data-branch-field="address" data-branch-id="${branch.id}">${escapeHtml(branch.address)}</textarea>
           </label>
           <div class="admin-product-actions">
             <label class="admin-toggle">
               <input type="checkbox" data-branch-field="pickup" data-branch-id="${branch.id}" ${branch.pickup ? "checked" : ""} />
-              <span>Pickup available</span>
+              <span>${t("adminPickupAvailable")}</span>
             </label>
-            <button class="primary-button" type="button" data-save-branch="${branch.id}">Save branch</button>
+            <button class="primary-button" type="button" data-save-branch="${branch.id}">${t("adminSaveBranch")}</button>
           </div>
         </article>
       `
@@ -590,7 +934,7 @@ function renderBranches(branches) {
     button.addEventListener("click", async () => {
       const branchId = button.dataset.saveBranch;
       button.disabled = true;
-      button.textContent = "Saving...";
+      button.textContent = t("adminSaving");
       try {
         await patchAdmin(apiUrl(`/api/admin/branches/${branchId}`), {
           ...gatherBranchPayload(branchId),
@@ -599,7 +943,7 @@ function renderBranches(branches) {
         await loadDashboard();
       } finally {
         button.disabled = false;
-        button.textContent = "Save branch";
+        button.textContent = t("adminSaveBranch");
       }
     });
   });
@@ -636,7 +980,7 @@ async function patchAdmin(url, payload) {
 
   const body = await response.json();
   if (!response.ok) {
-    throw new Error(body.error || "Update failed");
+    throw new Error(body.error || t("adminUpdateFailed"));
   }
 
   return body;
@@ -655,7 +999,7 @@ function formatCurrency(value) {
 }
 
 function formatDate(value) {
-  if (!value) return "No orders yet";
+  if (!value) return t("adminNoOrderDate");
   return new Intl.DateTimeFormat("en-RW", {
     dateStyle: "medium",
     timeStyle: "short",
@@ -681,6 +1025,20 @@ function loadFromStorage(key, fallback) {
 
 function saveToStorage(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
+}
+
+function formatOrderStatus(status) {
+  const statusMap = {
+    received: "adminStatusReceived",
+    accepted: "adminStatusAccepted",
+    preparing: "adminStatusPreparing",
+    "ready-for-pickup": "adminStatusReady",
+    completed: "adminStatusCompleted",
+    cancelled: "adminStatusCancelled",
+    delivered: "adminStatusDelivered",
+  };
+
+  return t(statusMap[String(status || "").trim().toLowerCase()] || status);
 }
 
 function apiUrl(path) {
@@ -848,7 +1206,7 @@ async function createServerProduct(payload) {
   });
 
   const body = await response.json();
-  if (!response.ok) throw new Error(body.error || "Could not create product");
+  if (!response.ok) throw new Error(body.error || t("adminCreateProductFailed"));
   return body;
 }
 
@@ -863,6 +1221,6 @@ async function createServerBranch(payload) {
   });
 
   const body = await response.json();
-  if (!response.ok) throw new Error(body.error || "Could not create branch");
+  if (!response.ok) throw new Error(body.error || t("adminCreateBranchFailed"));
   return body;
 }

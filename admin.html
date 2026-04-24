@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard | Simba Supermarket</title>
+    <title data-i18n-document-title="adminPageTitle">Admin Dashboard | Simba Supermarket</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,31 +19,39 @@
           <img class="brand-logo" src="assets/simba-logo.svg" alt="Simba Supermarket logo" />
           <span>
             <strong>Simba Supermarket</strong>
-            <small>Admin dashboard</small>
+            <small data-i18n="adminTagline">Admin dashboard</small>
           </span>
         </a>
 
         <div class="topbar-actions">
-          <a class="ghost-button" href="index.html">Storefront</a>
-          <a class="ghost-button" href="branches.html">Branches</a>
-          <a class="ghost-button" href="checkout.html">Checkout</a>
+          <a class="ghost-button" href="index.html" data-i18n="adminNavStorefront">Storefront</a>
+          <a class="ghost-button" href="branches.html" data-i18n="adminNavBranches">Branches</a>
+          <a class="ghost-button" href="checkout.html" data-i18n="adminNavCheckout">Checkout</a>
+          <label class="lang-picker">
+            <span class="sr-only" data-i18n="adminLanguageLabel">Language</span>
+            <select id="languageSelect" aria-label="Select language" data-i18n-aria-label="adminLanguageLabel">
+              <option value="en">English</option>
+              <option value="fr">Francais</option>
+              <option value="rw">Kinyarwanda</option>
+            </select>
+          </label>
         </div>
       </header>
 
       <main class="admin-layout">
         <section id="adminLoginCard" class="checkout-form-card admin-login-card">
           <div class="section-heading">
-            <p class="eyebrow">Admin access</p>
-            <h1>Sign in to review orders</h1>
+            <p class="eyebrow" data-i18n="adminAccessEyebrow">Admin access</p>
+            <h1 data-i18n="adminLoginTitle">Sign in to review orders</h1>
           </div>
 
           <form id="adminLoginForm" class="checkout-form">
             <label class="field">
-              <span>Admin password</span>
-              <input type="password" name="password" placeholder="Enter admin password" required />
+              <span data-i18n="adminPasswordLabel">Admin password</span>
+              <input type="password" name="password" placeholder="Enter admin password" data-i18n-placeholder="adminPasswordPlaceholder" required />
             </label>
-            <button class="primary-button full-width" type="submit">Open dashboard</button>
-            <p class="toolbar-note">Use the `SIMBA_ADMIN_PASSWORD` environment variable. For local demo only, the fallback password is `simba-admin-2026`.</p>
+            <button class="primary-button full-width" type="submit" data-i18n="adminOpenDashboard">Open dashboard</button>
+            <p class="toolbar-note" data-i18n="adminPasswordNote">Use the `SIMBA_ADMIN_PASSWORD` environment variable. For local demo only, the fallback password is `simba-admin-2026`.</p>
             <p class="checkout-message" id="adminLoginMessage" aria-live="polite"></p>
           </form>
         </section>
@@ -51,12 +59,12 @@
         <section id="adminDashboard" class="showcase-panel hidden">
           <div class="toolbar-header">
             <div>
-              <p class="eyebrow">Operations</p>
-              <h1>Orders, inventory, and store controls</h1>
+              <p class="eyebrow" data-i18n="adminOperationsEyebrow">Operations</p>
+              <h1 data-i18n="adminDashboardTitle">Orders, inventory, and store controls</h1>
             </div>
             <div class="topbar-actions">
-              <button id="refreshOrders" class="ghost-button" type="button">Refresh</button>
-              <button id="logoutAdmin" class="ghost-button" type="button">Log out</button>
+              <button id="refreshOrders" class="ghost-button" type="button" data-i18n="adminRefreshAction">Refresh</button>
+              <button id="logoutAdmin" class="ghost-button" type="button" data-i18n="adminLogoutAction">Log out</button>
             </div>
           </div>
 
@@ -64,10 +72,10 @@
           <section class="admin-section">
             <div class="toolbar-header compact-header">
               <div>
-                <p class="eyebrow">Order desk</p>
-                <h2>Incoming pickup orders</h2>
+                <p class="eyebrow" data-i18n="adminOrderDeskEyebrow">Order desk</p>
+                <h2 data-i18n="adminOrderDeskTitle">Incoming pickup orders</h2>
               </div>
-              <p class="toolbar-note">Branch managers can assign staff, then staff can move orders to ready for pickup.</p>
+              <p class="toolbar-note" data-i18n="adminOrderDeskNote">Branch managers can assign staff, then staff can move orders to ready for pickup.</p>
             </div>
             <div id="adminOrders" class="admin-orders"></div>
           </section>
@@ -75,62 +83,62 @@
           <section class="admin-section">
             <div class="toolbar-header compact-header">
               <div>
-                <p class="eyebrow">Catalog control</p>
-                <h2>Products and stock</h2>
+                <p class="eyebrow" data-i18n="adminCatalogEyebrow">Catalog control</p>
+                <h2 data-i18n="adminCatalogTitle">Products and stock</h2>
               </div>
             </div>
             <form id="createProductForm" class="showcase-panel admin-create-form">
               <div class="toolbar-header compact-header">
                 <div>
-                  <p class="eyebrow">New item</p>
-                  <h3>Create product</h3>
+                  <p class="eyebrow" data-i18n="adminNewItemEyebrow">New item</p>
+                  <h3 data-i18n="adminCreateProductTitle">Create product</h3>
                 </div>
               </div>
               <div class="admin-product-grid">
                 <label class="field">
-                  <span>Name</span>
+                  <span data-i18n="adminFieldName">Name</span>
                   <input type="text" name="name" required />
                 </label>
                 <label class="field">
-                  <span>Category</span>
+                  <span data-i18n="adminFieldCategory">Category</span>
                   <input type="text" name="category" required />
                 </label>
                 <label class="field">
-                  <span>Subcategory</span>
+                  <span data-i18n="adminFieldSubcategory">Subcategory</span>
                   <input type="text" name="subcategory" />
                 </label>
                 <label class="field">
-                  <span>Price</span>
+                  <span data-i18n="adminFieldPrice">Price</span>
                   <input type="number" name="price" min="0" step="100" required />
                 </label>
                 <label class="field">
-                  <span>Stock</span>
+                  <span data-i18n="adminFieldStock">Stock</span>
                   <input type="number" name="stock" min="0" step="1" required />
                 </label>
                 <label class="field">
-                  <span>Badge</span>
+                  <span data-i18n="adminFieldBadge">Badge</span>
                   <input type="text" name="badge" value="New" />
                 </label>
               </div>
               <label class="field">
-                <span>Image path</span>
+                <span data-i18n="adminFieldImagePath">Image path</span>
                 <input type="text" name="image" value="assets/product-fallback.svg" />
               </label>
               <label class="field">
-                <span>Description</span>
+                <span data-i18n="adminFieldDescription">Description</span>
                 <textarea name="description" rows="3"></textarea>
               </label>
               <div class="admin-product-actions">
                 <label class="admin-toggle">
                   <input type="checkbox" name="active" checked />
-                  <span>Visible in store</span>
+                  <span data-i18n="adminVisibleInStore">Visible in store</span>
                 </label>
-                <button class="primary-button" type="submit">Create product</button>
+                <button class="primary-button" type="submit" data-i18n="adminCreateProductAction">Create product</button>
               </div>
               <p id="createProductMessage" class="checkout-message" aria-live="polite"></p>
             </form>
             <div class="admin-product-toolbar">
-              <input id="productSearch" type="search" placeholder="Search products or categories" />
+              <input id="productSearch" type="search" placeholder="Search products or categories" data-i18n-placeholder="adminSearchProductsPlaceholder" />
             </div>
             <div id="adminProducts" class="admin-products"></div>
           </section>
@@ -138,43 +146,43 @@
           <section class="admin-section">
             <div class="toolbar-header compact-header">
               <div>
-                <p class="eyebrow">Branch control</p>
-                <h2>Branches and delivery zones</h2>
+                <p class="eyebrow" data-i18n="adminBranchEyebrow">Branch control</p>
+                <h2 data-i18n="adminBranchTitle">Branches and delivery zones</h2>
               </div>
             </div>
             <form id="createBranchForm" class="showcase-panel admin-create-form">
               <div class="admin-product-grid">
                 <label class="field">
-                  <span>Name</span>
+                  <span data-i18n="adminFieldName">Name</span>
                   <input type="text" name="name" required />
                 </label>
                 <label class="field">
-                  <span>Address</span>
+                  <span data-i18n="adminFieldAddress">Address</span>
                   <input type="text" name="address" required />
                 </label>
                 <label class="field">
-                  <span>City</span>
+                  <span data-i18n="adminFieldCity">City</span>
                   <input type="text" name="city" />
                 </label>
                 <label class="field">
-                  <span>Delivery fee</span>
+                  <span data-i18n="adminFieldDeliveryFee">Delivery fee</span>
                   <input type="number" name="deliveryFee" min="0" step="100" value="2000" />
                 </label>
                 <label class="field">
-                  <span>Hours</span>
+                  <span data-i18n="adminFieldHours">Hours</span>
                   <input type="text" name="hours" value="Open daily" />
                 </label>
                 <label class="field">
-                  <span>Phone</span>
+                  <span data-i18n="adminFieldPhone">Phone</span>
                   <input type="text" name="phone" />
                 </label>
               </div>
               <div class="admin-product-actions">
                 <label class="admin-toggle">
                   <input type="checkbox" name="pickup" checked />
-                  <span>Pickup available</span>
+                  <span data-i18n="adminPickupAvailable">Pickup available</span>
                 </label>
-                <button class="primary-button" type="submit">Create branch</button>
+                <button class="primary-button" type="submit" data-i18n="adminCreateBranchAction">Create branch</button>
               </div>
               <p id="createBranchMessage" class="checkout-message" aria-live="polite"></p>
             </form>

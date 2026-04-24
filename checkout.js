@@ -55,6 +55,8 @@ const translations = {
     depositLabel: "MoMo deposit",
     formError: "Please complete all delivery and payment fields before placing the order.",
     checkoutError: "We could not place the order right now. Please make sure the backend server is running.",
+    checkoutProcessing: "Processing order...",
+    checkoutLocalSuccess: "Order saved locally for this device because the backend is unavailable.",
   },
   fr: {
     theme: "Theme",
@@ -99,6 +101,8 @@ const translations = {
     depositLabel: "Depot MoMo",
     formError: "Veuillez remplir toutes les informations de livraison et de paiement avant de valider.",
     checkoutError: "Impossible d'envoyer la commande maintenant. Verifiez que le serveur backend fonctionne.",
+    checkoutProcessing: "Traitement de la commande...",
+    checkoutLocalSuccess: "La commande a ete enregistree localement sur cet appareil car le backend est indisponible.",
   },
   rw: {
     theme: "Insanganyamatsiko",
@@ -143,6 +147,8 @@ const translations = {
     depositLabel: "Ubwizigame bwa MoMo",
     formError: "Uzuza amakuru yose yo kohereza no kwishyura mbere yo kohereza itumiza.",
     checkoutError: "Ntitwabashije kohereza itumiza ubu. Reba niba server ya backend iri gukora.",
+    checkoutProcessing: "Birimo gutunganya order...",
+    checkoutLocalSuccess: "Order yabitswe kuri iki gikoresho kubera ko backend itaboneka.",
   },
 };
 
@@ -415,30 +421,16 @@ async function submitOrder(form) {
     })),
   };
 
-  message.textContent = "Processing order...";
+  message.textContent = copy.checkoutProcessing;
   if (submitButton) submitButton.disabled = true;
 
   try {
-    const response = await fetch(apiUrl("/api/orders"), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(state.customerToken ? { Authorization: `Bearer ${state.customerToken}` } : {}),
-      },
-      body: JSON.stringify(orderPayload),
-    });
-
-    const payload = await response.json();
-    if (!response.ok) {
-      throw new Error(payload.error || copy.checkoutError);
-    }
-
-    state.lastOrder = payload.order;
+    state.lastOrder = await submitOrderWithFallback(orderPayload, copy);
     const existingOrders = loadFromStorage(STORAGE_KEYS.orders, []);
     existingOrders.unshift(state.lastOrder);
     saveToStorage(STORAGE_KEYS.orders, existingOrders);
 
-    message.textContent = copy.checkoutSuccess;
+    message.textContent = state.lastOrder.localOnly ? copy.checkoutLocalSuccess : copy.checkoutSuccess;
     renderOrderConfirmation();
     confirmation.classList.remove("hidden");
 
@@ -572,6 +564,89 @@ function getDeliveryFee() {
   const mode = document.getElementById("checkoutForm")?.elements.fulfilmentMode?.value || "pickup";
   if (mode !== "delivery") return 0;
   return window.SIMBA_BRANCHES?.getBranchById(state.selectedBranchId)?.deliveryFee ?? DEFAULT_DELIVERY_FEE;
+}
+
+async function submitOrderWithFallback(orderPayload, copy) {
+  try {
+    const response = await fetch(apiUrl("/api/orders"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(state.customerToken ? { Authorization: `Bearer ${state.customerToken}` } : {}),
+      },
+      body: JSON.stringify(orderPayload),
+    });
+
+    const payload = await response.json();
+    if (!response.ok) {
+      throw new Error(payload.error || copy.checkoutError);
+    }
+
+    return payload.order;
+  } catch (error) {
+    if (!shouldUseLocalCheckoutFallback(error)) {
+      throw error;
+    }
+
+    return createLocalOrder(orderPayload);
+  }
+}
+
+function shouldUseLocalCheckoutFallback(error) {
+  const message = String(error?.message || "");
+  return (
+    message.includes("Failed to fetch") ||
+    message.includes("Load failed") ||
+    message.includes("NetworkError") ||
+    message.includes("backend")
+  );
+}
+
+function createLocalOrder(orderPayload) {
+  const productsById = new Map(state.products.map((product) => [product.id, product]));
+  const branch = window.SIMBA_BRANCHES?.getBranchById(orderPayload.branchId) || null;
+  const items = orderPayload.items
+    .map((item) => {
+      const product = productsById.get(item.id);
+      if (!product) return null;
+      return {
+        id: item.id,
+        name: product.name,
+        price: Number(product.price || 0),
+        quantity: Number(item.quantity || 0),
+        lineTotal: Number(product.price || 0) * Number(item.quantity || 0),
+        branchId: item.branchId,
+        image: product.image,
+      };
+    })
+    .filter(Boolean);
+
+  const subtotal = items.reduce((sum, item) => sum + Number(item.lineTotal || 0), 0);
+  const deliveryFee = getDeliveryFee();
+  const customerProfile = state.customerProfile || null;
+
+  return {
+    id: `LOCAL-${Date.now()}`,
+    customerId: customerProfile?.id || "",
+    branchId: orderPayload.branchId,
+    branch,
+    customer: {
+      ...orderPayload.customer,
+      email: customerProfile?.email || "",
+    },
+    payment: {
+      ...orderPayload.payment,
+      status: "simulated",
+    },
+    fulfilment: orderPayload.fulfilment,
+    items,
+    subtotal,
+    deliveryFee,
+    total: subtotal + deliveryFee + state.deposit,
+    status: "received",
+    createdAt: new Date().toISOString(),
+    localOnly: true,
+  };
 }
 
 async function loadProducts() {

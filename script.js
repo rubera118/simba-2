@@ -116,6 +116,16 @@ const translations = {
     assistantPlaceholder: "I need something for breakfast",
     assistantAction: "Ask Simba",
     assistantEmpty: "Ask for a meal, product, branch need, or budget and Simba will guide you.",
+    assistantNone: "I could not find a close match yet.",
+    assistantThinking: "Simba is thinking through the best options for you...",
+    assistantSuggestions: "Recommended matches",
+    assistantNextStep: "You can add one now or refine the search above.",
+    assistantBudgetHint: "I prioritized value picks and broad everyday matches.",
+    assistantAdd: "Add to cart",
+    assistantRefine1: "Show cheaper options",
+    assistantRefine2: "Fresh options only",
+    assistantRefine3: "What goes with this?",
+    assistantGroqFallback: "Groq is unavailable right now, so Simba used local catalog matching instead.",
     searchLabel: "Search products",
     searchPlaceholder: "Search rice, juice, shampoo...",
     categoryLabel: "Category",
@@ -269,6 +279,16 @@ const translations = {
     assistantPlaceholder: "Je veux quelque chose pour le petit dejeuner",
     assistantAction: "Demander a Simba",
     assistantEmpty: "Demandez un repas, un produit, un besoin de branche ou un budget et Simba vous guide.",
+    assistantNone: "Je n'ai pas encore trouve de correspondance proche.",
+    assistantThinking: "Simba cherche les meilleures options pour vous...",
+    assistantSuggestions: "Suggestions recommandees",
+    assistantNextStep: "Vous pouvez en ajouter une maintenant ou affiner la recherche ci-dessus.",
+    assistantBudgetHint: "J'ai privilegie les choix economiques et les besoins du quotidien.",
+    assistantAdd: "Ajouter au panier",
+    assistantRefine1: "Montrer moins cher",
+    assistantRefine2: "Options fraiches seulement",
+    assistantRefine3: "Que va avec ceci ?",
+    assistantGroqFallback: "Groq est indisponible pour le moment, Simba a donc utilise le catalogue local.",
     searchLabel: "Rechercher des produits",
     searchPlaceholder: "Chercher riz, jus, shampoing...",
     categoryLabel: "Categorie",
@@ -422,6 +442,16 @@ const translations = {
     assistantPlaceholder: "Ndashaka ikintu cya breakfast",
     assistantAction: "Baza Simba",
     assistantEmpty: "Baza ifunguro, igicuruzwa, ishami cyangwa budget Simba ikuyobore.",
+    assistantNone: "Nta kintu gihuye cyane n'ibyo ushaka ndabona ubu.",
+    assistantThinking: "Simba iri gutekereza ku bicuruzwa bikubereye neza...",
+    assistantSuggestions: "Ibyo Simba igusaba",
+    assistantNextStep: "Ushobora guhita wongeramo kimwe cyangwa ugakomeza kunonosora ubushakashatsi hejuru.",
+    assistantBudgetHint: "Nahisemo cyane cyane ibiciro byoroheje n'ibikunze gukoreshwa buri munsi.",
+    assistantAdd: "Shyira mu gaseke",
+    assistantRefine1: "Nyereka ibihendutse",
+    assistantRefine2: "Nyereka ibishya gusa",
+    assistantRefine3: "Ni iki najyana na byo?",
+    assistantGroqFallback: "Groq ntiboneka ubu, Simba yakoresheje local catalog matching.",
     searchLabel: "Shakisha ibicuruzwa",
     searchPlaceholder: "Shaka umuceri, umutobe, shampoo...",
     categoryLabel: "Icyiciro",
@@ -620,6 +650,7 @@ let appState = {
   promoTimer: null,
   cartAnimationTimer: null,
   lastCartCount: null,
+  assistantHistory: [],
 };
 
 const elements = {
@@ -739,6 +770,7 @@ function bindGlobalControls() {
     elements.branchSelect.value = appState.selectedBranchId || availableBranches[0].id;
     elements.branchSelect.addEventListener("change", async (event) => {
       appState.selectedBranchId = event.target.value;
+      appState.assistantHistory = [];
       window.SIMBA_BRANCHES?.saveSelectedBranch(appState.selectedBranchId);
       appState.cart = window.SIMBA_BRANCHES
         ? window.SIMBA_BRANCHES.normalizeCart(appState.cart, appState.selectedBranchId)
@@ -752,6 +784,7 @@ function bindGlobalControls() {
 
   elements.languageSelect.addEventListener("change", (event) => {
     appState.language = event.target.value;
+    appState.assistantHistory = [];
     saveToStorage(STORAGE_KEYS.language, appState.language);
     applyLanguage();
     populateCategoryFilter();
@@ -1423,6 +1456,7 @@ async function handleAssistantSearch() {
     return;
   }
 
+  renderAssistantResponse(copy.assistantThinking, []);
   const result = await requestAssistantRecommendation(query);
   appState.searchQuery = result.searchQuery;
   appState.departmentQuery = result.searchQuery;
@@ -1464,24 +1498,25 @@ async function requestAssistantRecommendation(query) {
       message: String(payload.message || ""),
     };
   } catch {
-    const fallback = interpretAssistantQuery(query);
-    const copy = translations[appState.language] || translations.en;
-    return {
-      ...fallback,
-      message: `${fallback.message} ${copy.assistantUnavailable}`.trim(),
-    };
+      const fallback = interpretAssistantQuery(query);
+      const copy = translations[appState.language] || translations.en;
+      return {
+        ...fallback,
+        message: `${fallback.message} ${copy.assistantGroqFallback}`.trim(),
+      };
   }
 }
 
 function interpretAssistantQuery(query) {
   const normalizedQuery = query.toLowerCase();
+  const copy = translations[appState.language] || translations.en;
   const intentMap = [
-    { pattern: /breakfast|morning|tea|coffee|bread|cereal/, keywords: ["milk", "bread", "tea", "coffee", "juice"], category: "Food Products", message: "Breakfast options are ready, with pantry staples and drinks that suit morning shopping." },
-    { pattern: /fresh|fruit|vegetable|produce/, keywords: ["fresh", "fruit", "vegetable", "tomato", "banana", "apple"], category: "Vegetable and Fruits", message: "These fresh picks focus on fruit and vegetable shopping for the selected branch." },
-    { pattern: /clean|detergent|soap|sanitary|laundry/, keywords: ["detergent", "soap", "clean", "laundry"], category: "Cleaning and Sanitary", message: "I filtered the catalog to cleaning and sanitary items for quick household restocking." },
-    { pattern: /drink|juice|water|soda|beverage/, keywords: ["juice", "water", "drink", "soda"], category: "Non-Alcoholic Drinks", message: "These drink options match the refreshment products available in this branch." },
-    { pattern: /beauty|cosmetic|shampoo|lotion|skin/, keywords: ["shampoo", "lotion", "beauty", "cosmetic"], category: "Cosmetics", message: "I narrowed the view to beauty and personal care products." },
-    { pattern: /cheap|budget|affordable|low price/, keywords: [], category: null, message: "I kept the search broad and you can use the price slider for the most affordable picks." },
+    { pattern: /breakfast|morning|tea|coffee|bread|cereal/, keywords: ["milk", "bread", "tea", "coffee", "juice"], category: "Food Products", tone: "category" },
+    { pattern: /fresh|fruit|vegetable|produce/, keywords: ["fresh", "fruit", "vegetable", "tomato", "banana", "apple"], category: "Vegetable and Fruits", tone: "category" },
+    { pattern: /clean|detergent|soap|sanitary|laundry/, keywords: ["detergent", "soap", "clean", "laundry"], category: "Cleaning and Sanitary", tone: "category" },
+    { pattern: /drink|juice|water|soda|beverage/, keywords: ["juice", "water", "drink", "soda"], category: "Non-Alcoholic Drinks", tone: "category" },
+    { pattern: /beauty|cosmetic|shampoo|lotion|skin/, keywords: ["shampoo", "lotion", "beauty", "cosmetic"], category: "Cosmetics", tone: "category" },
+    { pattern: /cheap|budget|affordable|low price|under|low-cost/, keywords: [], category: null, tone: "budget" },
   ];
 
   const matchedIntent = intentMap.find((intent) => intent.pattern.test(normalizedQuery));
@@ -1504,22 +1539,33 @@ function interpretAssistantQuery(query) {
     return keywordMatch && categoryMatch;
   }).slice(0, 4);
 
-  const copy = translations[appState.language] || translations.en;
-  const defaultMessage = copy.assistantFound.replace("{count}", matches.length);
-  const suffix = matches.length
-    ? ` ${matches.map((product) => product.name).slice(0, 3).join(", ")}`
-    : ` ${copy.emptyText}`;
+  const matchPreview = matches.map((product) => product.name).slice(0, 3).join(", ");
+  const categoryLabel = matchedIntent?.category ? getLocalizedCategoryName(matchedIntent.category) : "";
+  let message = matches.length
+    ? copy.assistantFound.replace("{count}", matches.length)
+    : copy.assistantNone || copy.emptyText;
+
+  if (matchedIntent?.tone === "budget") {
+    message = `${message} ${copy.assistantBudgetHint}`.trim();
+  } else if (categoryLabel && matches.length) {
+    message = `${message} ${categoryLabel}.`.trim();
+  }
+
+  if (matchPreview) {
+    message = `${message} ${matchPreview}`.trim();
+  }
 
   return {
     searchQuery,
     category,
     matches,
-    message: `${matchedIntent?.message || defaultMessage}${suffix}`.trim(),
+    message,
   };
 }
 
 function renderAssistantResponse(message, matches) {
   if (!elements.assistantResponse) return;
+  const copy = translations[appState.language] || translations.en;
 
   const cards = matches.length
     ? matches
@@ -1529,18 +1575,39 @@ function renderAssistantResponse(message, matches) {
               <strong>${product.name}</strong>
               <span>${getLocalizedCategoryName(product.category)}</span>
               <strong>${formatCurrency(product.price)}</strong>
+              <button class="ghost-button" type="button" data-assistant-add="${product.id}">${copy.assistantAdd}</button>
             </article>
           `
         )
         .join("")
     : "";
 
+  const followUps = matches.length
+    ? [copy.assistantRefine1, copy.assistantRefine2, copy.assistantRefine3]
+    : [];
+
   elements.assistantResponse.classList.remove("hidden");
   elements.assistantResponse.dataset.message = message;
+  elements.assistantResponse.dataset.matches = JSON.stringify(matches.map((product) => product.id));
   elements.assistantResponse.innerHTML = `
     <p>${message}</p>
+    ${matches.length ? `<p class="toolbar-note">${copy.assistantSuggestions}</p>` : ""}
     <div class="assistant-match-grid">${cards}</div>
+    ${followUps.length ? `<div class="chip-row">${followUps.map((label) => `<button class="chip" type="button" data-assistant-followup="${label}">${label}</button>`).join("")}</div>` : ""}
+    ${matches.length ? `<p class="toolbar-note">${copy.assistantNextStep}</p>` : ""}
   `;
+
+  elements.assistantResponse.querySelectorAll("[data-assistant-add]").forEach((button) => {
+    button.addEventListener("click", () => addToCart(button.dataset.assistantAdd, appState.selectedBranchId));
+  });
+
+  elements.assistantResponse.querySelectorAll("[data-assistant-followup]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!elements.assistantSearchInput) return;
+      elements.assistantSearchInput.value = button.dataset.assistantFollowup;
+      handleAssistantSearch();
+    });
+  });
 }
 
 function createProductCard(product, copy) {

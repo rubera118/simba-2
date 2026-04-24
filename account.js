@@ -8,10 +8,13 @@ const ACCOUNT_STORAGE_KEYS = {
 
 const REVIEW_ELIGIBLE_STATUSES = ["ready-for-pickup", "completed", "delivered"];
 
+const ACCOUNT_LANGUAGE_KEY = "simba-language";
+
 const accountState = {
   token: loadFromStorage(ACCOUNT_STORAGE_KEYS.token, ""),
   profile: loadFromStorage(ACCOUNT_STORAGE_KEYS.profile, null),
   orders: [],
+  language: loadFromStorage(ACCOUNT_LANGUAGE_KEY, "en"),
 };
 
 const GOOGLE_DEMO_PROFILE = {
@@ -21,9 +24,329 @@ const GOOGLE_DEMO_PROFILE = {
   address: "Kigali, KG 11 Ave",
 };
 
+const accountTranslations = {
+  en: {
+    accountPageTitle: "My Account | Simba Supermarket",
+    accountTagline: "Customer account",
+    accountNavStorefront: "Storefront",
+    accountNavBranches: "Branches",
+    accountNavCheckout: "Checkout",
+    accountLanguageLabel: "Language",
+    accountWelcomeBack: "Welcome back",
+    accountSignInTitle: "Sign in",
+    accountEmailLabel: "Email",
+    accountEmailPlaceholder: "you@example.com",
+    accountPasswordLabel: "Password",
+    accountPasswordPlaceholder: "Your password",
+    accountSignInAction: "Sign in",
+    accountGoogleAction: "Continue with Google",
+    accountResetEyebrow: "Reset access",
+    accountForgotTitle: "Forgot your password?",
+    accountResetAction: "Send reset link",
+    accountNewCustomer: "New customer",
+    accountCreateTitle: "Create account",
+    accountFullNameLabel: "Full name",
+    accountFullNamePlaceholder: "Aline Uwimana",
+    accountPhoneLabel: "Phone number",
+    accountPhonePlaceholder: "+250 788 123 456",
+    accountAddressLabel: "Default address",
+    accountAddressPlaceholder: "Kigali, KG 11 Ave",
+    accountCreatePasswordPlaceholder: "Create a password",
+    accountCreateAction: "Create account",
+    accountDashboardEyebrow: "My account",
+    accountDashboardTitle: "Your profile",
+    accountLogoutAction: "Log out",
+    accountOrdersEyebrow: "My orders",
+    accountOrdersTitle: "Order history",
+    accountWorking: "Working...",
+    accountGoogleConnecting: "Connecting Google account...",
+    accountSessionExpired: "Your account session expired. Sign in again.",
+    accountGreeting: "Welcome, {name}",
+    accountProfileEmail: "Email",
+    accountProfilePhone: "Phone",
+    accountProfileAddress: "Address",
+    accountNotSet: "Not set",
+    accountNoOrders: "You have not placed any orders yet.",
+    accountOrderPlaced: "Placed",
+    accountOrderPayment: "Payment",
+    accountOrderBranch: "Branch",
+    accountOrderFulfilment: "Fulfilment",
+    accountBranchReview: "Branch review",
+    accountReviewThankYou: "Thank you for sharing your pickup experience.",
+    accountReviewAvailableLater: "Available after pickup is completed",
+    accountReviewTitle: "Rate your branch experience",
+    accountReviewRating: "Rating",
+    accountReviewComment: "Comment",
+    accountReviewCommentPlaceholder: "Tell Simba how the pickup went.",
+    accountReviewSubmit: "Submit review",
+    accountResetEnterEmail: "Enter your email address first.",
+    accountResetPreparing: "Preparing reset link...",
+    accountResetPrepared: "If that account exists, a reset link has been prepared for demo use.",
+    accountResetDemoSaved: "Demo reset saved locally. In production this would email a secure reset link.",
+    accountReviewChooseRating: "Choose a rating before submitting.",
+    accountReviewSaved: "Thanks. Your branch review has been saved.",
+    accountFulfilmentPickup: "Gufatira ku ishami",
+    accountFulfilmentDelivery: "Kuzanirwa",
+    accountBackendConnected: "Account services are connected to {url}.",
+    accountBackendLocalMode: "Account creation and sign-in will use browser storage on this live site until a backend URL is connected in config.js.",
+    accountBackendMissing: "The account API backend is not configured for this site. Add your deployed backend URL in config.js so signup and login can work.",
+    accountBackendInvalid: "The account service returned an invalid response. Check that the backend is running and reachable from this site.",
+    accountErrorEmailRequired: "Email address is required.",
+    accountErrorEmailInvalid: "Enter a valid email address.",
+    accountErrorNameRequired: "Full name is required.",
+    accountErrorPasswordShort: "Password must be at least 6 characters long.",
+    accountErrorPasswordRequired: "Password is required.",
+    accountLocalRegisterSuccess: "Account created in browser storage for this device.",
+    accountLocalLoginSuccess: "Signed in using browser storage for this device.",
+    accountLocalSignedIn: "Signed in on this device.",
+    accountLocalUnsupported: "Local account mode does not support this action.",
+    accountLocalDuplicate: "An account with that email already exists on this device.",
+    accountLocalMissing: "No account was found with that email on this device.",
+    accountLocalWrongPassword: "Incorrect password. Please try again.",
+    accountLocalGoogleName: "Simba Google Customer",
+    accountLocalMissingCustomer: "This local account could not be found on this device anymore.",
+    accountGoogleUnavailable: "Google sign-in is not available right now.",
+    accountRequestFailed: "Account request failed.",
+    accountProfileLoadFailed: "Could not load your account profile.",
+    accountOrdersLoadFailed: "Could not load your order history.",
+    accountResetFailed: "Could not prepare a reset link right now.",
+    accountStatusReceived: "Received",
+    accountStatusAccepted: "Accepted",
+    accountStatusPreparing: "Preparing",
+    accountStatusReadyForPickup: "Ready for pickup",
+    accountStatusCompleted: "Completed",
+    accountStatusCancelled: "Cancelled",
+    accountStatusDelivered: "Delivered",
+    accountRatingStars: "{count} stars",
+    accountRatingStar: "{count} star",
+  },
+  fr: {
+    accountPageTitle: "Mon Compte | Simba Supermarket",
+    accountTagline: "Compte client",
+    accountNavStorefront: "Boutique",
+    accountNavBranches: "Branches",
+    accountNavCheckout: "Paiement",
+    accountLanguageLabel: "Langue",
+    accountWelcomeBack: "Bon retour",
+    accountSignInTitle: "Se connecter",
+    accountEmailLabel: "Email",
+    accountEmailPlaceholder: "vous@example.com",
+    accountPasswordLabel: "Mot de passe",
+    accountPasswordPlaceholder: "Votre mot de passe",
+    accountSignInAction: "Se connecter",
+    accountGoogleAction: "Continuer avec Google",
+    accountResetEyebrow: "Reinitialisation",
+    accountForgotTitle: "Mot de passe oublie ?",
+    accountResetAction: "Envoyer le lien",
+    accountNewCustomer: "Nouveau client",
+    accountCreateTitle: "Creer un compte",
+    accountFullNameLabel: "Nom complet",
+    accountFullNamePlaceholder: "Aline Uwimana",
+    accountPhoneLabel: "Numero de telephone",
+    accountPhonePlaceholder: "+250 788 123 456",
+    accountAddressLabel: "Adresse par defaut",
+    accountAddressPlaceholder: "Kigali, KG 11 Ave",
+    accountCreatePasswordPlaceholder: "Creez un mot de passe",
+    accountCreateAction: "Creer un compte",
+    accountDashboardEyebrow: "Mon compte",
+    accountDashboardTitle: "Votre profil",
+    accountLogoutAction: "Se deconnecter",
+    accountOrdersEyebrow: "Mes commandes",
+    accountOrdersTitle: "Historique des commandes",
+    accountWorking: "Traitement en cours...",
+    accountGoogleConnecting: "Connexion du compte Google...",
+    accountSessionExpired: "Votre session a expire. Connectez-vous de nouveau.",
+    accountGreeting: "Bienvenue, {name}",
+    accountProfileEmail: "Email",
+    accountProfilePhone: "Telephone",
+    accountProfileAddress: "Adresse",
+    accountNotSet: "Non renseigne",
+    accountNoOrders: "Vous n'avez pas encore passe de commande.",
+    accountOrderPlaced: "Passee le",
+    accountOrderPayment: "Paiement",
+    accountOrderBranch: "Branche",
+    accountOrderFulfilment: "Retrait",
+    accountBranchReview: "Avis sur la branche",
+    accountReviewThankYou: "Merci d'avoir partage votre experience de retrait.",
+    accountReviewAvailableLater: "Disponible apres le retrait termine",
+    accountReviewTitle: "Notez votre experience en branche",
+    accountReviewRating: "Note",
+    accountReviewComment: "Commentaire",
+    accountReviewCommentPlaceholder: "Dites a Simba comment le retrait s'est passe.",
+    accountReviewSubmit: "Envoyer l'avis",
+    accountResetEnterEmail: "Entrez d'abord votre adresse email.",
+    accountResetPreparing: "Preparation du lien de reinitialisation...",
+    accountResetPrepared: "Si ce compte existe, un lien de reinitialisation a ete prepare pour la demo.",
+    accountResetDemoSaved: "Reinitialisation demo enregistree localement. En production, un lien securise serait envoye par email.",
+    accountReviewChooseRating: "Choisissez une note avant d'envoyer.",
+    accountReviewSaved: "Merci. Votre avis sur la branche a ete enregistre.",
+    accountFulfilmentPickup: "Retrait",
+    accountFulfilmentDelivery: "Livraison",
+    accountBackendConnected: "Les services de compte sont connectes a {url}.",
+    accountBackendLocalMode: "La creation de compte et la connexion utiliseront le stockage du navigateur sur ce site tant qu'aucune URL backend n'est configuree dans config.js.",
+    accountBackendMissing: "Le backend du compte n'est pas configure pour ce site. Ajoutez l'URL de votre backend deploye dans config.js afin que l'inscription et la connexion fonctionnent.",
+    accountBackendInvalid: "Le service de compte a renvoye une reponse invalide. Verifiez que le backend fonctionne et reste accessible depuis ce site.",
+    accountErrorEmailRequired: "L'adresse email est obligatoire.",
+    accountErrorEmailInvalid: "Entrez une adresse email valide.",
+    accountErrorNameRequired: "Le nom complet est obligatoire.",
+    accountErrorPasswordShort: "Le mot de passe doit contenir au moins 6 caracteres.",
+    accountErrorPasswordRequired: "Le mot de passe est obligatoire.",
+    accountLocalRegisterSuccess: "Compte cree dans le stockage du navigateur pour cet appareil.",
+    accountLocalLoginSuccess: "Connexion effectuee via le stockage du navigateur pour cet appareil.",
+    accountLocalSignedIn: "Connecte sur cet appareil.",
+    accountLocalUnsupported: "Le mode local ne prend pas en charge cette action.",
+    accountLocalDuplicate: "Un compte avec cet email existe deja sur cet appareil.",
+    accountLocalMissing: "Aucun compte avec cet email n'a ete trouve sur cet appareil.",
+    accountLocalWrongPassword: "Mot de passe incorrect. Veuillez reessayer.",
+    accountLocalGoogleName: "Client Google Simba",
+    accountLocalMissingCustomer: "Ce compte local est introuvable sur cet appareil.",
+    accountGoogleUnavailable: "La connexion Google n'est pas disponible pour le moment.",
+    accountRequestFailed: "La demande de compte a echoue.",
+    accountProfileLoadFailed: "Impossible de charger votre profil.",
+    accountOrdersLoadFailed: "Impossible de charger l'historique des commandes.",
+    accountResetFailed: "Impossible de preparer un lien de reinitialisation maintenant.",
+    accountStatusReceived: "Recue",
+    accountStatusAccepted: "Acceptee",
+    accountStatusPreparing: "Preparation",
+    accountStatusReadyForPickup: "Pret pour le retrait",
+    accountStatusCompleted: "Terminee",
+    accountStatusCancelled: "Annulee",
+    accountStatusDelivered: "Livree",
+    accountRatingStars: "{count} etoiles",
+    accountRatingStar: "{count} etoile",
+  },
+  rw: {
+    accountPageTitle: "Konti Yanjye | Simba Supermarket",
+    accountTagline: "Konti y'umukiriya",
+    accountNavStorefront: "Iduka",
+    accountNavBranches: "Amashami",
+    accountNavCheckout: "Kwishyura",
+    accountLanguageLabel: "Ururimi",
+    accountWelcomeBack: "Murakaza neza",
+    accountSignInTitle: "Injira",
+    accountEmailLabel: "Imeyili",
+    accountEmailPlaceholder: "wowe@example.com",
+    accountPasswordLabel: "Ijambobanga",
+    accountPasswordPlaceholder: "Ijambobanga ryawe",
+    accountSignInAction: "Injira",
+    accountGoogleAction: "Komeza na Google",
+    accountResetEyebrow: "Gusubirana uburenganzira",
+    accountForgotTitle: "Wibagiwe ijambobanga?",
+    accountResetAction: "Ohereza link",
+    accountNewCustomer: "Umukiriya mushya",
+    accountCreateTitle: "Kora konti",
+    accountFullNameLabel: "Amazina yose",
+    accountFullNamePlaceholder: "Aline Uwimana",
+    accountPhoneLabel: "Numero ya telefone",
+    accountPhonePlaceholder: "+250 788 123 456",
+    accountAddressLabel: "Aderesi isanzwe",
+    accountAddressPlaceholder: "Kigali, KG 11 Ave",
+    accountCreatePasswordPlaceholder: "Kora ijambobanga",
+    accountCreateAction: "Kora konti",
+    accountDashboardEyebrow: "Konti yanjye",
+    accountDashboardTitle: "Umwirondoro wawe",
+    accountLogoutAction: "Sohoka",
+    accountOrdersEyebrow: "Ama-order yanjye",
+    accountOrdersTitle: "Amateka y'ama-order",
+    accountWorking: "Birimo gukorwa...",
+    accountGoogleConnecting: "Birimo guhuza konti ya Google...",
+    accountSessionExpired: "Session yawe yarangiye. Ongera winjire.",
+    accountGreeting: "Murakaza neza, {name}",
+    accountProfileEmail: "Imeyili",
+    accountProfilePhone: "Telefone",
+    accountProfileAddress: "Aderesi",
+    accountNotSet: "Ntabwo yashyizwemo",
+    accountNoOrders: "Nta order urashyira kugeza ubu.",
+    accountOrderPlaced: "Yashyizweho",
+    accountOrderPayment: "Kwishyura",
+    accountOrderBranch: "Ishami",
+    accountOrderFulfilment: "Uburyo bwo guhabwa",
+    accountBranchReview: "Isuzuma ry'ishami",
+    accountReviewThankYou: "Murakoze gusangiza uko pickup yagenze.",
+    accountReviewAvailableLater: "Bizaboneka nyuma yo gufata order",
+    accountReviewTitle: "Suzuma uko wakiriwe ku ishami",
+    accountReviewRating: "Amanota",
+    accountReviewComment: "Igitekerezo",
+    accountReviewCommentPlaceholder: "Bwira Simba uko pickup yagenze.",
+    accountReviewSubmit: "Ohereza isuzuma",
+    accountResetEnterEmail: "Banza wandike aderesi ya imeyili.",
+    accountResetPreparing: "Birimo gutegura link yo gusubirana ijambobanga...",
+    accountResetPrepared: "Niba iyo konti ibaho, link yo gusubirana ijambobanga yateguwe kuri demo.",
+    accountResetDemoSaved: "Reset ya demo yabitswe kuri iki gikoresho. Mu buryo nyabwo, email ifite link yizewe ni yo yakoherezwa.",
+    accountReviewChooseRating: "Banza uhitemo amanota mbere yo kohereza.",
+    accountReviewSaved: "Murakoze. Isuzuma ryanyu ryabitswe.",
+    accountFulfilmentPickup: "Pickup",
+    accountFulfilmentDelivery: "Delivery",
+    accountBackendConnected: "Serivisi za konti zahujwe na {url}.",
+    accountBackendLocalMode: "Gukora konti no kwinjira bizakoresha browser storage kuri iyi site kugeza igihe URL ya backend izashyirirwa muri config.js.",
+    accountBackendMissing: "Backend ya konti ntabwo yashyizwe kuri iyi site. Ongeramo URL ya backend yawe muri config.js kugira ngo kwiyandikisha no kwinjira bikore.",
+    accountBackendInvalid: "Serivisi ya konti yagaruye igisubizo kitari cyo. Reba niba backend iri gukora kandi ishobora kugerwaho n'iyi site.",
+    accountErrorEmailRequired: "Aderesi ya imeyili irakenewe.",
+    accountErrorEmailInvalid: "Shyiramo aderesi ya imeyili iboneye.",
+    accountErrorNameRequired: "Amazina yose arakenewe.",
+    accountErrorPasswordShort: "Ijambobanga rigomba kuba nibura rifite inyuguti 6.",
+    accountErrorPasswordRequired: "Ijambobanga rirakenewe.",
+    accountLocalRegisterSuccess: "Konti yakozwe muri browser storage kuri iki gikoresho.",
+    accountLocalLoginSuccess: "Winjiye ukoresheje browser storage kuri iki gikoresho.",
+    accountLocalSignedIn: "Winjiye kuri iki gikoresho.",
+    accountLocalUnsupported: "Ubu buryo bwa local ntibushyigikira iki gikorwa.",
+    accountLocalDuplicate: "Hari konti ifite iyi meyili kuri iki gikoresho.",
+    accountLocalMissing: "Nta konti ifite iyi meyili yabonetse kuri iki gikoresho.",
+    accountLocalWrongPassword: "Ijambobanga si ryo. Ongera ugerageze.",
+    accountLocalGoogleName: "Umukiriya wa Google wa Simba",
+    accountLocalMissingCustomer: "Iyi konti ya local ntikiboneka kuri iki gikoresho.",
+    accountGoogleUnavailable: "Kwinjira ukoresheje Google ntibiboneka ubu.",
+    accountRequestFailed: "Gusaba kwa konti byanze.",
+    accountProfileLoadFailed: "Ntibishobotse gupakurura umwirondoro wawe.",
+    accountOrdersLoadFailed: "Ntibishobotse gupakurura amateka y'ama-order.",
+    accountResetFailed: "Ntibishobotse gutegura link yo gusubirana ijambobanga ubu.",
+    accountStatusReceived: "Byakiriwe",
+    accountStatusAccepted: "Byemejwe",
+    accountStatusPreparing: "Birategurwa",
+    accountStatusReadyForPickup: "Byiteguye gufatwa",
+    accountStatusCompleted: "Byarangiye",
+    accountStatusCancelled: "Byahagaritswe",
+    accountStatusDelivered: "Byagejejwe",
+    accountRatingStars: "Inyenyeri {count}",
+    accountRatingStar: "Inyenyeri {count}",
+  },
+};
+
+function t(key, variables = {}) {
+  const copy = accountTranslations[accountState.language] || accountTranslations.en;
+  const template = copy[key] ?? accountTranslations.en[key] ?? key;
+  return Object.entries(variables).reduce(
+    (message, [name, value]) => message.replaceAll(`{${name}}`, String(value)),
+    template
+  );
+}
+
+function applyLanguage() {
+  document.documentElement.lang = accountState.language;
+
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    element.textContent = t(element.dataset.i18n);
+  });
+
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+    element.setAttribute("placeholder", t(element.dataset.i18nPlaceholder));
+  });
+
+  document.querySelectorAll("[data-i18n-document-title]").forEach((element) => {
+    const title = t(element.dataset.i18nDocumentTitle);
+    element.textContent = title;
+    document.title = title;
+  });
+
+  document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+    element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
+  });
+}
+
 document.addEventListener("DOMContentLoaded", initAccountPage);
 
 function initAccountPage() {
+  applyLanguage();
   renderAccountServiceNotice();
   bindAccountControls();
 
@@ -38,6 +361,21 @@ function bindAccountControls() {
   const forgotPasswordForm = document.getElementById("forgotPasswordForm");
   const logoutButton = document.getElementById("logoutAccount");
   const googleSignInButton = document.getElementById("googleSignInButton");
+  const languageSelect = document.getElementById("languageSelect");
+
+  if (languageSelect) {
+    languageSelect.value = accountState.language;
+    languageSelect.addEventListener("change", (event) => {
+      accountState.language = event.target.value;
+      saveToStorage(ACCOUNT_LANGUAGE_KEY, accountState.language);
+      applyLanguage();
+      renderAccountServiceNotice();
+      if (!document.getElementById("accountDashboard").classList.contains("hidden") && accountState.profile) {
+        renderProfile(accountState.profile);
+        renderOrders(accountState.orders);
+      }
+    });
+  }
 
   loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -73,7 +411,7 @@ function bindAccountControls() {
 
   googleSignInButton?.addEventListener("click", async () => {
     const message = document.getElementById("googleSignInMessage");
-    message.textContent = "Connecting Google account...";
+    message.textContent = t("accountGoogleConnecting");
 
     try {
       const response = await fetch(apiUrl("/api/customers/google"), {
@@ -84,7 +422,7 @@ function bindAccountControls() {
         body: JSON.stringify(GOOGLE_DEMO_PROFILE),
       });
 
-      const body = await parseApiResponse(response, "Google sign-in is not available right now.");
+      const body = await parseApiResponse(response, t("accountGoogleUnavailable"));
 
       accountState.token = body.token;
       accountState.profile = body.customer;
@@ -126,7 +464,7 @@ function bindAccountControls() {
 
 async function authenticateCustomer(url, payload, messageId) {
   const message = document.getElementById(messageId);
-  message.textContent = "Working...";
+  message.textContent = t("accountWorking");
 
   try {
     validateAuthPayload(url, payload);
@@ -138,7 +476,7 @@ async function authenticateCustomer(url, payload, messageId) {
       body: JSON.stringify(payload),
     });
 
-    const body = await parseApiResponse(response, "Account request failed.");
+    const body = await parseApiResponse(response, t("accountRequestFailed"));
 
     accountState.token = body.token;
     accountState.profile = body.customer;
@@ -181,11 +519,11 @@ async function loadAccountDashboard() {
     ]);
 
     if (profileResponse.status === 401 || ordersResponse.status === 401) {
-      throw new Error("Your account session expired. Sign in again.");
+      throw new Error(t("accountSessionExpired"));
     }
 
-    const profilePayload = await parseApiResponse(profileResponse, "Could not load your account profile.");
-    const ordersPayload = await parseApiResponse(ordersResponse, "Could not load your order history.");
+    const profilePayload = await parseApiResponse(profileResponse, t("accountProfileLoadFailed"));
+    const ordersPayload = await parseApiResponse(ordersResponse, t("accountOrdersLoadFailed"));
     accountState.profile = profilePayload.customer;
     accountState.orders = ordersPayload.orders || [];
     saveToStorage(ACCOUNT_STORAGE_KEYS.profile, accountState.profile);
@@ -217,19 +555,19 @@ async function loadAccountDashboard() {
 }
 
 function renderProfile(profile) {
-  document.getElementById("accountGreeting").textContent = `Welcome, ${profile.name}`;
+  document.getElementById("accountGreeting").textContent = t("accountGreeting", { name: profile.name });
   document.getElementById("accountProfile").innerHTML = `
     <article class="summary-box admin-stat-card">
-      <span>Email</span>
+      <span>${t("accountProfileEmail")}</span>
       <strong>${profile.email}</strong>
     </article>
     <article class="summary-box admin-stat-card">
-      <span>Phone</span>
-      <strong>${profile.phone || "Not set"}</strong>
+      <span>${t("accountProfilePhone")}</span>
+      <strong>${profile.phone || t("accountNotSet")}</strong>
     </article>
     <article class="summary-box admin-stat-card">
-      <span>Address</span>
-      <strong>${profile.address || "Not set"}</strong>
+      <span>${t("accountProfileAddress")}</span>
+      <strong>${profile.address || t("accountNotSet")}</strong>
     </article>
   `;
 }
@@ -237,7 +575,7 @@ function renderProfile(profile) {
 function renderOrders(orders) {
   const container = document.getElementById("accountOrders");
   if (!orders.length) {
-    container.innerHTML = `<div class="state-panel"><p>You have not placed any orders yet.</p></div>`;
+    container.innerHTML = `<div class="state-panel"><p>${t("accountNoOrders")}</p></div>`;
     return;
   }
 
@@ -250,23 +588,23 @@ function renderOrders(orders) {
               <p class="eyebrow">${order.id}</p>
               <h2>${formatCurrency(order.total)}</h2>
             </div>
-            <span class="chip">${order.status}</span>
+            <span class="chip">${formatOrderStatus(order.status)}</span>
           </div>
           <div class="admin-order-grid">
             <div class="summary-box">
-              <span>Placed</span>
+              <span>${t("accountOrderPlaced")}</span>
               <strong>${formatDate(order.createdAt)}</strong>
             </div>
             <div class="summary-box">
-              <span>Payment</span>
+              <span>${t("accountOrderPayment")}</span>
               <strong>${order.payment.network}</strong>
             </div>
             <div class="summary-box">
-              <span>Branch</span>
-              <strong>${order.branch?.name || order.branchId || "Not set"}</strong>
+              <span>${t("accountOrderBranch")}</span>
+              <strong>${order.branch?.name || order.branchId || t("accountNotSet")}</strong>
             </div>
             <div class="summary-box">
-              <span>Fulfilment</span>
+              <span>${t("accountOrderFulfilment")}</span>
               <strong>${formatFulfilment(order)}</strong>
             </div>
           </div>
@@ -282,7 +620,7 @@ function renderOrders(orders) {
               )
               .join("")}
           </div>
-          ${renderReviewPanel(order)}
+          ${renderLocalizedReviewPanel(order)}
         </article>
       `
     )
@@ -339,6 +677,52 @@ function renderReviewPanel(order) {
   `;
 }
 
+function renderLocalizedReviewPanel(order) {
+  const existingReview = getReviewByOrderId(order.id);
+  if (existingReview) {
+    return `
+      <div class="summary-box">
+        <span>${t("accountBranchReview")}</span>
+        <strong>${getReviewStars(existingReview.rating)}</strong>
+        <p>${existingReview.comment || t("accountReviewThankYou")}</p>
+      </div>
+    `;
+  }
+
+  if (!REVIEW_ELIGIBLE_STATUSES.includes(order.status)) {
+    return `
+      <div class="summary-box">
+        <span>${t("accountBranchReview")}</span>
+        <strong>${t("accountReviewAvailableLater")}</strong>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="summary-box">
+      <span>${t("accountReviewTitle")}</span>
+      <div class="checkout-form">
+        <label class="field">
+          <span>${t("accountReviewRating")}</span>
+          <select data-review-field="rating" data-order-id="${order.id}">
+            <option value="5">${formatRatingLabel(5)}</option>
+            <option value="4">${formatRatingLabel(4)}</option>
+            <option value="3">${formatRatingLabel(3)}</option>
+            <option value="2">${formatRatingLabel(2)}</option>
+            <option value="1">${formatRatingLabel(1)}</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>${t("accountReviewComment")}</span>
+          <textarea rows="3" data-review-field="comment" data-order-id="${order.id}" placeholder="${t("accountReviewCommentPlaceholder")}"></textarea>
+        </label>
+        <button class="ghost-button" type="button" data-submit-review="${order.id}">${t("accountReviewSubmit")}</button>
+        <p class="checkout-message" id="reviewMessage-${order.id}" aria-live="polite"></p>
+      </div>
+    </div>
+  `;
+}
+
 function getAuthHeaders() {
   return {
     Authorization: `Bearer ${accountState.token}`,
@@ -350,11 +734,11 @@ async function requestPasswordReset(email) {
   if (!message) return;
 
   if (!email.trim()) {
-    message.textContent = "Enter your email address first.";
+    message.textContent = t("accountResetEnterEmail");
     return;
   }
 
-  message.textContent = "Preparing reset link...";
+  message.textContent = t("accountResetPreparing");
 
   try {
     const response = await fetch(apiUrl("/api/customers/forgot-password"), {
@@ -365,9 +749,9 @@ async function requestPasswordReset(email) {
       body: JSON.stringify({ email }),
     });
 
-    await parseApiResponse(response, "Could not prepare a reset link right now.");
+    await parseApiResponse(response, t("accountResetFailed"));
 
-    message.textContent = "If that account exists, a reset link has been prepared for demo use.";
+    message.textContent = t("accountResetPrepared");
   } catch (error) {
     if (shouldShowBackendConfigurationHint(error)) {
       message.textContent = error.message;
@@ -380,7 +764,7 @@ async function requestPasswordReset(email) {
       createdAt: new Date().toISOString(),
     });
     saveToStorage(ACCOUNT_STORAGE_KEYS.passwordResets, requests);
-    message.textContent = "Demo reset saved locally. In production this would email a secure reset link.";
+    message.textContent = t("accountResetDemoSaved");
   }
 }
 
@@ -396,7 +780,7 @@ function submitReview(orderId) {
 
   const rating = Math.max(1, Math.min(5, Number(ratingField.value || 0)));
   if (!rating) {
-    message.textContent = "Choose a rating before submitting.";
+    message.textContent = t("accountReviewChooseRating");
     return;
   }
 
@@ -406,13 +790,13 @@ function submitReview(orderId) {
     branchId: targetOrder.branchId,
     branchName: targetOrder.branch?.name || "",
     customerId: accountState.profile?.id || "",
-    customerName: accountState.profile?.name || "Simba customer",
+    customerName: accountState.profile?.name || t("accountLocalGoogleName"),
     rating,
     comment: commentField.value.trim(),
     createdAt: new Date().toISOString(),
   });
   saveReviews(reviews);
-  message.textContent = "Thanks. Your branch review has been saved.";
+  message.textContent = t("accountReviewSaved");
   renderOrders(accountState.orders);
 }
 
@@ -432,9 +816,9 @@ function formatFulfilment(order) {
   const mode = order.fulfilment?.mode || "delivery";
   const pickupTime = order.fulfilment?.pickupTime || "";
   if (mode === "pickup") {
-    return pickupTime ? `Pickup | ${pickupTime}` : "Pickup";
+    return pickupTime ? `${t("accountFulfilmentPickup")} | ${pickupTime}` : t("accountFulfilmentPickup");
   }
-  return "Delivery";
+  return t("accountFulfilmentDelivery");
 }
 
 function formatCurrency(value) {
@@ -482,11 +866,11 @@ function getBackendConfigurationMessage() {
   const isGitHubPages = window.location.hostname.endsWith("github.io");
 
   if (baseUrl) {
-    return `Account services are connected to ${baseUrl}.`;
+    return t("accountBackendConnected", { url: baseUrl });
   }
 
   if (isGitHubPages) {
-    return "Account creation and sign-in will use browser storage on this live site until a backend URL is connected in config.js.";
+    return t("accountBackendLocalMode");
   }
 
   return "";
@@ -547,43 +931,43 @@ function extractResponseErrorMessage(text) {
 function getNonJsonResponseMessage() {
   const baseUrl = window.SIMBA_CONFIG?.API_BASE_URL?.trim();
   if (!baseUrl) {
-    return "The account API backend is not configured for this site. Add your deployed backend URL in config.js so signup and login can work.";
+    return t("accountBackendMissing");
   }
 
-  return "The account service returned an invalid response. Check that the backend is running and reachable from this site.";
+  return t("accountBackendInvalid");
 }
 
 function validateAuthPayload(url, payload) {
   const email = String(payload.email || "").trim().toLowerCase();
   if (!email) {
-    throw new Error("Email address is required.");
+    throw new Error(t("accountErrorEmailRequired"));
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    throw new Error("Enter a valid email address.");
+    throw new Error(t("accountErrorEmailInvalid"));
   }
 
   if (url.includes("/register")) {
     if (!String(payload.name || "").trim()) {
-      throw new Error("Full name is required.");
+      throw new Error(t("accountErrorNameRequired"));
     }
     if (String(payload.password || "").length < 6) {
-      throw new Error("Password must be at least 6 characters long.");
+      throw new Error(t("accountErrorPasswordShort"));
     }
   }
 
   if (url.includes("/login") && !String(payload.password || "")) {
-    throw new Error("Password is required.");
+    throw new Error(t("accountErrorPasswordRequired"));
   }
 }
 
 function getLocalModeSuccessMessage(url) {
   if (url.includes("/register")) {
-    return "Account created in browser storage for this device.";
+    return t("accountLocalRegisterSuccess");
   }
   if (url.includes("/login")) {
-    return "Signed in using browser storage for this device.";
+    return t("accountLocalLoginSuccess");
   }
-  return "Signed in on this device.";
+  return t("accountLocalSignedIn");
 }
 
 async function handleLocalAccountAuth(url, payload) {
@@ -595,7 +979,7 @@ async function handleLocalAccountAuth(url, payload) {
     return loginLocalCustomer(payload);
   }
 
-  throw new Error("Local account mode does not support this action.");
+  throw new Error(t("accountLocalUnsupported"));
 }
 
 async function registerLocalCustomer(payload) {
@@ -603,7 +987,7 @@ async function registerLocalCustomer(payload) {
   const email = String(payload.email || "").trim().toLowerCase();
 
   if (customers.some((customer) => customer.email === email)) {
-    throw new Error("An account with that email already exists on this device.");
+    throw new Error(t("accountLocalDuplicate"));
   }
 
   const customer = {
@@ -632,12 +1016,12 @@ async function loginLocalCustomer(payload) {
   const customer = customers.find((entry) => entry.email === email);
 
   if (!customer) {
-    throw new Error("No account was found with that email on this device.");
+    throw new Error(t("accountLocalMissing"));
   }
 
   const passwordHash = await hashLocalPassword(String(payload.password || ""));
   if (customer.passwordHash !== passwordHash) {
-    throw new Error("Incorrect password. Please try again.");
+    throw new Error(t("accountLocalWrongPassword"));
   }
 
   return {
@@ -654,7 +1038,7 @@ async function signInWithLocalGoogleProfile(profile) {
   if (!customer) {
     customer = {
       id: createLocalCustomerId(),
-      name: String(profile.name || "").trim() || "Simba Google Customer",
+      name: String(profile.name || "").trim() || t("accountLocalGoogleName"),
       email,
       phone: String(profile.phone || "").trim(),
       address: String(profile.address || "").trim(),
@@ -675,12 +1059,12 @@ async function signInWithLocalGoogleProfile(profile) {
 function loadLocalAccountDashboard() {
   const customer = getCustomerFromLocalToken(accountState.token) || accountState.profile;
   if (!customer?.id) {
-    throw new Error("Your account session expired. Sign in again.");
+    throw new Error(t("accountSessionExpired"));
   }
 
   const fullCustomer = loadLocalCustomers().find((entry) => entry.id === customer.id);
   if (!fullCustomer) {
-    throw new Error("This local account could not be found on this device anymore.");
+    throw new Error(t("accountLocalMissingCustomer"));
   }
 
   accountState.profile = sanitizeLocalCustomer(fullCustomer);
@@ -749,4 +1133,30 @@ async function hashLocalPassword(password) {
   return Array.from(new Uint8Array(digest))
     .map((byte) => byte.toString(16).padStart(2, "0"))
     .join("");
+}
+
+function formatOrderStatus(status) {
+  const normalized = String(status || "").trim().toLowerCase();
+  const statusMap = {
+    received: "accountStatusReceived",
+    accepted: "accountStatusAccepted",
+    preparing: "accountStatusPreparing",
+    "ready-for-pickup": "accountStatusReadyForPickup",
+    completed: "accountStatusCompleted",
+    cancelled: "accountStatusCancelled",
+    delivered: "accountStatusDelivered",
+  };
+
+  const translationKey = statusMap[normalized];
+  if (!translationKey) return status;
+  return t(translationKey);
+}
+
+function formatRatingLabel(value) {
+  return t(value === 1 ? "accountRatingStar" : "accountRatingStars", { count: value });
+}
+
+function getReviewStars(rating) {
+  const normalized = Math.max(1, Math.min(5, Number(rating || 0)));
+  return `${String.fromCharCode(9733).repeat(normalized)}${String.fromCharCode(9734).repeat(5 - normalized)}`;
 }

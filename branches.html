@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Branches | Simba Supermarket</title>
+    <title data-i18n-document-title="branchesPageTitle">Branches | Simba Supermarket</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,14 +19,22 @@
           <img class="brand-logo" src="assets/simba-logo.svg" alt="Simba Supermarket logo" />
           <span>
             <strong>Simba Supermarket</strong>
-            <small>Branches across Rwanda</small>
+            <small data-i18n="branchesTagline">Branches across Rwanda</small>
           </span>
         </a>
 
         <div class="topbar-actions">
-          <a class="ghost-button" href="./index.html">Home</a>
-          <a class="ghost-button" href="./about.html">About</a>
-          <a class="ghost-button" href="./contact.html">Contact</a>
+          <a class="ghost-button" href="./index.html" data-i18n="branchesNavHome">Home</a>
+          <a class="ghost-button" href="./about.html" data-i18n="branchesNavAbout">About</a>
+          <a class="ghost-button" href="./contact.html" data-i18n="branchesNavContact">Contact</a>
+          <label class="lang-picker">
+            <span class="sr-only" data-i18n="branchesLanguageLabel">Language</span>
+            <select id="languageSelect" aria-label="Select language" data-i18n-aria-label="branchesLanguageLabel">
+              <option value="en">English</option>
+              <option value="fr">Francais</option>
+              <option value="rw">Kinyarwanda</option>
+            </select>
+          </label>
         </div>
       </header>
 
@@ -34,13 +42,29 @@
         <section class="showcase-panel">
           <div class="toolbar-header">
             <div>
-              <p class="eyebrow">Store network</p>
-              <h1>Choose the Simba branch you want to shop from</h1>
+              <p class="eyebrow" data-i18n="branchesHeroEyebrow">Store network</p>
+              <h1 data-i18n="branchesHeroTitle">Choose the Simba branch you want to shop from</h1>
             </div>
-            <p class="toolbar-note">
+            <p class="toolbar-note" data-i18n="branchesHeroText">
               Select a branch for pickup, branch-based stock visibility, and more relevant delivery details during checkout.
             </p>
           </div>
+          <div class="admin-product-grid">
+            <label class="field">
+              <span data-i18n="branchesSearchLabel">Search branches</span>
+              <input
+                id="branchSearchInput"
+                type="search"
+                placeholder="Search by branch name or area"
+                data-i18n-placeholder="branchesSearchPlaceholder"
+              />
+            </label>
+            <label class="field">
+              <span data-i18n="branchesFilterAll">All cities</span>
+              <select id="branchCityFilter"></select>
+            </label>
+          </div>
+          <p id="branchResultCount" class="toolbar-note"></p>
         </section>
 
         <section id="selectedBranchPanel" class="showcase-panel branch-summary-panel"></section>
