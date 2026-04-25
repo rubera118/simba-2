@@ -369,19 +369,28 @@
               </div>
               <p class="toolbar-note" data-i18n="assistantNote">Try phrases like "I need breakfast", "show fresh milk", or "cheap cleaning products".</p>
             </div>
+            <div class="chip-row assistant-prompt-row" aria-label="Suggested prompts">
+              <button class="chip assistant-prompt" type="button" data-assistant-prompt="Do you have fresh milk?">Do you have fresh milk?</button>
+              <button class="chip assistant-prompt" type="button" data-assistant-prompt="I need something for breakfast">I need something for breakfast</button>
+              <button class="chip assistant-prompt" type="button" data-assistant-prompt="Show cheap cleaning products">Show cheap cleaning products</button>
+            </div>
             <div class="conversation-form">
               <label class="field conversation-field">
                 <span data-i18n="assistantInputLabel">Your request</span>
                 <input id="assistantSearchInput" type="search" placeholder="I need something for breakfast" data-i18n-placeholder="assistantPlaceholder" />
               </label>
-              <button id="assistantSearchButton" class="primary-button" type="button" data-i18n="assistantAction">Ask Simba</button>
+              <div class="assistant-actions">
+                <button id="assistantSearchButton" class="primary-button" type="button" data-i18n="assistantAction">Ask Simba</button>
+                <button id="assistantResetButton" class="ghost-button" type="button" data-i18n="assistantReset">Reset</button>
+              </div>
             </div>
+            <div id="assistantStatus" class="assistant-status hidden" aria-live="polite"></div>
             <div id="assistantResponse" class="assistant-response hidden" aria-live="polite"></div>
           </section>
 
-          <div class="toolbar-controls">
+          <div class="toolbar-controls refine-controls">
             <label class="field">
-              <span data-i18n="searchLabel">Search products</span>
+              <span data-i18n="searchLabel">Manual refine</span>
               <input id="searchInput" type="search" placeholder="Search milk, bread, rice..." data-i18n-placeholder="searchPlaceholder" />
             </label>
 
@@ -525,5 +534,6 @@
     <script src="branches-data.js" defer></script>
     <script src="products-data.js" defer></script>
     <script src="script.js" defer></script>
+    <script src="groq-client.js" defer></script>
   </body>
 </html>

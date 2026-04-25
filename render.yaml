@@ -6,9 +6,13 @@ services:
     buildCommand: ""
     startCommand: node server.js
     envVars:
+      - key: HOST
+        value: 0.0.0.0
       - key: SIMBA_ADMIN_PASSWORD
         sync: false
       - key: SIMBA_TOKEN_SECRET
         generateValue: true
       - key: SIMBA_ALLOWED_ORIGINS
+        sync: false
+      - key: SIMBA_GROQ_API_KEY
         sync: false

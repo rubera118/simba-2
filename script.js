@@ -122,11 +122,17 @@ const translations = {
     assistantNextStep: "You can add one now or refine the search above.",
     assistantBudgetHint: "I prioritized value picks and broad everyday matches.",
     assistantAdd: "Add to cart",
+    assistantReset: "Reset",
     assistantRefine1: "Show cheaper options",
     assistantRefine2: "Fresh options only",
     assistantRefine3: "What goes with this?",
     assistantGroqFallback: "Groq is unavailable right now, so Simba used local catalog matching instead.",
-    searchLabel: "Search products",
+    assistantSourceGroq: "Powered by Groq AI",
+    assistantSourceFallback: "Using Simba catalog fallback",
+    assistantPrompt1: "Do you have fresh milk?",
+    assistantPrompt2: "I need something for breakfast",
+    assistantPrompt3: "Show cheap cleaning products",
+    searchLabel: "Manual refine",
     searchPlaceholder: "Search rice, juice, shampoo...",
     categoryLabel: "Category",
     priceLabel: "Max price",
@@ -285,11 +291,17 @@ const translations = {
     assistantNextStep: "Vous pouvez en ajouter une maintenant ou affiner la recherche ci-dessus.",
     assistantBudgetHint: "J'ai privilegie les choix economiques et les besoins du quotidien.",
     assistantAdd: "Ajouter au panier",
+    assistantReset: "Reinitialiser",
     assistantRefine1: "Montrer moins cher",
     assistantRefine2: "Options fraiches seulement",
     assistantRefine3: "Que va avec ceci ?",
     assistantGroqFallback: "Groq est indisponible pour le moment, Simba a donc utilise le catalogue local.",
-    searchLabel: "Rechercher des produits",
+    assistantSourceGroq: "Alimente par Groq AI",
+    assistantSourceFallback: "Catalogue Simba local utilise",
+    assistantPrompt1: "Avez-vous du lait frais ?",
+    assistantPrompt2: "Je veux quelque chose pour le petit dejeuner",
+    assistantPrompt3: "Montre des produits de nettoyage pas chers",
+    searchLabel: "Affinage manuel",
     searchPlaceholder: "Chercher riz, jus, shampoing...",
     categoryLabel: "Categorie",
     priceLabel: "Prix maximum",
@@ -448,11 +460,17 @@ const translations = {
     assistantNextStep: "Ushobora guhita wongeramo kimwe cyangwa ugakomeza kunonosora ubushakashatsi hejuru.",
     assistantBudgetHint: "Nahisemo cyane cyane ibiciro byoroheje n'ibikunze gukoreshwa buri munsi.",
     assistantAdd: "Shyira mu gaseke",
+    assistantReset: "Siba",
     assistantRefine1: "Nyereka ibihendutse",
     assistantRefine2: "Nyereka ibishya gusa",
     assistantRefine3: "Ni iki najyana na byo?",
     assistantGroqFallback: "Groq ntiboneka ubu, Simba yakoresheje local catalog matching.",
-    searchLabel: "Shakisha ibicuruzwa",
+    assistantSourceGroq: "Bikoreshejwe na Groq AI",
+    assistantSourceFallback: "Hakoreshejwe Simba catalog yo mu buryo bwa fallback",
+    assistantPrompt1: "Mufite fresh milk?",
+    assistantPrompt2: "Ndashaka ikintu cya breakfast",
+    assistantPrompt3: "Nyereka cleaning products zihendutse",
+    searchLabel: "Kanonosora n'intoki",
     searchPlaceholder: "Shaka umuceri, umutobe, shampoo...",
     categoryLabel: "Icyiciro",
     priceLabel: "Igiciro ntarengwa",
@@ -651,6 +669,7 @@ let appState = {
   cartAnimationTimer: null,
   lastCartCount: null,
   assistantHistory: [],
+  assistantSource: "",
 };
 
 const elements = {
@@ -695,10 +714,16 @@ const elements = {
   heroBranchCount: document.getElementById("heroBranchCount"),
   assistantSearchInput: document.getElementById("assistantSearchInput"),
   assistantSearchButton: document.getElementById("assistantSearchButton"),
+  assistantResetButton: document.getElementById("assistantResetButton"),
+  assistantStatus: document.getElementById("assistantStatus"),
   assistantResponse: document.getElementById("assistantResponse"),
+  assistantPromptButtons: document.querySelectorAll("[data-assistant-prompt]"),
 };
 
 const PRODUCT_FALLBACK_IMAGE = "assets/product-fallback.svg";
+
+window.translations = translations;
+window.appState = appState;
 
 document.addEventListener("DOMContentLoaded", initStorefront);
 
@@ -770,7 +795,7 @@ function bindGlobalControls() {
     elements.branchSelect.value = appState.selectedBranchId || availableBranches[0].id;
     elements.branchSelect.addEventListener("change", async (event) => {
       appState.selectedBranchId = event.target.value;
-      appState.assistantHistory = [];
+      resetAssistantExperience({ preserveInput: false, rerenderProducts: false });
       window.SIMBA_BRANCHES?.saveSelectedBranch(appState.selectedBranchId);
       appState.cart = window.SIMBA_BRANCHES
         ? window.SIMBA_BRANCHES.normalizeCart(appState.cart, appState.selectedBranchId)
@@ -784,7 +809,6 @@ function bindGlobalControls() {
 
   elements.languageSelect.addEventListener("change", (event) => {
     appState.language = event.target.value;
-    appState.assistantHistory = [];
     saveToStorage(STORAGE_KEYS.language, appState.language);
     applyLanguage();
     populateCategoryFilter();
@@ -839,14 +863,8 @@ function bindGlobalControls() {
   elements.quickSearchButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const query = button.dataset.search || "";
-      elements.searchInput.value = query;
-      elements.departmentSearchInput.value = query;
-      appState.searchQuery = query.toLowerCase();
-      appState.departmentQuery = query.toLowerCase();
-      appState.selectedCategory = "all";
-      elements.categoryFilter.value = "all";
-      renderDepartmentMenu();
-      renderProducts();
+      if (elements.assistantSearchInput) elements.assistantSearchInput.value = query;
+      handleAssistantSearch();
       promoScrollTarget.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
@@ -854,11 +872,21 @@ function bindGlobalControls() {
   elements.assistantSearchButton?.addEventListener("click", () => {
     handleAssistantSearch();
   });
+  elements.assistantResetButton?.addEventListener("click", () => {
+    resetAssistantExperience();
+  });
   elements.assistantSearchInput?.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
       handleAssistantSearch();
     }
+  });
+  elements.assistantPromptButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!elements.assistantSearchInput) return;
+      elements.assistantSearchInput.value = button.dataset.assistantPrompt || "";
+      handleAssistantSearch();
+    });
   });
 
   elements.promoPrev?.addEventListener("click", () => rotatePromo(-1));
@@ -918,9 +946,9 @@ function applyLanguage() {
     if (copy[key]) node.placeholder = copy[key];
   });
 
-  if (elements.assistantResponse && !elements.assistantResponse.classList.contains("hidden")) {
-    renderAssistantResponse(elements.assistantResponse.dataset.message || copy.assistantEmpty, []);
-  }
+  syncAssistantPromptLabels();
+  renderAssistantStatus();
+  renderAssistantThread();
 }
 
 function applyTheme() {
@@ -1452,23 +1480,39 @@ async function handleAssistantSearch() {
   const query = String(elements.assistantSearchInput?.value || "").trim();
   const copy = translations[appState.language] || translations.en;
   if (!query) {
-    renderAssistantResponse(copy.assistantEmpty, []);
+    resetAssistantExperience({ preserveInput: false });
+    pushAssistantTurn({
+      role: "assistant",
+      text: copy.assistantEmpty,
+      matches: [],
+      followUps: [],
+      source: "",
+    });
     return;
   }
 
-  renderAssistantResponse(copy.assistantThinking, []);
   const result = await requestAssistantRecommendation(query);
-  appState.searchQuery = result.searchQuery;
-  appState.departmentQuery = result.searchQuery;
+  const resolvedSearchQuery = result.searchQuery || (result.matches?.length ? "" : query.toLowerCase());
+  appState.searchQuery = resolvedSearchQuery;
+  appState.departmentQuery = resolvedSearchQuery;
   appState.selectedCategory = result.category || "all";
+  appState.assistantSource = result.source || "";
 
-  if (elements.searchInput) elements.searchInput.value = result.searchQuery;
-  if (elements.departmentSearchInput) elements.departmentSearchInput.value = result.searchQuery;
+  if (elements.searchInput) elements.searchInput.value = resolvedSearchQuery;
+  if (elements.departmentSearchInput) elements.departmentSearchInput.value = resolvedSearchQuery;
   if (elements.categoryFilter) elements.categoryFilter.value = appState.selectedCategory;
 
   renderDepartmentMenu();
   renderProducts();
-  renderAssistantResponse(result.message, result.matches);
+  pushAssistantTurn({ role: "user", text: query });
+  pushAssistantTurn({
+    role: "assistant",
+    text: result.message,
+    matches: result.matches,
+    followUps: result.followUps,
+    source: result.source,
+  });
+  renderAssistantStatus();
   document.getElementById("catalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
@@ -1496,6 +1540,8 @@ async function requestAssistantRecommendation(query) {
       category: String(payload.category || "all"),
       matches: Array.isArray(payload.matches) ? payload.matches : [],
       message: String(payload.message || ""),
+      followUps: Array.isArray(payload.followUps) ? payload.followUps.map((entry) => String(entry || "").trim()).filter(Boolean).slice(0, 3) : [],
+      source: String(payload.source || "groq"),
     };
   } catch {
       const fallback = interpretAssistantQuery(query);
@@ -1560,42 +1606,94 @@ function interpretAssistantQuery(query) {
     category,
     matches,
     message,
+    followUps: matches.length ? [copy.assistantRefine1, copy.assistantRefine2, copy.assistantRefine3] : [],
+    source: "fallback",
   };
 }
 
-function renderAssistantResponse(message, matches) {
+function syncAssistantPromptLabels() {
+  const copy = translations[appState.language] || translations.en;
+  const promptLabels = [copy.assistantPrompt1, copy.assistantPrompt2, copy.assistantPrompt3];
+  elements.assistantPromptButtons.forEach((button, index) => {
+    const label = promptLabels[index];
+    if (!label) return;
+    button.textContent = label;
+    button.dataset.assistantPrompt = label;
+  });
+}
+
+function pushAssistantTurn(turn) {
+  appState.assistantHistory.push(turn);
+  renderAssistantThread();
+}
+
+function renderAssistantStatus() {
+  if (!elements.assistantStatus) return;
+  const copy = translations[appState.language] || translations.en;
+  const sourceCopy =
+    appState.assistantSource === "groq"
+      ? copy.assistantSourceGroq
+      : appState.assistantSource === "fallback"
+        ? copy.assistantSourceFallback
+        : "";
+
+  elements.assistantStatus.classList.toggle("hidden", !sourceCopy);
+  elements.assistantStatus.textContent = sourceCopy;
+}
+
+function renderAssistantThread() {
   if (!elements.assistantResponse) return;
   const copy = translations[appState.language] || translations.en;
 
-  const cards = matches.length
-    ? matches
+  if (!appState.assistantHistory.length) {
+    elements.assistantResponse.classList.add("hidden");
+    elements.assistantResponse.innerHTML = "";
+    return;
+  }
+
+  elements.assistantResponse.classList.remove("hidden");
+  elements.assistantResponse.innerHTML = appState.assistantHistory
+    .map((turn) => {
+      if (turn.role === "user") {
+        return `
+          <article class="assistant-turn assistant-turn-user">
+            <span class="assistant-role">You</span>
+            <p>${turn.text}</p>
+          </article>
+        `;
+      }
+
+      const matches = Array.isArray(turn.matches) ? turn.matches : [];
+      const cards = matches
         .map(
           (product) => `
             <article class="assistant-match">
-              <strong>${product.name}</strong>
-              <span>${getLocalizedCategoryName(product.category)}</span>
-              <strong>${formatCurrency(product.price)}</strong>
-              <button class="ghost-button" type="button" data-assistant-add="${product.id}">${copy.assistantAdd}</button>
+              <div>
+                <strong>${product.name}</strong>
+                <span>${getLocalizedCategoryName(product.category)}</span>
+              </div>
+              <div class="assistant-match-meta">
+                <strong>${formatCurrency(product.price)}</strong>
+                <button class="ghost-button" type="button" data-assistant-add="${product.id}">${copy.assistantAdd}</button>
+              </div>
             </article>
           `
         )
-        .join("")
-    : "";
+        .join("");
+      const followUps = Array.isArray(turn.followUps) ? turn.followUps.filter(Boolean).slice(0, 3) : [];
 
-  const followUps = matches.length
-    ? [copy.assistantRefine1, copy.assistantRefine2, copy.assistantRefine3]
-    : [];
-
-  elements.assistantResponse.classList.remove("hidden");
-  elements.assistantResponse.dataset.message = message;
-  elements.assistantResponse.dataset.matches = JSON.stringify(matches.map((product) => product.id));
-  elements.assistantResponse.innerHTML = `
-    <p>${message}</p>
-    ${matches.length ? `<p class="toolbar-note">${copy.assistantSuggestions}</p>` : ""}
-    <div class="assistant-match-grid">${cards}</div>
-    ${followUps.length ? `<div class="chip-row">${followUps.map((label) => `<button class="chip" type="button" data-assistant-followup="${label}">${label}</button>`).join("")}</div>` : ""}
-    ${matches.length ? `<p class="toolbar-note">${copy.assistantNextStep}</p>` : ""}
-  `;
+      return `
+        <article class="assistant-turn assistant-turn-bot">
+          <span class="assistant-role">Simba</span>
+          <p>${turn.text}</p>
+          ${matches.length ? `<p class="toolbar-note">${copy.assistantSuggestions}</p>` : ""}
+          ${matches.length ? `<div class="assistant-match-grid">${cards}</div>` : ""}
+          ${followUps.length ? `<div class="chip-row">${followUps.map((label) => `<button class="chip" type="button" data-assistant-followup="${label}">${label}</button>`).join("")}</div>` : ""}
+          ${matches.length ? `<p class="toolbar-note">${copy.assistantNextStep}</p>` : ""}
+        </article>
+      `;
+    })
+    .join("");
 
   elements.assistantResponse.querySelectorAll("[data-assistant-add]").forEach((button) => {
     button.addEventListener("click", () => addToCart(button.dataset.assistantAdd, appState.selectedBranchId));
@@ -1608,6 +1706,23 @@ function renderAssistantResponse(message, matches) {
       handleAssistantSearch();
     });
   });
+}
+
+function resetAssistantExperience(options = {}) {
+  const { preserveInput = false, rerenderProducts = true } = options;
+  appState.assistantHistory = [];
+  appState.assistantSource = "";
+  appState.searchQuery = "";
+  appState.departmentQuery = "";
+  appState.selectedCategory = "all";
+  if (!preserveInput && elements.assistantSearchInput) elements.assistantSearchInput.value = "";
+  if (elements.searchInput) elements.searchInput.value = "";
+  if (elements.departmentSearchInput) elements.departmentSearchInput.value = "";
+  if (elements.categoryFilter) elements.categoryFilter.value = "all";
+  renderAssistantStatus();
+  renderAssistantThread();
+  renderDepartmentMenu();
+  if (rerenderProducts) renderProducts();
 }
 
 function createProductCard(product, copy) {

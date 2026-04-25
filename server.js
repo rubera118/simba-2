@@ -6,7 +6,7 @@ const crypto = require("crypto");
 const { URL } = require("url");
 
 const PORT = Number(process.env.PORT || 3000);
-const HOST = process.env.HOST || "127.0.0.1";
+const HOST = process.env.HOST || "0.0.0.0";
 const ROOT_DIR = __dirname;
 const DATA_DIR = path.join(ROOT_DIR, "data");
 const SOURCE_PRODUCTS_PATH = path.join(ROOT_DIR, "products.json");
@@ -37,6 +37,8 @@ const STATIC_FILES = {
   "/admin.html": "admin.html",
   "/branches.js": "branches.js",
   "/branches-data.js": "branches-data.js",
+  "/config.js": "config.js",
+  "/groq-client.js": "groq-client.js",
   "/script.js": "script.js",
   "/product.js": "product.js",
   "/checkout.js": "checkout.js",
@@ -746,6 +748,15 @@ async function handleCustomerGoogleAuth(request, response) {
 }
 
 function buildAssistantFallback(query, products, language = "en") {
+  function getAssistantFollowUps(currentLanguage, categoryName) {
+    const prompts = {
+      en: ["Show cheaper options", "Fresh options only", categoryName && categoryName !== "all" ? `More in ${categoryName}` : "What goes with this?"],
+      fr: ["Montrer moins cher", "Options fraiches seulement", categoryName && categoryName !== "all" ? `Plus dans ${categoryName}` : "Que va avec ceci ?"],
+      rw: ["Nyereka ibihendutse", "Nyereka ibishya gusa", categoryName && categoryName !== "all" ? `${categoryName} byinshi` : "Ni iki najyana na byo?"],
+    };
+    return (prompts[currentLanguage] || prompts.en).filter(Boolean);
+  }
+
   const normalizedQuery = String(query || "").trim().toLowerCase();
   const intentMap = [
     {
@@ -843,6 +854,7 @@ function buildAssistantFallback(query, products, language = "en") {
     category,
     matches,
     message: baseMessage,
+    followUps: getAssistantFollowUps(language, category),
     source: "fallback",
   };
 }
@@ -874,7 +886,7 @@ async function requestGroqAssistantResult(query, branch, products, language) {
         {
           role: "system",
           content:
-            "You are Simba Supermarket's shopping assistant. Reply with JSON only using keys: message, category, searchQuery, productIds. productIds must be an array of ids from the catalog context.",
+            "You are Simba Supermarket's shopping assistant. Reply with JSON only using keys: message, category, searchQuery, productIds, followUps. Keep message under 28 words, warm and helpful, and grounded only in the provided catalog. searchQuery should be a short keyword query for filtering. category should be a catalog category string or 'all'. productIds must be an array of ids from the catalog context only. followUps must be an array of 3 short follow-up shopper prompts.",
         },
         {
           role: "user",
@@ -909,6 +921,7 @@ async function requestGroqAssistantResult(query, branch, products, language) {
     category: String(parsed.category || "all"),
     matches,
     message: String(parsed.message || ""),
+    followUps: Array.isArray(parsed.followUps) ? parsed.followUps.map((value) => String(value || "").trim()).filter(Boolean).slice(0, 3) : [],
     source: "groq",
   };
 }
