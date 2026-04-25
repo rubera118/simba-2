@@ -721,6 +721,7 @@ const elements = {
 };
 
 const PRODUCT_FALLBACK_IMAGE = "assets/product-fallback.svg";
+const DEFAULT_MAX_PRICE = Number(document.getElementById("priceFilter")?.max || 120000);
 
 window.translations = translations;
 window.appState = appState;
@@ -1492,15 +1493,19 @@ async function handleAssistantSearch() {
   }
 
   const result = await requestAssistantRecommendation(query);
-  const resolvedSearchQuery = result.searchQuery || (result.matches?.length ? "" : query.toLowerCase());
+  const hasMatches = Array.isArray(result.matches) && result.matches.length > 0;
+  const resolvedSearchQuery = hasMatches ? String(result.searchQuery || "").trim().toLowerCase() : "";
   appState.searchQuery = resolvedSearchQuery;
   appState.departmentQuery = resolvedSearchQuery;
-  appState.selectedCategory = result.category || "all";
+  appState.selectedCategory = hasMatches ? result.category || "all" : "all";
+  appState.maxPrice = DEFAULT_MAX_PRICE;
   appState.assistantSource = result.source || "";
 
   if (elements.searchInput) elements.searchInput.value = resolvedSearchQuery;
   if (elements.departmentSearchInput) elements.departmentSearchInput.value = resolvedSearchQuery;
   if (elements.categoryFilter) elements.categoryFilter.value = appState.selectedCategory;
+  if (elements.priceFilter) elements.priceFilter.value = String(appState.maxPrice);
+  updatePriceLabel();
 
   renderDepartmentMenu();
   renderProducts();
@@ -1715,10 +1720,13 @@ function resetAssistantExperience(options = {}) {
   appState.searchQuery = "";
   appState.departmentQuery = "";
   appState.selectedCategory = "all";
+  appState.maxPrice = DEFAULT_MAX_PRICE;
   if (!preserveInput && elements.assistantSearchInput) elements.assistantSearchInput.value = "";
   if (elements.searchInput) elements.searchInput.value = "";
   if (elements.departmentSearchInput) elements.departmentSearchInput.value = "";
   if (elements.categoryFilter) elements.categoryFilter.value = "all";
+  if (elements.priceFilter) elements.priceFilter.value = String(appState.maxPrice);
+  updatePriceLabel();
   renderAssistantStatus();
   renderAssistantThread();
   renderDepartmentMenu();
