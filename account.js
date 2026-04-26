@@ -12,6 +12,7 @@ const REVIEW_ELIGIBLE_STATUSES = ["ready-for-pickup", "completed", "delivered"];
 
 const ACCOUNT_LANGUAGE_KEY = "simba-language";
 const ACCOUNT_THEME_KEY = "simba-theme";
+const ACCOUNT_UI_ALERT_KEY = "simba-ui-alert";
 
 const accountState = {
   token: loadFromStorage(ACCOUNT_STORAGE_KEYS.token, ""),
@@ -382,6 +383,7 @@ function showAccountAlert(message, variant = "success") {
 
   alertElement.textContent = message;
   alertElement.className = `site-alert site-alert-${variant}`;
+  alertElement.scrollIntoView({ block: "start", behavior: "smooth" });
   accountAlertTimer = window.setTimeout(hideAccountAlert, 4500);
 }
 
@@ -390,6 +392,28 @@ function hideAccountAlert() {
   if (!alertElement) return;
   alertElement.textContent = "";
   alertElement.className = "site-alert hidden";
+}
+
+function savePendingUiAlert(message, variant = "success") {
+  try {
+    sessionStorage.setItem(
+      ACCOUNT_UI_ALERT_KEY,
+      JSON.stringify({ message, variant })
+    );
+  } catch {
+    // Ignore storage errors for non-critical UI feedback.
+  }
+}
+
+function consumePendingUiAlert() {
+  try {
+    const rawValue = sessionStorage.getItem(ACCOUNT_UI_ALERT_KEY);
+    if (!rawValue) return null;
+    sessionStorage.removeItem(ACCOUNT_UI_ALERT_KEY);
+    return JSON.parse(rawValue);
+  } catch {
+    return null;
+  }
 }
 
 function applyLanguage() {
@@ -428,6 +452,11 @@ function initAccountPage() {
   window.markPreferencesReady?.();
   renderAccountServiceNotice();
   bindAccountControls();
+
+  const pendingAlert = consumePendingUiAlert();
+  if (pendingAlert?.message) {
+    showAccountAlert(pendingAlert.message, pendingAlert.variant || "success");
+  }
 
   if (accountState.token) {
     loadAccountDashboard();
@@ -1026,6 +1055,7 @@ function completePostLoginRedirect() {
     return;
   }
 
+  savePendingUiAlert(t("accountAlertSignedIn"));
   window.location.href = action?.redirectTo || returnTo || "index.html";
 }
 

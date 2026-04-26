@@ -189,6 +189,7 @@ const state = {
 };
 
 const DEFAULT_DELIVERY_FEE = 2000;
+const UI_ALERT_STORAGE_KEY = "simba-ui-alert";
 
 const PRODUCT_FALLBACK_IMAGE = "assets/product-fallback.svg";
 
@@ -205,8 +206,31 @@ async function initCheckoutPage() {
   applyLanguage();
   bindControls();
   window.markPreferencesReady?.();
+  showPendingUiAlert();
   hydrateCustomerDetails();
   await renderCheckoutItems();
+}
+
+function showPendingUiAlert() {
+  const alertElement = document.getElementById("checkoutAlert");
+  if (!alertElement) return;
+
+  try {
+    const rawValue = sessionStorage.getItem(UI_ALERT_STORAGE_KEY);
+    if (!rawValue) return;
+    sessionStorage.removeItem(UI_ALERT_STORAGE_KEY);
+    const payload = JSON.parse(rawValue);
+    if (!payload?.message) return;
+    alertElement.textContent = payload.message;
+    alertElement.className = `site-alert site-alert-${payload.variant || "success"}`;
+    alertElement.scrollIntoView({ block: "start", behavior: "smooth" });
+    window.setTimeout(() => {
+      alertElement.textContent = "";
+      alertElement.className = "site-alert hidden";
+    }, 4500);
+  } catch {
+    // Ignore storage errors for non-critical UI feedback.
+  }
 }
 
 function bindControls() {
