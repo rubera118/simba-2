@@ -83,6 +83,7 @@ document.addEventListener("DOMContentLoaded", initContactPage);
 function initContactPage() {
   applyTheme();
   applyLanguage();
+  window.markPreferencesReady?.();
   const languageSelect = document.getElementById("languageSelect");
   const themeToggle = document.getElementById("themeToggle");
   if (languageSelect) {
@@ -120,7 +121,9 @@ function applyLanguage() {
 }
 
 function applyTheme() {
-  document.body.classList.toggle("dark", contactState.theme === "dark");
+  const isDarkTheme = contactState.theme === "dark";
+  document.documentElement.classList.toggle("dark", isDarkTheme);
+  document.body.classList.toggle("dark", isDarkTheme);
 }
 
 function loadFromStorage(key, fallback) {

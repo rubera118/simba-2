@@ -30,6 +30,12 @@
   --hero-card-text: #1f2933;
 }
 
+html.dark {
+  color-scheme: dark;
+  background: #0f172a;
+}
+
+html.dark body,
 body.dark {
   --bg: #0f172a;
   --bg-secondary: #172033;
@@ -64,6 +70,10 @@ body.dark {
 
 html {
   scroll-behavior: smooth;
+}
+
+html.prefs-loading body {
+  visibility: hidden;
 }
 
 body {

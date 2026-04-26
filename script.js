@@ -841,6 +841,7 @@ async function initStorefront() {
     : appState.cart;
   applyTheme();
   applyLanguage();
+  window.markPreferencesReady?.();
   bindGlobalControls();
   handlePostLoginCartOpen();
   syncHeaderMenu();
@@ -1074,7 +1075,9 @@ function applyLanguage() {
 }
 
 function applyTheme() {
-  elements.body.classList.toggle("dark", appState.theme === "dark");
+  const isDarkTheme = appState.theme === "dark";
+  document.documentElement.classList.toggle("dark", isDarkTheme);
+  elements.body.classList.toggle("dark", isDarkTheme);
 }
 
 function renderBranchControls() {

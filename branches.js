@@ -128,6 +128,7 @@ document.addEventListener("DOMContentLoaded", initBranchesPage);
 function initBranchesPage() {
   applyTheme();
   applyLanguage();
+  window.markPreferencesReady?.();
   bindControls();
   renderBranchesPage();
 }
@@ -184,7 +185,9 @@ function applyLanguage() {
 }
 
 function applyTheme() {
-  document.body.classList.toggle("dark", branchState.theme === "dark");
+  const isDarkTheme = branchState.theme === "dark";
+  document.documentElement.classList.toggle("dark", isDarkTheme);
+  document.body.classList.toggle("dark", isDarkTheme);
 }
 
 function renderBranchesPage() {

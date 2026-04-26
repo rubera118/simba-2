@@ -351,6 +351,7 @@ document.addEventListener("DOMContentLoaded", initAdminPage);
 function initAdminPage() {
   applyTheme();
   applyLanguage();
+  window.markPreferencesReady?.();
   bindAdminControls();
 
   if (adminState.token) {
@@ -386,7 +387,9 @@ function applyLanguage() {
 }
 
 function applyTheme() {
-  document.body.classList.toggle("dark", adminState.theme === "dark");
+  const isDarkTheme = adminState.theme === "dark";
+  document.documentElement.classList.toggle("dark", isDarkTheme);
+  document.body.classList.toggle("dark", isDarkTheme);
 }
 
 function getCurrentStats() {

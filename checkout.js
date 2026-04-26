@@ -204,6 +204,7 @@ async function initCheckoutPage() {
   applyTheme();
   applyLanguage();
   bindControls();
+  window.markPreferencesReady?.();
   hydrateCustomerDetails();
   await renderCheckoutItems();
 }
@@ -252,7 +253,9 @@ function bindControls() {
 }
 
 function applyTheme() {
-  document.body.classList.toggle("dark", state.theme === "dark");
+  const isDarkTheme = state.theme === "dark";
+  document.documentElement.classList.toggle("dark", isDarkTheme);
+  document.body.classList.toggle("dark", isDarkTheme);
 }
 
 function applyLanguage() {

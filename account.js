@@ -387,7 +387,9 @@ function applyLanguage() {
 }
 
 function applyTheme() {
-  document.body.classList.toggle("dark", accountState.theme === "dark");
+  const isDarkTheme = accountState.theme === "dark";
+  document.documentElement.classList.toggle("dark", isDarkTheme);
+  document.body.classList.toggle("dark", isDarkTheme);
 }
 
 document.addEventListener("DOMContentLoaded", initAccountPage);
@@ -395,6 +397,7 @@ document.addEventListener("DOMContentLoaded", initAccountPage);
 function initAccountPage() {
   applyTheme();
   applyLanguage();
+  window.markPreferencesReady?.();
   renderAccountServiceNotice();
   bindAccountControls();
 
