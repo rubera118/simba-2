@@ -16,7 +16,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check JavaScript syntax
+        run: |
+          for file in server.js script.js product.js checkout.js account.js admin.js branches.js about.js contact.js groq-client.js config.js branches-data.js products-data.js; do
+            if [ -f "$file" ]; then
+              node --check "$file"
+            fi
+          done
+
   deploy:
+    needs: validate
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -28,10 +48,16 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Prepare static site
+        run: |
+          mkdir -p _site
+          cp index.html product.html checkout.html account.html admin.html branches.html about.html contact.html styles.css script.js product.js checkout.js account.js admin.js branches.js about.js contact.js config.js groq-client.js branches-data.js products-data.js products.json _site/
+          cp -R assets _site/assets
+
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment

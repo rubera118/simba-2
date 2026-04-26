@@ -260,6 +260,7 @@ function normalizeOrder(order) {
 }
 
 function normalizeCustomer(customer) {
+  const noShowCount = Math.max(0, Number(customer.noShowCount || 0));
   return {
     id: String(customer.id || ""),
     name: String(customer.name || ""),
@@ -269,6 +270,8 @@ function normalizeCustomer(customer) {
     passwordHash: String(customer.passwordHash || ""),
     resetCodeHash: String(customer.resetCodeHash || ""),
     resetCodeExpiresAt: customer.resetCodeExpiresAt || null,
+    noShowCount,
+    noShowFlags: Array.isArray(customer.noShowFlags) ? customer.noShowFlags.slice(-10) : [],
     createdAt: customer.createdAt || new Date().toISOString(),
   };
 }
@@ -389,8 +392,31 @@ function sanitizeCustomer(customer) {
     email: customer.email,
     phone: customer.phone,
     address: customer.address,
+    noShowCount: Math.max(0, Number(customer.noShowCount || 0)),
+    requiredDeposit: getRequiredDepositForCustomer(customer),
     createdAt: customer.createdAt,
   };
+}
+
+function getRequiredDepositForCustomer(customer) {
+  const noShowCount = Math.max(0, Number(customer?.noShowCount || 0));
+  if (noShowCount >= 2) return 1000;
+  if (noShowCount >= 1) return 750;
+  return 500;
+}
+
+function findCustomerByOrder(customers, order) {
+  if (order?.customerId) {
+    const matchById = customers.find((entry) => entry.id === order.customerId);
+    if (matchById) return matchById;
+  }
+
+  const email = String(order?.customer?.email || "").trim().toLowerCase();
+  if (email) {
+    return customers.find((entry) => entry.email === email) || null;
+  }
+
+  return null;
 }
 
 function verifyAuthToken(token) {
@@ -554,11 +580,17 @@ async function handleCreateOrder(request, response) {
   const token = getBearerToken(request);
   const accountPayload = verifyAuthToken(token);
   let customerId = null;
+  let accountCustomer = null;
   if (accountPayload?.role === "customer" && accountPayload.customerId) {
     customerId = accountPayload.customerId;
   }
 
-  const products = await readProducts();
+  const [products, customers] = await Promise.all([readProducts(), readCustomers()]);
+  if (customerId) {
+    accountCustomer = customers.find((entry) => entry.id === customerId) || null;
+  }
+
+  const requiredDeposit = getRequiredDepositForCustomer(accountCustomer);
   const normalizedItems = items
     .map((item) => ({
       id: String(item.id || ""),
@@ -593,12 +625,17 @@ async function handleCreateOrder(request, response) {
     };
   });
 
-  await writeProducts(products);
-
   const subtotal = orderItems.reduce((sum, item) => sum + item.lineTotal, 0);
   const orderBranch = getBranchById(branches, String(body.branchId || orderItems[0]?.branchId || ""));
   const deliveryFee = mode === "delivery" ? orderBranch?.deliveryFee ?? DELIVERY_FEE : 0;
   const deposit = Math.max(0, Number(payment.deposit || 0));
+  if (deposit < requiredDeposit) {
+    sendJson(request, response, 400, {
+      error: `This account requires a deposit of at least ${requiredDeposit} RWF to confirm pickup orders.`,
+    });
+    return;
+  }
+
   const order = normalizeOrder({
     id: createOrderId(),
     customerId,
@@ -608,7 +645,8 @@ async function handleCreateOrder(request, response) {
       name: customer.name,
       phone: customer.phone,
       address: resolvedAddress,
-      email: customer.email || "",
+      email: customer.email || accountCustomer?.email || "",
+      noShowCount: Math.max(0, Number(accountCustomer?.noShowCount || 0)),
     },
     notes: customer.notes || "",
     payment: {
@@ -628,11 +666,13 @@ async function handleCreateOrder(request, response) {
     status: "received",
     managerName: "",
     staffName: "",
+    noShowFlagged: false,
     source: "web",
   });
 
   const orders = await readOrders();
   orders.unshift(order);
+  await writeProducts(products);
   await writeOrders(orders);
 
   sendJson(request, response, 201, {
@@ -1203,7 +1243,7 @@ async function handleAdminPatch(request, response, pathname) {
       return;
     }
 
-    const orders = await readOrders();
+    const [orders, customers] = await Promise.all([readOrders(), readCustomers()]);
     const order = orders.find((entry) => entry.id === orderId);
     if (!order) {
         sendJson(request, response, 404, { error: "Order not found" });
@@ -1213,6 +1253,28 @@ async function handleAdminPatch(request, response, pathname) {
     order.status = status;
     if (body.managerName !== undefined) order.managerName = String(body.managerName || "");
     if (body.staffName !== undefined) order.staffName = String(body.staffName || "");
+    if (body.noShowFlagged !== undefined) {
+      const shouldFlag = Boolean(body.noShowFlagged);
+      const customer = findCustomerByOrder(customers, order);
+      if (shouldFlag && !order.noShowFlagged && customer) {
+        customer.noShowCount = Math.max(0, Number(customer.noShowCount || 0)) + 1;
+        customer.noShowFlags = [
+          ...(Array.isArray(customer.noShowFlags) ? customer.noShowFlags : []),
+          {
+            orderId: order.id,
+            branchId: order.branchId || "",
+            flaggedAt: new Date().toISOString(),
+          },
+        ].slice(-10);
+        order.noShowFlagged = true;
+        order.customer.noShowCount = customer.noShowCount;
+      }
+
+      if (!shouldFlag) {
+        order.noShowFlagged = false;
+      }
+      await writeCustomers(customers);
+    }
     await writeOrders(orders);
     sendJson(request, response, 200, { order });
     return;

@@ -3,6 +3,8 @@ const ADMIN_STORAGE_KEYS = {
   mode: "simba-admin-mode",
   demoProducts: "simba-admin-demo-products",
   demoBranches: "simba-admin-demo-branches",
+  roleView: "simba-admin-role-view",
+  viewerName: "simba-admin-viewer-name",
 };
 const ADMIN_LANGUAGE_KEY = "simba-language";
 
@@ -14,6 +16,8 @@ const adminState = {
   branches: [],
   productQuery: "",
   language: loadFromStorage(ADMIN_LANGUAGE_KEY, "en"),
+  roleView: loadFromStorage(ADMIN_STORAGE_KEYS.roleView, "manager"),
+  viewerName: loadFromStorage(ADMIN_STORAGE_KEYS.viewerName, "Alice"),
 };
 
 const ORDER_STATUSES = ["received", "accepted", "preparing", "ready-for-pickup", "completed", "cancelled", "delivered"];
@@ -24,25 +28,29 @@ const STAFF_OPTIONS = ["Grace", "Jean", "Kevin", "Merveille", "Sandrine"];
 
 const adminTranslations = {
   en: {
-    adminPageTitle: "Admin Dashboard | Simba Supermarket",
-    adminTagline: "Admin dashboard",
+    adminPageTitle: "Market Rep Dashboard | Simba Supermarket",
+    adminTagline: "Market rep dashboard",
     adminNavStorefront: "Storefront",
     adminNavBranches: "Branches",
     adminNavCheckout: "Checkout",
     adminLanguageLabel: "Language",
-    adminAccessEyebrow: "Admin access",
+    adminAccessEyebrow: "Market rep access",
     adminLoginTitle: "Sign in to review orders",
     adminPasswordLabel: "Admin password",
     adminPasswordPlaceholder: "Enter admin password",
     adminOpenDashboard: "Open dashboard",
     adminPasswordNote: "Use the `SIMBA_ADMIN_PASSWORD` environment variable. For local demo only, the fallback password is `simba-admin-2026`.",
-    adminOperationsEyebrow: "Operations",
+    adminOperationsEyebrow: "Market operations",
     adminDashboardTitle: "Orders, inventory, and store controls",
     adminRefreshAction: "Refresh",
     adminLogoutAction: "Log out",
     adminOrderDeskEyebrow: "Order desk",
     adminOrderDeskTitle: "Incoming pickup orders",
     adminOrderDeskNote: "Branch managers can assign staff, then staff can move orders to ready for pickup.",
+    adminRoleViewLabel: "Dashboard view",
+    adminRoleManager: "Manager",
+    adminRoleStaff: "Staff",
+    adminViewerLabel: "Current teammate",
     adminCatalogEyebrow: "Catalog control",
     adminCatalogTitle: "Products and stock",
     adminNewItemEyebrow: "New item",
@@ -97,6 +105,11 @@ const adminTranslations = {
     adminStaffPlaceholder: "Select staff",
     adminAssignTeam: "Assign team",
     adminMarkReady: "Mark ready for pickup",
+    adminMarkComplete: "Mark picked up",
+    adminFlagNoShow: "Flag no-show",
+    adminCustomerRisk: "Customer risk",
+    adminCustomerFlags: "{count} no-show flag(s)",
+    adminAssignedOrdersOnly: "Staff only see orders assigned to them.",
     adminSaving: "Saving...",
     adminUpdating: "Updating...",
     adminNoProducts: "No products match the current search.",
@@ -119,25 +132,29 @@ const adminTranslations = {
     adminStatusDelivered: "Delivered",
   },
   fr: {
-    adminPageTitle: "Tableau Admin | Simba Supermarket",
-    adminTagline: "Tableau admin",
+    adminPageTitle: "Tableau Market Rep | Simba Supermarket",
+    adminTagline: "Tableau market rep",
     adminNavStorefront: "Boutique",
     adminNavBranches: "Branches",
     adminNavCheckout: "Paiement",
     adminLanguageLabel: "Langue",
-    adminAccessEyebrow: "Acces admin",
+    adminAccessEyebrow: "Acces market rep",
     adminLoginTitle: "Connectez-vous pour verifier les commandes",
     adminPasswordLabel: "Mot de passe admin",
     adminPasswordPlaceholder: "Entrez le mot de passe admin",
     adminOpenDashboard: "Ouvrir le tableau",
     adminPasswordNote: "Utilisez la variable d'environnement `SIMBA_ADMIN_PASSWORD`. Pour la demo locale seulement, le mot de passe de secours est `simba-admin-2026`.",
-    adminOperationsEyebrow: "Operations",
+    adminOperationsEyebrow: "Operations market",
     adminDashboardTitle: "Commandes, stock et controles magasin",
     adminRefreshAction: "Actualiser",
     adminLogoutAction: "Se deconnecter",
     adminOrderDeskEyebrow: "Poste commandes",
     adminOrderDeskTitle: "Commandes retrait entrantes",
     adminOrderDeskNote: "Les managers de branche peuvent assigner le staff, puis le staff peut passer a pret pour retrait.",
+    adminRoleViewLabel: "Vue du tableau",
+    adminRoleManager: "Manager",
+    adminRoleStaff: "Staff",
+    adminViewerLabel: "Collaborateur actuel",
     adminCatalogEyebrow: "Controle catalogue",
     adminCatalogTitle: "Produits et stock",
     adminNewItemEyebrow: "Nouvel article",
@@ -192,6 +209,11 @@ const adminTranslations = {
     adminStaffPlaceholder: "Choisir le staff",
     adminAssignTeam: "Assigner l'equipe",
     adminMarkReady: "Marquer pret pour retrait",
+    adminMarkComplete: "Marquer retiree",
+    adminFlagNoShow: "Signaler absent",
+    adminCustomerRisk: "Risque client",
+    adminCustomerFlags: "{count} absence(s)",
+    adminAssignedOrdersOnly: "Le staff ne voit que les commandes qui lui sont assignees.",
     adminSaving: "Enregistrement...",
     adminUpdating: "Mise a jour...",
     adminNoProducts: "Aucun produit ne correspond a la recherche actuelle.",
@@ -214,25 +236,29 @@ const adminTranslations = {
     adminStatusDelivered: "Livree",
   },
   rw: {
-    adminPageTitle: "Admin Dashboard | Simba Supermarket",
-    adminTagline: "Dashboard ya admin",
+    adminPageTitle: "Dashboard ya Market Rep | Simba Supermarket",
+    adminTagline: "Dashboard ya market rep",
     adminNavStorefront: "Iduka",
     adminNavBranches: "Amashami",
     adminNavCheckout: "Checkout",
     adminLanguageLabel: "Ururimi",
-    adminAccessEyebrow: "Uburyo bwa admin",
+    adminAccessEyebrow: "Uburyo bwa market rep",
     adminLoginTitle: "Injira urebe ama-order",
     adminPasswordLabel: "Ijambobanga rya admin",
     adminPasswordPlaceholder: "Andika ijambobanga rya admin",
     adminOpenDashboard: "Fungura dashboard",
     adminPasswordNote: "Koresha environment variable `SIMBA_ADMIN_PASSWORD`. Ku demo ya local gusa, ijambobanga risanzwe ni `simba-admin-2026`.",
-    adminOperationsEyebrow: "Ibikorwa",
+    adminOperationsEyebrow: "Ibikorwa bya market rep",
     adminDashboardTitle: "Ama-order, stock n'igenzura ry'iduka",
     adminRefreshAction: "Ongera usubize",
     adminLogoutAction: "Sohoka",
     adminOrderDeskEyebrow: "Aho order zicungwa",
     adminOrderDeskTitle: "Ama-order ya pickup yinjiye",
     adminOrderDeskNote: "Abayobozi b'amashami bashobora guha staff, hanyuma staff ikayashyira kuri ready for pickup.",
+    adminRoleViewLabel: "Uburyo bwa dashboard",
+    adminRoleManager: "Manager",
+    adminRoleStaff: "Staff",
+    adminViewerLabel: "Umukozi ukoresha",
     adminCatalogEyebrow: "Igenzura rya catalog",
     adminCatalogTitle: "Ibicuruzwa na stock",
     adminNewItemEyebrow: "Igicuruzwa gishya",
@@ -287,6 +313,11 @@ const adminTranslations = {
     adminStaffPlaceholder: "Hitamo staff",
     adminAssignTeam: "Ha ikipe",
     adminMarkReady: "Shyira kuri ready for pickup",
+    adminMarkComplete: "Shyira kuri picked up",
+    adminFlagNoShow: "Emeza ko ataje",
+    adminCustomerRisk: "Ibyago by'umukiriya",
+    adminCustomerFlags: "No-show {count}",
+    adminAssignedOrdersOnly: "Staff ibona gusa ama-order yayiherejwe.",
     adminSaving: "Birimo kubika...",
     adminUpdating: "Birimo kuvugurura...",
     adminNoProducts: "Nta bicuruzwa bihuye n'ibyo washakishije.",
@@ -368,6 +399,8 @@ function bindAdminControls() {
   const createProductForm = document.getElementById("createProductForm");
   const createBranchForm = document.getElementById("createBranchForm");
   const languageSelect = document.getElementById("languageSelect");
+  const roleViewSelect = document.getElementById("adminRoleView");
+  const viewerNameSelect = document.getElementById("adminViewerName");
 
   if (languageSelect) {
     languageSelect.value = adminState.language;
@@ -376,9 +409,28 @@ function bindAdminControls() {
       saveToStorage(ADMIN_LANGUAGE_KEY, adminState.language);
       applyLanguage();
       renderStats(getCurrentStats());
+      syncRoleControls();
       renderOrders(adminState.orders);
       renderProducts(adminState.products);
       renderBranches(adminState.branches);
+    });
+  }
+
+  if (roleViewSelect) {
+    roleViewSelect.value = adminState.roleView;
+    roleViewSelect.addEventListener("change", (event) => {
+      adminState.roleView = String(event.target.value || "manager");
+      saveToStorage(ADMIN_STORAGE_KEYS.roleView, adminState.roleView);
+      syncRoleControls();
+      renderOrders(adminState.orders);
+    });
+  }
+
+  if (viewerNameSelect) {
+    viewerNameSelect.addEventListener("change", (event) => {
+      adminState.viewerName = String(event.target.value || "");
+      saveToStorage(ADMIN_STORAGE_KEYS.viewerName, adminState.viewerName);
+      renderOrders(adminState.orders);
     });
   }
 
@@ -524,6 +576,7 @@ async function loadDashboard() {
       adminState.products = demoData.products;
       adminState.branches = demoData.branches;
 
+      syncRoleControls();
       renderStats(demoData.stats);
       renderOrders(adminState.orders);
       renderProducts(adminState.products);
@@ -554,6 +607,7 @@ async function loadDashboard() {
     adminState.products = productsPayload.products || [];
     adminState.branches = branchesPayload.branches || [];
 
+    syncRoleControls();
     renderStats(statsPayload.stats);
     renderOrders(adminState.orders);
     renderProducts(adminState.products);
@@ -601,13 +655,19 @@ function renderStats(stats = {}) {
 
 function renderOrders(orders) {
   const container = document.getElementById("adminOrders");
+  const visibleOrders = orders.filter((order) => {
+    if (adminState.roleView !== "staff") return true;
+    return !adminState.viewerName || order.staffName === adminState.viewerName;
+  });
 
-  if (!orders.length) {
+  if (!visibleOrders.length) {
     container.innerHTML = `<div class="state-panel"><p>${t("adminNoOrders")}</p></div>`;
     return;
   }
 
-  container.innerHTML = orders
+  container.innerHTML = `
+    ${adminState.roleView === "staff" ? `<p class="toolbar-note">${t("adminAssignedOrdersOnly")}</p>` : ""}
+    ${visibleOrders
     .map(
       (order) => `
         <article class="showcase-panel admin-order-card">
@@ -651,12 +711,16 @@ function renderOrders(orders) {
               <span>${t("adminOrderDeposit")}</span>
               <strong>${formatCurrency(order.payment?.deposit || 0)}</strong>
             </div>
+            <div class="summary-box">
+              <span>${t("adminCustomerRisk")}</span>
+              <strong>${t("adminCustomerFlags", { count: Number(order.customer?.noShowCount || 0) })}</strong>
+            </div>
           </div>
           <div class="summary-box">
             <span>${t("adminOrderDeliveryAddress")}</span>
             <strong>${order.customer.address}</strong>
           </div>
-          <div class="admin-product-grid">
+          <div class="admin-product-grid ${adminState.roleView === "staff" ? "hidden" : ""}">
             <label class="field">
               <span>${t("adminManagerLabel")}</span>
               <select data-order-field="managerName" data-order-id="${order.id}">
@@ -677,8 +741,10 @@ function renderOrders(orders) {
             </label>
           </div>
           <div class="admin-product-actions">
-            <button class="ghost-button" type="button" data-assign-order="${order.id}">${t("adminAssignTeam")}</button>
+            ${adminState.roleView === "staff" ? "" : `<button class="ghost-button" type="button" data-assign-order="${order.id}">${t("adminAssignTeam")}</button>`}
             <button class="primary-button" type="button" data-ready-order="${order.id}">${t("adminMarkReady")}</button>
+            <button class="ghost-button" type="button" data-complete-order="${order.id}">${t("adminMarkComplete")}</button>
+            <button class="ghost-button" type="button" data-noshow-order="${order.id}" ${order.noShowFlagged ? "disabled" : ""}>${t("adminFlagNoShow")}</button>
           </div>
           <div class="admin-order-items">
             ${order.items
@@ -695,7 +761,8 @@ function renderOrders(orders) {
         </article>
       `
     )
-    .join("");
+    .join("")}
+  `;
 
   container.querySelectorAll("[data-order-status]").forEach((select) => {
     select.addEventListener("change", async () => {
@@ -746,6 +813,68 @@ function renderOrders(orders) {
       }
     });
   });
+
+  container.querySelectorAll("[data-complete-order]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const orderId = button.dataset.completeOrder;
+      button.disabled = true;
+      button.textContent = t("adminUpdating");
+      try {
+        await patchAdmin(apiUrl(`/api/admin/orders/${orderId}`), {
+          id: orderId,
+          managerName: getOrderFieldValue(orderId, "managerName"),
+          staffName: getOrderFieldValue(orderId, "staffName"),
+          status: "completed",
+        });
+        await loadDashboard();
+      } finally {
+        button.disabled = false;
+        button.textContent = t("adminMarkComplete");
+      }
+    });
+  });
+
+  container.querySelectorAll("[data-noshow-order]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const orderId = button.dataset.noshowOrder;
+      button.disabled = true;
+      button.textContent = t("adminUpdating");
+      try {
+        await patchAdmin(apiUrl(`/api/admin/orders/${orderId}`), {
+          id: orderId,
+          managerName: getOrderFieldValue(orderId, "managerName"),
+          staffName: getOrderFieldValue(orderId, "staffName"),
+          status: "cancelled",
+          noShowFlagged: true,
+        });
+        await loadDashboard();
+      } finally {
+        button.disabled = false;
+        button.textContent = t("adminFlagNoShow");
+      }
+    });
+  });
+
+  syncRoleControls();
+}
+
+function syncRoleControls() {
+  const roleViewSelect = document.getElementById("adminRoleView");
+  const viewerNameSelect = document.getElementById("adminViewerName");
+  if (roleViewSelect) {
+    roleViewSelect.value = adminState.roleView;
+  }
+  if (!viewerNameSelect) return;
+
+  const options = adminState.roleView === "staff" ? STAFF_OPTIONS : MANAGER_OPTIONS;
+  if (!options.includes(adminState.viewerName)) {
+    adminState.viewerName = options[0] || "";
+    saveToStorage(ADMIN_STORAGE_KEYS.viewerName, adminState.viewerName);
+  }
+
+  viewerNameSelect.innerHTML = options
+    .map((name) => `<option value="${name}" ${name === adminState.viewerName ? "selected" : ""}>${name}</option>`)
+    .join("");
 }
 
 function getOrderFieldValue(orderId, field) {
@@ -849,6 +978,7 @@ function renderProducts(products) {
       }
     });
   });
+
 }
 
 function gatherProductPayload(productId) {

@@ -3,10 +3,14 @@ const STORAGE_KEYS = {
   theme: "simba-theme",
   language: "simba-language",
   selectedBranch: "simba-selected-branch",
+  customerToken: "simba-customer-token",
+  postAuthAction: "simba-post-auth-action",
 };
 
 const translations = {
   en: {
+    homePageTitle: "Simba Supermarket | Rwanda's Modern Online Supermarket",
+    languageLabel: "Language",
     announceText: "Modern shopping for Kigali families, offices, and everyday essentials.",
     announcePill: "Same-day delivery available",
     brandTagline: "Fresh groceries, home essentials, and fast shopping in Rwanda",
@@ -35,6 +39,8 @@ const translations = {
     spotlightToday: "Selected branch",
     spotlightTitle: "Union Trade Centre",
     spotlightText: "3336+MHV Union Trade Centre, 1 KN 4 Ave, Kigali",
+    heroOverlayEyebrow: "Everyday supermarket shopping",
+    heroOverlayTitle: "Fresh food, pantry staples, drinks, home care, and more in one place",
     shopThisBranch: "Shop this branch",
     viewAllBranches: "View all branches",
     featureFast: "Fast delivery",
@@ -51,6 +57,10 @@ const translations = {
     departmentEmpty: "No matching department found.",
     promoBadge: "Promo highlights",
     promoTitle: "Weekly deals, bundles, and fast-moving offers",
+    promoPrevLabel: "Prev",
+    promoNextLabel: "Next",
+    promoPrevAria: "Previous banner",
+    promoNextAria: "Next banner",
     shoppingRowsBadge: "Shopping rows",
     shoppingRowsTitle: "Curated shelves that feel more like a real marketplace",
     shoppingRowsText: "These rows help shoppers discover products by intent instead of only by category.",
@@ -60,6 +70,14 @@ const translations = {
     trustTwoText: "Selected branch stock, pickup, and delivery context carried into cart and checkout",
     trustThreeTitle: "Everyday convenience",
     trustThreeText: "Mobile-friendly browsing, account tools, and quick checkout with Mobile Money",
+    marketRepBadge: "Market rep tools",
+    marketRepTitle: "Open the Market Rep Dashboard for orders, staff assignment, and stock control",
+    marketRepText: "Review live orders, assign branch staff, update product stock, and manage branches from one operations dashboard.",
+    marketRepOrdersTitle: "Order operations",
+    marketRepOrdersText: "Managers can review incoming orders and move them through the fulfilment flow.",
+    marketRepInventoryTitle: "Catalog control",
+    marketRepInventoryText: "Update prices, stock, visibility, and branch settings from the same workspace.",
+    marketRepAction: "Open Market Rep Dashboard",
     pickupPriorityBadge: "Demo-day flow",
     pickupPriorityTitle: "Pick-up first, then delivery",
     pickupPriorityText:
@@ -174,8 +192,29 @@ const translations = {
     browseCatalog: "Browse catalog",
     assistantFound: "Simba found {count} matching product(s).",
     assistantUnavailable: "Smart search is temporarily using local catalog matching.",
+    footerQuickLinks: "Quick links",
+    footerShopAisles: "Shop aisles",
+    footerAllProducts: "All products",
+    footerOurBranches: "Our branches",
+    footerAboutUs: "About us",
+    footerContact: "Contact",
+    footerMyAccount: "My account",
+    footerMarketRep: "Market Rep Dashboard",
+    footerSupportTitle: "Support",
+    footerPopularBranches: "Popular branches",
+    footerCheckoutHelp: "Checkout help",
+    footerCustomerSupport: "Customer support",
+    footerStoreInfo: "Store information",
+    footerCopyright: "Copyright 2026 Simba Supermarket Rwanda. All rights reserved.",
+    footerPrivacy: "Privacy",
+    footerSupportLink: "Support",
+    footerBranchesLink: "Branches",
+    closeCartLabel: "Close",
+    closeCartAria: "Close cart",
   },
   fr: {
+    homePageTitle: "Simba Supermarket | Supermarche en ligne moderne du Rwanda",
+    languageLabel: "Langue",
     announceText: "Shopping moderne pour les familles, bureaux et besoins du quotidien a Kigali.",
     announcePill: "Livraison le jour meme disponible",
     brandTagline: "Courses, maison et achats rapides au Rwanda",
@@ -204,6 +243,8 @@ const translations = {
     spotlightToday: "Branche choisie",
     spotlightTitle: "Union Trade Centre",
     spotlightText: "3336+MHV Union Trade Centre, 1 KN 4 Ave, Kigali",
+    heroOverlayEyebrow: "Courses du quotidien",
+    heroOverlayTitle: "Produits frais, essentiels du placard, boissons et entretien au meme endroit",
     shopThisBranch: "Acheter dans cette branche",
     viewAllBranches: "Voir les branches",
     featureFast: "Livraison rapide",
@@ -220,6 +261,10 @@ const translations = {
     departmentEmpty: "Aucun departement correspondant.",
     promoBadge: "Promotions",
     promoTitle: "Offres de la semaine, bundles et selections rapides",
+    promoPrevLabel: "Prec",
+    promoNextLabel: "Suiv",
+    promoPrevAria: "Banniere precedente",
+    promoNextAria: "Banniere suivante",
     shoppingRowsBadge: "Rangees d'achat",
     shoppingRowsTitle: "Des rangees plus proches d'une vraie marketplace",
     shoppingRowsText: "Ces rangees aident a decouvrir par besoin et non seulement par categorie.",
@@ -229,6 +274,14 @@ const translations = {
     trustTwoText: "Le stock, le retrait et la livraison suivent la branche choisie",
     trustThreeTitle: "Confort au quotidien",
     trustThreeText: "Navigation mobile, compte client et paiement rapide par Mobile Money",
+    marketRepBadge: "Outils market rep",
+    marketRepTitle: "Ouvrez le tableau Market Rep pour les commandes, l'assignation du staff et le controle du stock",
+    marketRepText: "Verifiez les commandes en direct, assignez le staff de branche, mettez a jour le stock et gerez les branches depuis un meme tableau.",
+    marketRepOrdersTitle: "Operations commandes",
+    marketRepOrdersText: "Les managers peuvent verifier les commandes entrantes et les faire avancer dans le flux de fulfilment.",
+    marketRepInventoryTitle: "Controle catalogue",
+    marketRepInventoryText: "Mettez a jour prix, stock, visibilite et reglages de branche depuis le meme espace.",
+    marketRepAction: "Ouvrir le tableau Market Rep",
     pickupPriorityBadge: "Flux de demo",
     pickupPriorityTitle: "Retrait d'abord, livraison ensuite",
     pickupPriorityText:
@@ -343,8 +396,29 @@ const translations = {
     browseCatalog: "Voir le catalogue",
     assistantFound: "Simba a trouve {count} produit(s) correspondants.",
     assistantUnavailable: "La recherche intelligente utilise temporairement le catalogue local.",
+    footerQuickLinks: "Liens rapides",
+    footerShopAisles: "Voir les rayons",
+    footerAllProducts: "Tous les produits",
+    footerOurBranches: "Nos branches",
+    footerAboutUs: "A propos",
+    footerContact: "Contact",
+    footerMyAccount: "Mon compte",
+    footerMarketRep: "Tableau Market Rep",
+    footerSupportTitle: "Support",
+    footerPopularBranches: "Branches populaires",
+    footerCheckoutHelp: "Aide checkout",
+    footerCustomerSupport: "Support client",
+    footerStoreInfo: "Informations magasin",
+    footerCopyright: "Copyright 2026 Simba Supermarket Rwanda. Tous droits reserves.",
+    footerPrivacy: "Confidentialite",
+    footerSupportLink: "Support",
+    footerBranchesLink: "Branches",
+    closeCartLabel: "Fermer",
+    closeCartAria: "Fermer le panier",
   },
   rw: {
+    homePageTitle: "Simba Supermarket | Supermarket yo kuri internet igezweho mu Rwanda",
+    languageLabel: "Ururimi",
     announceText: "Kwamamaza gushya ku miryango, ibiro n'ibikenerwa buri munsi i Kigali.",
     announcePill: "Kohereza umunsi umwe birahari",
     brandTagline: "Ibiribwa, ibikenerwa mu rugo n'uguhaha byihuse mu Rwanda",
@@ -373,6 +447,8 @@ const translations = {
     spotlightToday: "Ishami ryatoranyijwe",
     spotlightTitle: "Union Trade Centre",
     spotlightText: "3336+MHV Union Trade Centre, 1 KN 4 Ave, Kigali",
+    heroOverlayEyebrow: "Guhaha kwa buri munsi",
+    heroOverlayTitle: "Ibiribwa bishya, ibyo mu bubiko, ibinyobwa n'ibikoresho byo mu rugo hamwe ahantu hamwe",
     shopThisBranch: "Gura kuri iri shami",
     viewAllBranches: "Reba amashami yose",
     featureFast: "Kohereza vuba",
@@ -389,6 +465,10 @@ const translations = {
     departmentEmpty: "Nta shami rihuye n'ibyashakishijwe.",
     promoBadge: "Promos",
     promoTitle: "Ibyagabanyijwe, bundles n'ibikunzwe by'iki cyumweru",
+    promoPrevLabel: "Mbere",
+    promoNextLabel: "Kurikira",
+    promoPrevAria: "Banner ibanza",
+    promoNextAria: "Banner ikurikira",
     shoppingRowsBadge: "Imirongo yo kugura",
     shoppingRowsTitle: "Imirongo ituma iduka risa na marketplace nyayo",
     shoppingRowsText: "Iyi mirongo ifasha kubona ibicuruzwa ukurikije icyo ushaka kurusha icyiciro gusa.",
@@ -398,6 +478,14 @@ const translations = {
     trustTwoText: "Stock, pickup na delivery bikurikira ishami wahisemo",
     trustThreeTitle: "Byoroheye buri munsi",
     trustThreeText: "Gukoresha neza kuri telefoni, konti y'umukiriya na Mobile Money",
+    marketRepBadge: "Ibikoresho bya market rep",
+    marketRepTitle: "Fungura dashboard ya Market Rep urebe ama-order, uhe staff akazi, kandi ucunge stock",
+    marketRepText: "Reba ama-order ya live, ha staff yo ku ishami akazi, vugurura stock y'ibicuruzwa, kandi ucunge amashami byose muri dashboard imwe.",
+    marketRepOrdersTitle: "Imicungire ya order",
+    marketRepOrdersText: "Abayobozi bashobora kureba ama-order yinjiye no kuyayobora mu nzira ya fulfilment.",
+    marketRepInventoryTitle: "Igenzura rya catalog",
+    marketRepInventoryText: "Vugurura ibiciro, stock, ukugaragara, n'igenamiterere ry'amashami ahantu hamwe.",
+    marketRepAction: "Fungura Dashboard ya Market Rep",
     pickupPriorityBadge: "Uko demo ikora",
     pickupPriorityTitle: "Banza pickup, delivery ikurikire",
     pickupPriorityText:
@@ -512,6 +600,25 @@ const translations = {
     browseCatalog: "Reba katalogi",
     assistantFound: "Simba yabonye ibicuruzwa {count} bihuye n'ibyo ushaka.",
     assistantUnavailable: "Smart search iri gukoresha local catalog by'igihe gito.",
+    footerQuickLinks: "Imiyoboro yihuse",
+    footerShopAisles: "Reba aisles",
+    footerAllProducts: "Ibicuruzwa byose",
+    footerOurBranches: "Amashami yacu",
+    footerAboutUs: "Abo turi bo",
+    footerContact: "Twandikire",
+    footerMyAccount: "Konti yanjye",
+    footerMarketRep: "Dashboard ya Market Rep",
+    footerSupportTitle: "Ubufasha",
+    footerPopularBranches: "Amashami akunzwe",
+    footerCheckoutHelp: "Ubufasha bwa checkout",
+    footerCustomerSupport: "Ubufasha bw'abakiriya",
+    footerStoreInfo: "Amakuru y'iduka",
+    footerCopyright: "Uburenganzira bwose bwa 2026 Simba Supermarket Rwanda burabitswe.",
+    footerPrivacy: "Ubwirinzi bw'amakuru",
+    footerSupportLink: "Ubufasha",
+    footerBranchesLink: "Amashami",
+    closeCartLabel: "Funga",
+    closeCartAria: "Funga agaseke",
   },
 };
 
@@ -735,6 +842,7 @@ async function initStorefront() {
   applyTheme();
   applyLanguage();
   bindGlobalControls();
+  handlePostLoginCartOpen();
   syncHeaderMenu();
   setupTopbarScroll();
   syncActiveNavLink();
@@ -945,6 +1053,19 @@ function applyLanguage() {
   document.querySelectorAll("[data-i18n-placeholder]").forEach((node) => {
     const key = node.dataset.i18nPlaceholder;
     if (copy[key]) node.placeholder = copy[key];
+  });
+
+  document.querySelectorAll("[data-i18n-document-title]").forEach((node) => {
+    const key = node.dataset.i18nDocumentTitle;
+    if (copy[key]) {
+      node.textContent = copy[key];
+      document.title = copy[key];
+    }
+  });
+
+  document.querySelectorAll("[data-i18n-aria-label]").forEach((node) => {
+    const key = node.dataset.i18nAriaLabel;
+    if (copy[key]) node.setAttribute("aria-label", copy[key]);
   });
 
   syncAssistantPromptLabels();
@@ -1767,6 +1888,18 @@ function createProductCard(product, copy) {
 }
 
 function addToCart(productId, branchId = appState.selectedBranchId) {
+  if (
+    !ensureSignedInForCartAction({
+      type: "add-to-cart",
+      productId,
+      quantity: 1,
+      branchId,
+      redirectTo: buildCurrentPageRedirectUrl(true),
+    })
+  ) {
+    return;
+  }
+
   if (!canAddProductToCart(productId, branchId)) return;
   const existingItem = appState.cart.find((item) => item.id === productId && item.branchId === branchId);
   if (existingItem) existingItem.quantity += 1;
@@ -1910,6 +2043,42 @@ function loadFromStorage(key, fallback) {
 
 function saveToStorage(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
+}
+
+function isCustomerSignedIn() {
+  return Boolean(loadFromStorage(STORAGE_KEYS.customerToken, ""));
+}
+
+function ensureSignedInForCartAction(action) {
+  if (isCustomerSignedIn()) {
+    return true;
+  }
+
+  saveToStorage(STORAGE_KEYS.postAuthAction, action);
+  window.location.href = `account.html?returnTo=${encodeURIComponent(action.redirectTo || buildCurrentPageRedirectUrl())}`;
+  return false;
+}
+
+function buildCurrentPageRedirectUrl(openCart = false) {
+  const url = new URL(window.location.href);
+  if (openCart) {
+    url.searchParams.set("openCart", "1");
+  }
+  return `${url.pathname.split("/").pop() || "index.html"}${url.search}${url.hash}`;
+}
+
+function handlePostLoginCartOpen() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("openCart") !== "1") return;
+
+  const nextUrl = new URL(window.location.href);
+  nextUrl.searchParams.delete("openCart");
+  window.history.replaceState({}, "", `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`);
+
+  window.setTimeout(() => {
+    renderCart();
+    openCart();
+  }, 0);
 }
 
 function syncCartWithInventory() {

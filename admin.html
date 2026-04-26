@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title data-i18n-document-title="adminPageTitle">Admin Dashboard | Simba Supermarket</title>
+    <title data-i18n-document-title="adminPageTitle">Market Rep Dashboard | Simba Supermarket</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,7 +19,7 @@
           <img class="brand-logo" src="assets/simba-logo.svg" alt="Simba Supermarket logo" />
           <span>
             <strong>Simba Supermarket</strong>
-            <small data-i18n="adminTagline">Admin dashboard</small>
+            <small data-i18n="adminTagline">Market rep dashboard</small>
           </span>
         </a>
 
@@ -41,8 +41,8 @@
       <main class="admin-layout">
         <section id="adminLoginCard" class="checkout-form-card admin-login-card">
           <div class="section-heading">
-            <p class="eyebrow" data-i18n="adminAccessEyebrow">Admin access</p>
-            <h1 data-i18n="adminLoginTitle">Sign in to review orders</h1>
+              <p class="eyebrow" data-i18n="adminAccessEyebrow">Market rep access</p>
+              <h1 data-i18n="adminLoginTitle">Sign in to review orders</h1>
           </div>
 
           <form id="adminLoginForm" class="checkout-form">
@@ -59,7 +59,7 @@
         <section id="adminDashboard" class="showcase-panel hidden">
           <div class="toolbar-header">
             <div>
-              <p class="eyebrow" data-i18n="adminOperationsEyebrow">Operations</p>
+              <p class="eyebrow" data-i18n="adminOperationsEyebrow">Market operations</p>
               <h1 data-i18n="adminDashboardTitle">Orders, inventory, and store controls</h1>
             </div>
             <div class="topbar-actions">
@@ -76,6 +76,19 @@
                 <h2 data-i18n="adminOrderDeskTitle">Incoming pickup orders</h2>
               </div>
               <p class="toolbar-note" data-i18n="adminOrderDeskNote">Branch managers can assign staff, then staff can move orders to ready for pickup.</p>
+            </div>
+            <div class="admin-product-grid">
+              <label class="field">
+                <span data-i18n="adminRoleViewLabel">Dashboard view</span>
+                <select id="adminRoleView">
+                  <option value="manager" data-i18n="adminRoleManager">Manager</option>
+                  <option value="staff" data-i18n="adminRoleStaff">Staff</option>
+                </select>
+              </label>
+              <label class="field">
+                <span data-i18n="adminViewerLabel">Current teammate</span>
+                <select id="adminViewerName"></select>
+              </label>
             </div>
             <div id="adminOrders" class="admin-orders"></div>
           </section>

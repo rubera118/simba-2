@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Checkout | Simba Supermarket</title>
+    <title data-i18n-document-title="checkoutPageTitle">Checkout | Simba Supermarket</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -25,15 +25,15 @@
 
         <div class="topbar-actions">
           <label class="lang-picker">
-            <select id="languageSelect" aria-label="Select language">
+            <select id="languageSelect" aria-label="Select language" data-i18n-aria-label="languageLabel">
               <option value="en">English</option>
               <option value="fr">Francais</option>
               <option value="rw">Kinyarwanda</option>
             </select>
           </label>
           <button id="themeToggle" class="icon-button" type="button" data-i18n="theme">Theme</button>
-          <a class="ghost-button" href="branches.html">Branches</a>
-          <a class="ghost-button" href="account.html">Account</a>
+          <a class="ghost-button" href="branches.html" data-i18n="navBranches">Branches</a>
+          <a class="ghost-button" href="account.html" data-i18n="navAccount">Account</a>
         </div>
       </header>
 
@@ -100,11 +100,12 @@
 
             <div class="payment-panel">
               <div class="section-heading">
-                <p class="eyebrow">MoMo</p>
+                <p class="eyebrow" data-i18n="paymentEyebrow">MoMo</p>
                 <h2 data-i18n="paymentTitle">MoMo deposit to confirm your order</h2>
               </div>
 
               <p class="toolbar-note" data-i18n="depositText">A small non-refundable deposit confirms the order so branch staff can start preparing it.</p>
+              <p class="toolbar-note" data-i18n="depositRiskNotice">Customers with previous no-shows may be asked for a higher confirmation deposit.</p>
 
               <label class="field">
                 <span data-i18n="network">Network</span>

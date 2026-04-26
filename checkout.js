@@ -7,12 +7,17 @@ const STORAGE_KEYS = {
   customerProfile: "simba-customer-profile",
   selectedBranch: "simba-selected-branch",
   reviews: "simba-branch-reviews",
+  postAuthAction: "simba-post-auth-action",
 };
 
 const PICKUP_DEPOSIT = 500;
 
 const translations = {
   en: {
+    checkoutPageTitle: "Checkout | Simba Supermarket",
+    languageLabel: "Language",
+    navBranches: "Branches",
+    navAccount: "Account",
     theme: "Theme",
     checkoutBadge: "Safe and simple checkout",
     deliveryInfo: "Delivery details",
@@ -29,6 +34,7 @@ const translations = {
     phoneNumber: "Phone number",
     address: "Delivery address",
     notes: "Delivery notes",
+    paymentEyebrow: "MoMo",
     paymentTitle: "MoMo deposit to confirm your order",
     depositText: "A small non-refundable deposit confirms the order so branch staff can start preparing it.",
     network: "Network",
@@ -53,12 +59,18 @@ const translations = {
     branchLabel: "Branch",
     branchSummary: "Selected branch",
     depositLabel: "MoMo deposit",
+    depositRiskNotice: "Customers with previous no-shows may be asked for a higher confirmation deposit.",
+    depositRequirement: "Required deposit",
     formError: "Please complete all delivery and payment fields before placing the order.",
     checkoutError: "We could not place the order right now. Please make sure the backend server is running.",
     checkoutProcessing: "Processing order...",
     checkoutLocalSuccess: "Order saved locally for this device because the backend is unavailable.",
   },
   fr: {
+    checkoutPageTitle: "Paiement | Simba Supermarket",
+    languageLabel: "Langue",
+    navBranches: "Branches",
+    navAccount: "Compte",
     theme: "Theme",
     checkoutBadge: "Paiement simple et sur",
     deliveryInfo: "Informations de livraison",
@@ -75,6 +87,7 @@ const translations = {
     phoneNumber: "Numero de telephone",
     address: "Adresse de livraison",
     notes: "Notes de livraison",
+    paymentEyebrow: "MoMo",
     paymentTitle: "Depot MoMo pour confirmer la commande",
     depositText: "Un petit depot non remboursable confirme la commande pour que l'equipe commence la preparation.",
     network: "Reseau",
@@ -99,12 +112,18 @@ const translations = {
     branchLabel: "Branche",
     branchSummary: "Branche choisie",
     depositLabel: "Depot MoMo",
+    depositRiskNotice: "Les clients avec des absences precedentes peuvent avoir un depot de confirmation plus eleve.",
+    depositRequirement: "Depot requis",
     formError: "Veuillez remplir toutes les informations de livraison et de paiement avant de valider.",
     checkoutError: "Impossible d'envoyer la commande maintenant. Verifiez que le serveur backend fonctionne.",
     checkoutProcessing: "Traitement de la commande...",
     checkoutLocalSuccess: "La commande a ete enregistree localement sur cet appareil car le backend est indisponible.",
   },
   rw: {
+    checkoutPageTitle: "Checkout | Simba Supermarket",
+    languageLabel: "Ururimi",
+    navBranches: "Amashami",
+    navAccount: "Konti",
     theme: "Insanganyamatsiko",
     checkoutBadge: "Kwishyura byoroshye kandi bitekanye",
     deliveryInfo: "Aho woherezwa",
@@ -121,6 +140,7 @@ const translations = {
     phoneNumber: "Numero ya telefone",
     address: "Aderesi yo koherezaho",
     notes: "Ubutumwa bwo kohereza",
+    paymentEyebrow: "MoMo",
     paymentTitle: "Kubitsa MoMo kugira ngo wemeze order",
     depositText: "Ubwishyu buto butagaruka bwemeza order kugira ngo abakozi batangire kuyitegura.",
     network: "Umuyoboro",
@@ -145,6 +165,8 @@ const translations = {
     branchLabel: "Ishami",
     branchSummary: "Ishami ryatoranyijwe",
     depositLabel: "Ubwizigame bwa MoMo",
+    depositRiskNotice: "Abakiriya bafite amateka yo kutaza gufata order bashobora gusabwa deposit iri hejuru.",
+    depositRequirement: "Deposit isabwa",
     formError: "Uzuza amakuru yose yo kohereza no kwishyura mbere yo kohereza itumiza.",
     checkoutError: "Ntitwabashije kohereza itumiza ubu. Reba niba server ya backend iri gukora.",
     checkoutProcessing: "Birimo gutunganya order...",
@@ -163,7 +185,7 @@ const state = {
   customerToken: loadFromStorage(STORAGE_KEYS.customerToken, ""),
   customerProfile: loadFromStorage(STORAGE_KEYS.customerProfile, null),
   selectedBranchId: window.SIMBA_BRANCHES?.getSelectedBranch()?.id || "",
-  deposit: PICKUP_DEPOSIT,
+  deposit: getRequiredDeposit(loadFromStorage(STORAGE_KEYS.customerProfile, null)),
 };
 
 const DEFAULT_DELIVERY_FEE = 2000;
@@ -173,6 +195,12 @@ const PRODUCT_FALLBACK_IMAGE = "assets/product-fallback.svg";
 document.addEventListener("DOMContentLoaded", initCheckoutPage);
 
 async function initCheckoutPage() {
+  if (!isCustomerSignedIn()) {
+    redirectToLoginForCheckout();
+    return;
+  }
+
+  await refreshCustomerProfile();
   applyTheme();
   applyLanguage();
   bindControls();
@@ -235,6 +263,19 @@ function applyLanguage() {
     if (copy[key]) node.textContent = copy[key];
   });
 
+  document.querySelectorAll("[data-i18n-document-title]").forEach((node) => {
+    const key = node.dataset.i18nDocumentTitle;
+    if (copy[key]) {
+      node.textContent = copy[key];
+      document.title = copy[key];
+    }
+  });
+
+  document.querySelectorAll("[data-i18n-aria-label]").forEach((node) => {
+    const key = node.dataset.i18nAriaLabel;
+    if (copy[key]) node.setAttribute("aria-label", copy[key]);
+  });
+
   const confirmation = document.getElementById("orderConfirmation");
   if (state.lastOrder && !confirmation.classList.contains("hidden")) {
     renderOrderConfirmation();
@@ -253,6 +294,7 @@ async function renderCheckoutItems() {
   const branchSummary = document.getElementById("summaryBranch");
   const pickupSummary = document.getElementById("summaryPickupTime");
   const deliveryFee = getDeliveryFee();
+  state.deposit = getRequiredDeposit(state.customerProfile);
 
   try {
     state.products = await loadProducts();
@@ -505,6 +547,10 @@ function hydrateCustomerDetails() {
   if (!form.elements.address.value) form.elements.address.value = state.customerProfile.address || "";
 }
 
+function getRequiredDeposit(profile) {
+  return Math.max(PICKUP_DEPOSIT, Number(profile?.requiredDeposit || PICKUP_DEPOSIT));
+}
+
 function populatePickupBranches() {
   const select = document.getElementById("pickupBranchSelect");
   if (!select || !window.SIMBA_BRANCHES) return;
@@ -593,6 +639,10 @@ async function submitOrderWithFallback(orderPayload, copy) {
 }
 
 function shouldUseLocalCheckoutFallback(error) {
+  if (!allowLocalCheckoutFallback()) {
+    return false;
+  }
+
   const message = String(error?.message || "");
   return (
     message.includes("Failed to fetch") ||
@@ -600,6 +650,10 @@ function shouldUseLocalCheckoutFallback(error) {
     message.includes("NetworkError") ||
     message.includes("backend")
   );
+}
+
+function allowLocalCheckoutFallback() {
+  return !window.SIMBA_CONFIG?.API_BASE_URL?.trim();
 }
 
 function createLocalOrder(orderPayload) {
@@ -691,6 +745,36 @@ function loadFromStorage(key, fallback) {
 
 function saveToStorage(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
+}
+
+function isCustomerSignedIn() {
+  return Boolean(loadFromStorage(STORAGE_KEYS.customerToken, ""));
+}
+
+function redirectToLoginForCheckout() {
+  saveToStorage(STORAGE_KEYS.postAuthAction, {
+    type: "checkout",
+    redirectTo: "checkout.html",
+  });
+  window.location.href = "account.html?returnTo=checkout.html";
+}
+
+async function refreshCustomerProfile() {
+  try {
+    const response = await fetch(apiUrl("/api/account/profile"), {
+      headers: {
+        Authorization: `Bearer ${state.customerToken}`,
+      },
+    });
+    if (!response.ok) return;
+    const payload = await response.json();
+    if (!payload?.customer) return;
+    state.customerProfile = payload.customer;
+    state.deposit = getRequiredDeposit(state.customerProfile);
+    saveToStorage(STORAGE_KEYS.customerProfile, state.customerProfile);
+  } catch {
+    // Keep the locally cached profile if the backend is unavailable.
+  }
 }
 
 function apiUrl(path) {

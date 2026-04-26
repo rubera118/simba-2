@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About | Simba Supermarket</title>
+    <title data-i18n-document-title="aboutPageTitle">About | Simba Supermarket</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,13 +19,21 @@
           <img class="brand-logo" src="assets/simba-logo.svg" alt="Simba Supermarket logo" />
           <span>
             <strong>Simba Supermarket</strong>
-            <small>About Simba</small>
+            <small data-i18n="aboutTagline">About Simba</small>
           </span>
         </a>
         <div class="topbar-actions">
-          <a class="ghost-button" href="index.html">Home</a>
-          <a class="ghost-button" href="branches.html">Branches</a>
-          <a class="ghost-button" href="contact.html">Contact</a>
+          <a class="ghost-button" href="index.html" data-i18n="aboutNavHome">Home</a>
+          <a class="ghost-button" href="branches.html" data-i18n="aboutNavBranches">Branches</a>
+          <a class="ghost-button" href="contact.html" data-i18n="aboutNavContact">Contact</a>
+          <label class="lang-picker">
+            <span class="sr-only" data-i18n="aboutLanguageLabel">Language</span>
+            <select id="languageSelect" aria-label="Select language" data-i18n-aria-label="aboutLanguageLabel">
+              <option value="en">English</option>
+              <option value="fr">Francais</option>
+              <option value="rw">Kinyarwanda</option>
+            </select>
+          </label>
         </div>
       </header>
 
@@ -33,10 +41,10 @@
         <section class="showcase-panel">
           <div class="toolbar-header">
             <div>
-              <p class="eyebrow">About us</p>
-              <h1>Simba Supermarket for modern everyday shopping</h1>
+              <p class="eyebrow" data-i18n="aboutHeroEyebrow">About us</p>
+              <h1 data-i18n="aboutHeroTitle">Simba Supermarket for modern everyday shopping</h1>
             </div>
-            <p class="toolbar-note">
+            <p class="toolbar-note" data-i18n="aboutHeroText">
               Simba Supermarket brings groceries, household essentials, beauty, drinks, kitchenware, and trusted family products together in one convenient shopping experience.
             </p>
           </div>
@@ -46,32 +54,33 @@
           <article class="showcase-panel">
             <div class="toolbar-header compact-header">
               <div>
-                <p class="eyebrow">What we offer</p>
-                <h2>Fresh choices, home essentials, and easy ordering</h2>
+                <p class="eyebrow" data-i18n="aboutOfferEyebrow">What we offer</p>
+                <h2 data-i18n="aboutOfferTitle">Fresh choices, home essentials, and easy ordering</h2>
               </div>
             </div>
             <div class="detail-points">
-              <div class="detail-point">A wide supermarket catalog based on real Simba products and departments.</div>
-              <div class="detail-point">Branch-aware shopping with branch selection for stock, pickup, and delivery context.</div>
-              <div class="detail-point">Mobile-friendly browsing, cleaner search, and faster ordering for everyday customers.</div>
+              <div class="detail-point" data-i18n="aboutOfferPointOne">A wide supermarket catalog based on real Simba products and departments.</div>
+              <div class="detail-point" data-i18n="aboutOfferPointTwo">Branch-aware shopping with branch selection for stock, pickup, and delivery context.</div>
+              <div class="detail-point" data-i18n="aboutOfferPointThree">Mobile-friendly browsing, cleaner search, and faster ordering for everyday customers.</div>
             </div>
           </article>
 
           <article class="showcase-panel">
             <div class="toolbar-header compact-header">
               <div>
-                <p class="eyebrow">Our focus</p>
-                <h2>Convenience, trust, and local relevance</h2>
+                <p class="eyebrow" data-i18n="aboutFocusEyebrow">Our focus</p>
+                <h2 data-i18n="aboutFocusTitle">Convenience, trust, and local relevance</h2>
               </div>
             </div>
             <div class="detail-checklist">
-              <p>Designed around the way supermarket customers shop in Rwanda.</p>
-              <p>Built to support delivery, pickup, Mobile Money, and clear branch communication.</p>
-              <p>Structured as a storefront that can keep growing with admin tools and backend APIs.</p>
+              <p data-i18n="aboutFocusPointOne">Designed around the way supermarket customers shop in Rwanda.</p>
+              <p data-i18n="aboutFocusPointTwo">Built to support delivery, pickup, Mobile Money, and clear branch communication.</p>
+              <p data-i18n="aboutFocusPointThree">Structured as a storefront that can keep growing with admin tools and backend APIs.</p>
             </div>
           </article>
         </section>
       </main>
     </div>
+    <script src="about.js" defer></script>
   </body>
 </html>

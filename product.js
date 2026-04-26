@@ -3,10 +3,16 @@ const STORAGE_KEYS = {
   theme: "simba-theme",
   language: "simba-language",
   selectedBranch: "simba-selected-branch",
+  customerToken: "simba-customer-token",
+  postAuthAction: "simba-post-auth-action",
 };
 
 const translations = {
   en: {
+    productPageTitle: "Product Details | Simba Supermarket",
+    languageLabel: "Language",
+    navBranches: "Branches",
+    navAccount: "Account",
     theme: "Theme",
     checkout: "Proceed to checkout",
     loadingProduct: "Loading product details...",
@@ -47,6 +53,10 @@ const translations = {
     branchPrompt: "Select the branch you want to shop from for more accurate stock and pickup details.",
   },
   fr: {
+    productPageTitle: "Details du produit | Simba Supermarket",
+    languageLabel: "Langue",
+    navBranches: "Branches",
+    navAccount: "Compte",
     theme: "Theme",
     checkout: "Passer au paiement",
     loadingProduct: "Chargement des details du produit...",
@@ -87,6 +97,10 @@ const translations = {
     branchPrompt: "Choisissez la branche ou vous souhaitez acheter pour un stock plus precis.",
   },
   rw: {
+    productPageTitle: "Ibisobanuro by'igicuruzwa | Simba Supermarket",
+    languageLabel: "Ururimi",
+    navBranches: "Amashami",
+    navAccount: "Konti",
     theme: "Insanganyamatsiko",
     checkout: "Komeza wishyure",
     loadingProduct: "Turimo gupakurura ibisobanuro by'igicuruzwa...",
@@ -173,6 +187,17 @@ function applyLanguage() {
   document.querySelectorAll("[data-i18n]").forEach((node) => {
     const key = node.dataset.i18n;
     if (copy[key]) node.textContent = copy[key];
+  });
+  document.querySelectorAll("[data-i18n-document-title]").forEach((node) => {
+    const key = node.dataset.i18nDocumentTitle;
+    if (copy[key]) {
+      node.textContent = copy[key];
+      document.title = copy[key];
+    }
+  });
+  document.querySelectorAll("[data-i18n-aria-label]").forEach((node) => {
+    const key = node.dataset.i18nAriaLabel;
+    if (copy[key]) node.setAttribute("aria-label", copy[key]);
   });
   document.documentElement.lang = state.language;
 }
@@ -366,10 +391,34 @@ function bindDetailActions(product) {
   });
 
   document.getElementById("detailAddToCart")?.addEventListener("click", () => {
+    if (
+      !ensureSignedInForCartAction({
+        type: "add-to-cart",
+        productId: product.id,
+        quantity: state.quantity,
+        branchId: state.selectedBranchId,
+        redirectTo: "index.html?openCart=1",
+      })
+    ) {
+      return;
+    }
+
     addProductToCart(product.id, state.quantity, state.selectedBranchId);
   });
 
   document.getElementById("detailBuyNow")?.addEventListener("click", () => {
+    if (
+      !ensureSignedInForCartAction({
+        type: "buy-now",
+        productId: product.id,
+        quantity: state.quantity,
+        branchId: state.selectedBranchId,
+        redirectTo: "checkout.html",
+      })
+    ) {
+      return;
+    }
+
     addProductToCart(product.id, state.quantity, state.selectedBranchId);
     window.location.href = "checkout.html";
   });
@@ -435,6 +484,20 @@ function loadFromStorage(key, fallback) {
 
 function saveToStorage(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
+}
+
+function isCustomerSignedIn() {
+  return Boolean(loadFromStorage(STORAGE_KEYS.customerToken, ""));
+}
+
+function ensureSignedInForCartAction(action) {
+  if (isCustomerSignedIn()) {
+    return true;
+  }
+
+  saveToStorage(STORAGE_KEYS.postAuthAction, action);
+  window.location.href = `account.html?returnTo=${encodeURIComponent(action.redirectTo || "index.html?openCart=1")}`;
+  return false;
 }
 
 function getAvailabilityLabel(product, copy) {

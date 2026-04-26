@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simba Supermarket | Rwanda's Modern Online Supermarket</title>
+    <title data-i18n-document-title="homePageTitle">Simba Supermarket | Rwanda's Modern Online Supermarket</title>
     <meta
       name="description"
       content="A modern reimagining of Simba Supermarket with grocery aisles, fresh picks, easy checkout, and fast online shopping in Rwanda."
@@ -56,8 +56,8 @@
             </label>
 
             <label class="lang-picker">
-              <span class="sr-only">Language</span>
-              <select id="languageSelect" aria-label="Select language">
+              <span class="sr-only" data-i18n="languageLabel">Language</span>
+              <select id="languageSelect" aria-label="Select language" data-i18n-aria-label="languageLabel">
                 <option value="en">English</option>
                 <option value="fr">Francais</option>
                 <option value="rw">Kinyarwanda</option>
@@ -124,8 +124,8 @@
               <div class="hero-visual-overlay">
                 <img class="hero-overlay-logo" src="assets/simba-logo.svg" alt="Simba Supermarket logo" />
                 <div>
-                  <p class="eyebrow">Everyday supermarket shopping</p>
-                  <h2>Fresh food, pantry staples, drinks, home care, and more in one place</h2>
+                  <p class="eyebrow" data-i18n="heroOverlayEyebrow">Everyday supermarket shopping</p>
+                  <h2 data-i18n="heroOverlayTitle">Fresh food, pantry staples, drinks, home care, and more in one place</h2>
                 </div>
               </div>
             </article>
@@ -186,8 +186,8 @@
                   <h2 data-i18n="promoTitle">Weekly deals, bundles, and fast-moving offers</h2>
                 </div>
                 <div class="carousel-controls">
-                  <button id="promoPrev" class="icon-button" type="button" aria-label="Previous banner">Prev</button>
-                  <button id="promoNext" class="icon-button" type="button" aria-label="Next banner">Next</button>
+                  <button id="promoPrev" class="icon-button" type="button" aria-label="Previous banner" data-i18n-aria-label="promoPrevAria" data-i18n="promoPrevLabel">Prev</button>
+                  <button id="promoNext" class="icon-button" type="button" aria-label="Next banner" data-i18n-aria-label="promoNextAria" data-i18n="promoNextLabel">Next</button>
                 </div>
               </div>
               <div id="promoCarousel" class="promo-carousel" aria-live="polite"></div>
@@ -209,6 +209,27 @@
           <article>
             <strong data-i18n="trustThreeTitle">Everyday convenience</strong>
             <span data-i18n="trustThreeText">Mobile-friendly browsing, account tools, and quick checkout with Mobile Money</span>
+          </article>
+        </section>
+
+        <section class="brand-proof-band">
+          <article class="brand-proof-card proof-main">
+            <p class="eyebrow" data-i18n="marketRepBadge">Market rep tools</p>
+            <h2 data-i18n="marketRepTitle">Open the Market Rep Dashboard for orders, staff assignment, and stock control</h2>
+            <p data-i18n="marketRepText">
+              Review live orders, assign branch staff, update product stock, and manage branches from one operations dashboard.
+            </p>
+          </article>
+          <article class="brand-proof-card">
+            <strong data-i18n="marketRepOrdersTitle">Order operations</strong>
+            <span data-i18n="marketRepOrdersText">Managers can review incoming orders and move them through the fulfilment flow.</span>
+          </article>
+          <article class="brand-proof-card">
+            <strong data-i18n="marketRepInventoryTitle">Catalog control</strong>
+            <span data-i18n="marketRepInventoryText">Update prices, stock, visibility, and branch settings from the same workspace.</span>
+          </article>
+          <article class="brand-proof-card">
+            <a class="primary-button" href="./admin.html" data-i18n="marketRepAction">Open Market Rep Dashboard</a>
           </article>
         </section>
 
@@ -456,19 +477,20 @@
           </div>
 
           <div>
-            <p class="footer-col-title">Quick links</p>
+            <p class="footer-col-title" data-i18n="footerQuickLinks">Quick links</p>
             <ul class="footer-links">
-              <li><a href="./index.html#aisles">Shop aisles</a></li>
-              <li><a href="./index.html#catalog">All products</a></li>
-              <li><a href="./branches.html">Our branches</a></li>
-              <li><a href="./about.html">About us</a></li>
-              <li><a href="./contact.html">Contact</a></li>
-              <li><a href="./account.html">My account</a></li>
+              <li><a href="./index.html#aisles" data-i18n="footerShopAisles">Shop aisles</a></li>
+              <li><a href="./index.html#catalog" data-i18n="footerAllProducts">All products</a></li>
+              <li><a href="./branches.html" data-i18n="footerOurBranches">Our branches</a></li>
+              <li><a href="./about.html" data-i18n="footerAboutUs">About us</a></li>
+              <li><a href="./contact.html" data-i18n="footerContact">Contact</a></li>
+              <li><a href="./account.html" data-i18n="footerMyAccount">My account</a></li>
+              <li><a href="./admin.html" data-i18n="footerMarketRep">Market Rep Dashboard</a></li>
             </ul>
           </div>
 
           <div>
-            <p class="footer-col-title">Popular branches</p>
+            <p class="footer-col-title" data-i18n="footerPopularBranches">Popular branches</p>
             <div class="footer-branch-item">
               <strong>Union Trade Centre</strong>
               <span>KN 4 Ave, Kigali</span>
@@ -488,21 +510,21 @@
           </div>
 
           <div>
-            <p class="footer-col-title">Support</p>
+            <p class="footer-col-title" data-i18n="footerSupportTitle">Support</p>
             <ul class="footer-links">
-              <li><a href="./checkout.html">Checkout help</a></li>
-              <li><a href="./contact.html">Customer support</a></li>
-              <li><a href="./about.html">Store information</a></li>
+              <li><a href="./checkout.html" data-i18n="footerCheckoutHelp">Checkout help</a></li>
+              <li><a href="./contact.html" data-i18n="footerCustomerSupport">Customer support</a></li>
+              <li><a href="./about.html" data-i18n="footerStoreInfo">Store information</a></li>
             </ul>
           </div>
         </div>
 
         <div class="footer-bottom">
-          <p>Copyright 2026 Simba Supermarket Rwanda. All rights reserved.</p>
+          <p data-i18n="footerCopyright">Copyright 2026 Simba Supermarket Rwanda. All rights reserved.</p>
           <div class="footer-bottom-links">
-            <a href="./about.html">Privacy</a>
-            <a href="./contact.html">Support</a>
-            <a href="./branches.html">Branches</a>
+            <a href="./about.html" data-i18n="footerPrivacy">Privacy</a>
+            <a href="./contact.html" data-i18n="footerSupportLink">Support</a>
+            <a href="./branches.html" data-i18n="footerBranchesLink">Branches</a>
           </div>
         </div>
       </div>
@@ -514,7 +536,7 @@
           <p class="eyebrow" data-i18n="cartBadge">Your basket</p>
           <h2 data-i18n="cartTitle">Shopping cart</h2>
         </div>
-        <button id="closeCart" class="icon-button" type="button" aria-label="Close cart">Close</button>
+        <button id="closeCart" class="icon-button" type="button" aria-label="Close cart" data-i18n-aria-label="closeCartAria" data-i18n="closeCartLabel">Close</button>
       </div>
 
       <div id="cartItems" class="cart-items"></div>

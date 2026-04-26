@@ -4,6 +4,8 @@ const ACCOUNT_STORAGE_KEYS = {
   branchReviews: "simba-branch-reviews",
   passwordResets: "simba-password-resets",
   customers: "simba-local-customers",
+  cart: "simba-cart",
+  postAuthAction: "simba-post-auth-action",
 };
 
 const REVIEW_ELIGIBLE_STATUSES = ["ready-for-pickup", "completed", "delivered"];
@@ -31,6 +33,7 @@ const accountTranslations = {
     accountNavStorefront: "Storefront",
     accountNavBranches: "Branches",
     accountNavCheckout: "Checkout",
+    accountNavMarketRep: "Market Rep",
     accountLanguageLabel: "Language",
     accountWelcomeBack: "Welcome back",
     accountSignInTitle: "Sign in",
@@ -70,6 +73,7 @@ const accountTranslations = {
     accountProfileEmail: "Email",
     accountProfilePhone: "Phone",
     accountProfileAddress: "Address",
+    accountProfileDeposit: "Required deposit",
     accountNotSet: "Not set",
     accountNoOrders: "You have not placed any orders yet.",
     accountOrderPlaced: "Placed",
@@ -136,6 +140,7 @@ const accountTranslations = {
     accountNavStorefront: "Boutique",
     accountNavBranches: "Branches",
     accountNavCheckout: "Paiement",
+    accountNavMarketRep: "Market Rep",
     accountLanguageLabel: "Langue",
     accountWelcomeBack: "Bon retour",
     accountSignInTitle: "Se connecter",
@@ -175,6 +180,7 @@ const accountTranslations = {
     accountProfileEmail: "Email",
     accountProfilePhone: "Telephone",
     accountProfileAddress: "Adresse",
+    accountProfileDeposit: "Depot requis",
     accountNotSet: "Non renseigne",
     accountNoOrders: "Vous n'avez pas encore passe de commande.",
     accountOrderPlaced: "Passee le",
@@ -241,6 +247,7 @@ const accountTranslations = {
     accountNavStorefront: "Iduka",
     accountNavBranches: "Amashami",
     accountNavCheckout: "Kwishyura",
+    accountNavMarketRep: "Market Rep",
     accountLanguageLabel: "Ururimi",
     accountWelcomeBack: "Murakaza neza",
     accountSignInTitle: "Injira",
@@ -280,6 +287,7 @@ const accountTranslations = {
     accountProfileEmail: "Imeyili",
     accountProfilePhone: "Telefone",
     accountProfileAddress: "Aderesi",
+    accountProfileDeposit: "Deposit isabwa",
     accountNotSet: "Ntabwo yashyizwemo",
     accountNoOrders: "Nta order urashyira kugeza ubu.",
     accountOrderPlaced: "Yashyizweho",
@@ -573,6 +581,7 @@ async function loadAccountDashboard() {
 
     document.getElementById("accountAuthView").classList.add("hidden");
     document.getElementById("accountDashboard").classList.remove("hidden");
+    completePostLoginRedirect();
   } catch (error) {
     if (accountState.profile && shouldUseLocalAccountFallback(error)) {
       try {
@@ -608,6 +617,10 @@ function renderProfile(profile) {
     <article class="summary-box admin-stat-card">
       <span>${t("accountProfileAddress")}</span>
       <strong>${profile.address || t("accountNotSet")}</strong>
+    </article>
+    <article class="summary-box admin-stat-card">
+      <span>${t("accountProfileDeposit")}</span>
+      <strong>${formatCurrency(profile.requiredDeposit || 500)}</strong>
     </article>
   `;
 }
@@ -943,6 +956,51 @@ function saveToStorage(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
+function completePostLoginRedirect() {
+  const action = loadFromStorage(ACCOUNT_STORAGE_KEYS.postAuthAction, null);
+  const returnTo = getSafeReturnTo();
+
+  if (action) {
+    applyPostAuthAction(action);
+    localStorage.removeItem(ACCOUNT_STORAGE_KEYS.postAuthAction);
+  }
+
+  if (!action && !returnTo) {
+    return;
+  }
+
+  window.location.href = action?.redirectTo || returnTo || "index.html";
+}
+
+function applyPostAuthAction(action) {
+  if (!action || !action.productId || !action.branchId) {
+    return;
+  }
+
+  const cart = loadFromStorage(ACCOUNT_STORAGE_KEYS.cart, []);
+  const existingItem = cart.find((item) => item.id === action.productId && item.branchId === action.branchId);
+  const quantity = Math.max(1, Number(action.quantity || 1));
+
+  if (existingItem) {
+    existingItem.quantity += quantity;
+  } else {
+    cart.push({
+      id: action.productId,
+      quantity,
+      branchId: action.branchId,
+    });
+  }
+
+  saveToStorage(ACCOUNT_STORAGE_KEYS.cart, cart);
+}
+
+function getSafeReturnTo() {
+  const value = new URLSearchParams(window.location.search).get("returnTo");
+  if (!value) return "";
+  if (/^[a-z]+:/i.test(value) || value.startsWith("//")) return "";
+  return value;
+}
+
 function apiUrl(path) {
   const baseUrl = window.SIMBA_CONFIG?.API_BASE_URL?.trim();
   return baseUrl ? `${baseUrl}${path}` : path;
@@ -977,6 +1035,10 @@ function shouldShowBackendConfigurationHint(error) {
 }
 
 function shouldUseLocalAccountFallback(error) {
+  if (!allowLocalAccountFallback()) {
+    return false;
+  }
+
   const message = String(error?.message || "");
   return (
     isBackendUnavailableMessage(message) ||
@@ -984,6 +1046,10 @@ function shouldUseLocalAccountFallback(error) {
     message.includes("Load failed") ||
     message.includes("NetworkError")
   );
+}
+
+function allowLocalAccountFallback() {
+  return !window.SIMBA_CONFIG?.API_BASE_URL?.trim();
 }
 
 function isBackendUnavailableMessage(message) {
@@ -1171,6 +1237,7 @@ function loadLocalAccountDashboard() {
   renderOrders(accountState.orders);
   document.getElementById("accountAuthView").classList.add("hidden");
   document.getElementById("accountDashboard").classList.remove("hidden");
+  completePostLoginRedirect();
 }
 
 function loadLocalAccountOrders(profile) {
