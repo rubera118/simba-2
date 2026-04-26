@@ -416,6 +416,14 @@ function consumePendingUiAlert() {
   }
 }
 
+function hasPendingUiAlert() {
+  try {
+    return Boolean(sessionStorage.getItem(ACCOUNT_UI_ALERT_KEY));
+  } catch {
+    return false;
+  }
+}
+
 function applyLanguage() {
   document.documentElement.lang = accountState.language;
 
@@ -554,6 +562,7 @@ function bindAccountControls() {
       saveToStorage(ACCOUNT_STORAGE_KEYS.token, accountState.token);
       saveToStorage(ACCOUNT_STORAGE_KEYS.profile, accountState.profile);
       message.textContent = "";
+      savePendingUiAlert(t("accountAlertSignedIn"));
       await loadAccountDashboard();
       showAccountAlert(t("accountAlertSignedIn"));
     } catch (error) {
@@ -565,6 +574,7 @@ function bindAccountControls() {
           saveToStorage(ACCOUNT_STORAGE_KEYS.token, accountState.token);
           saveToStorage(ACCOUNT_STORAGE_KEYS.profile, accountState.profile);
           message.textContent = "";
+          savePendingUiAlert(t("accountAlertSignedIn"));
           await loadAccountDashboard();
           showAccountAlert(t("accountAlertSignedIn"));
           return;
@@ -613,6 +623,7 @@ async function authenticateCustomer(url, payload, messageId) {
     saveToStorage(ACCOUNT_STORAGE_KEYS.token, accountState.token);
     saveToStorage(ACCOUNT_STORAGE_KEYS.profile, accountState.profile);
     message.textContent = "";
+    savePendingUiAlert(getAuthSuccessBanner(url));
     await loadAccountDashboard();
     showAccountAlert(getAuthSuccessBanner(url));
   } catch (error) {
@@ -624,6 +635,7 @@ async function authenticateCustomer(url, payload, messageId) {
         saveToStorage(ACCOUNT_STORAGE_KEYS.token, accountState.token);
         saveToStorage(ACCOUNT_STORAGE_KEYS.profile, accountState.profile);
         message.textContent = getLocalModeSuccessMessage(url);
+        savePendingUiAlert(getAuthSuccessBanner(url));
         await loadAccountDashboard();
         showAccountAlert(getAuthSuccessBanner(url));
         message.textContent = "";
@@ -1055,7 +1067,9 @@ function completePostLoginRedirect() {
     return;
   }
 
-  savePendingUiAlert(t("accountAlertSignedIn"));
+  if (!hasPendingUiAlert()) {
+    savePendingUiAlert(t("accountAlertSignedIn"));
+  }
   window.location.href = action?.redirectTo || returnTo || "index.html";
 }
 
