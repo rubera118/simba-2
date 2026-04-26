@@ -19,8 +19,11 @@ const ADMIN_PASSWORD = process.env.SIMBA_ADMIN_PASSWORD || "simba-admin-2026";
 const TOKEN_SECRET = process.env.SIMBA_TOKEN_SECRET || "simba-demo-secret";
 const GROQ_API_KEY = process.env.SIMBA_GROQ_API_KEY || "";
 const GROQ_MODEL = process.env.SIMBA_GROQ_MODEL || "llama-3.3-70b-versatile";
-const RESEND_API_KEY = process.env.RESEND_API_KEY || "";
-const EMAIL_FROM = process.env.SIMBA_EMAIL_FROM || "";
+const RESEND_API_KEY = process.env.RESEND_API_KEY || process.env.SIMBA_RESEND_API_KEY || "";
+const EMAIL_FROM =
+  process.env.SIMBA_EMAIL_FROM ||
+  process.env.SIMBA_RESEND_FROM ||
+  "";
 const ORDER_STATUSES = ["received", "accepted", "preparing", "ready-for-pickup", "completed", "cancelled", "delivered"];
 const ALLOWED_ORIGINS = (process.env.SIMBA_ALLOWED_ORIGINS || "*")
   .split(",")
