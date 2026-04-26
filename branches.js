@@ -1,8 +1,10 @@
 const BRANCH_LANGUAGE_KEY = "simba-language";
+const BRANCH_THEME_KEY = "simba-theme";
 const BRANCH_REVIEW_STORAGE_KEY = "simba-branch-reviews";
 
 const branchState = {
   language: loadFromStorage(BRANCH_LANGUAGE_KEY, "en"),
+  theme: loadFromStorage(BRANCH_THEME_KEY, "light"),
   query: "",
   city: "all",
 };
@@ -15,6 +17,7 @@ const branchTranslations = {
     branchesNavAbout: "About",
     branchesNavContact: "Contact",
     branchesLanguageLabel: "Language",
+    branchesTheme: "Theme",
     branchesHeroEyebrow: "Store network",
     branchesHeroTitle: "Choose the Simba branch you want to shop from",
     branchesHeroText:
@@ -51,6 +54,7 @@ const branchTranslations = {
     branchesNavAbout: "A propos",
     branchesNavContact: "Contact",
     branchesLanguageLabel: "Langue",
+    branchesTheme: "Theme",
     branchesHeroEyebrow: "Reseau de magasins",
     branchesHeroTitle: "Choisissez la branche Simba ou vous voulez acheter",
     branchesHeroText:
@@ -87,6 +91,7 @@ const branchTranslations = {
     branchesNavAbout: "Ibyacu",
     branchesNavContact: "Twandikire",
     branchesLanguageLabel: "Ururimi",
+    branchesTheme: "Insanganyamatsiko",
     branchesHeroEyebrow: "Urusobe rw'amashami",
     branchesHeroTitle: "Hitamo ishami rya Simba ushaka guhaha mo",
     branchesHeroText:
@@ -121,6 +126,7 @@ const branchTranslations = {
 document.addEventListener("DOMContentLoaded", initBranchesPage);
 
 function initBranchesPage() {
+  applyTheme();
   applyLanguage();
   bindControls();
   renderBranchesPage();
@@ -128,6 +134,7 @@ function initBranchesPage() {
 
 function bindControls() {
   const languageSelect = document.getElementById("languageSelect");
+  const themeToggle = document.getElementById("themeToggle");
   const searchInput = document.getElementById("branchSearchInput");
   const cityFilter = document.getElementById("branchCityFilter");
 
@@ -140,6 +147,12 @@ function bindControls() {
       renderBranchesPage();
     });
   }
+
+  themeToggle?.addEventListener("click", () => {
+    branchState.theme = branchState.theme === "dark" ? "light" : "dark";
+    saveToStorage(BRANCH_THEME_KEY, branchState.theme);
+    applyTheme();
+  });
 
   searchInput?.addEventListener("input", (event) => {
     branchState.query = String(event.target.value || "").trim().toLowerCase();
@@ -168,6 +181,10 @@ function applyLanguage() {
   document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
     element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
   });
+}
+
+function applyTheme() {
+  document.body.classList.toggle("dark", branchState.theme === "dark");
 }
 
 function renderBranchesPage() {

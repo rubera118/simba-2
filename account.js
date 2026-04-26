@@ -11,12 +11,14 @@ const ACCOUNT_STORAGE_KEYS = {
 const REVIEW_ELIGIBLE_STATUSES = ["ready-for-pickup", "completed", "delivered"];
 
 const ACCOUNT_LANGUAGE_KEY = "simba-language";
+const ACCOUNT_THEME_KEY = "simba-theme";
 
 const accountState = {
   token: loadFromStorage(ACCOUNT_STORAGE_KEYS.token, ""),
   profile: loadFromStorage(ACCOUNT_STORAGE_KEYS.profile, null),
   orders: [],
   language: loadFromStorage(ACCOUNT_LANGUAGE_KEY, "en"),
+  theme: loadFromStorage(ACCOUNT_THEME_KEY, "light"),
 };
 
 const GOOGLE_DEMO_PROFILE = {
@@ -35,6 +37,7 @@ const accountTranslations = {
     accountNavCheckout: "Checkout",
     accountNavMarketRep: "Market Rep",
     accountLanguageLabel: "Language",
+    accountTheme: "Theme",
     accountWelcomeBack: "Welcome back",
     accountSignInTitle: "Sign in",
     accountEmailLabel: "Email",
@@ -142,6 +145,7 @@ const accountTranslations = {
     accountNavCheckout: "Paiement",
     accountNavMarketRep: "Market Rep",
     accountLanguageLabel: "Langue",
+    accountTheme: "Theme",
     accountWelcomeBack: "Bon retour",
     accountSignInTitle: "Se connecter",
     accountEmailLabel: "Email",
@@ -249,6 +253,7 @@ const accountTranslations = {
     accountNavCheckout: "Kwishyura",
     accountNavMarketRep: "Market Rep",
     accountLanguageLabel: "Ururimi",
+    accountTheme: "Insanganyamatsiko",
     accountWelcomeBack: "Murakaza neza",
     accountSignInTitle: "Injira",
     accountEmailLabel: "Imeyili",
@@ -381,9 +386,14 @@ function applyLanguage() {
   });
 }
 
+function applyTheme() {
+  document.body.classList.toggle("dark", accountState.theme === "dark");
+}
+
 document.addEventListener("DOMContentLoaded", initAccountPage);
 
 function initAccountPage() {
+  applyTheme();
   applyLanguage();
   renderAccountServiceNotice();
   bindAccountControls();
@@ -401,6 +411,7 @@ function bindAccountControls() {
   const logoutButton = document.getElementById("logoutAccount");
   const googleSignInButton = document.getElementById("googleSignInButton");
   const languageSelect = document.getElementById("languageSelect");
+  const themeToggle = document.getElementById("themeToggle");
 
   if (languageSelect) {
     languageSelect.value = accountState.language;
@@ -415,6 +426,12 @@ function bindAccountControls() {
       }
     });
   }
+
+  themeToggle?.addEventListener("click", () => {
+    accountState.theme = accountState.theme === "dark" ? "light" : "dark";
+    saveToStorage(ACCOUNT_THEME_KEY, accountState.theme);
+    applyTheme();
+  });
 
   loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();

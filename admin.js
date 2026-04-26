@@ -7,6 +7,7 @@ const ADMIN_STORAGE_KEYS = {
   viewerName: "simba-admin-viewer-name",
 };
 const ADMIN_LANGUAGE_KEY = "simba-language";
+const ADMIN_THEME_KEY = "simba-theme";
 
 const adminState = {
   token: loadFromStorage(ADMIN_STORAGE_KEYS.token, ""),
@@ -16,6 +17,7 @@ const adminState = {
   branches: [],
   productQuery: "",
   language: loadFromStorage(ADMIN_LANGUAGE_KEY, "en"),
+  theme: loadFromStorage(ADMIN_THEME_KEY, "light"),
   roleView: loadFromStorage(ADMIN_STORAGE_KEYS.roleView, "manager"),
   viewerName: loadFromStorage(ADMIN_STORAGE_KEYS.viewerName, "Alice"),
 };
@@ -34,6 +36,7 @@ const adminTranslations = {
     adminNavBranches: "Branches",
     adminNavCheckout: "Checkout",
     adminLanguageLabel: "Language",
+    adminTheme: "Theme",
     adminAccessEyebrow: "Market rep access",
     adminLoginTitle: "Sign in to review orders",
     adminPasswordLabel: "Admin password",
@@ -138,6 +141,7 @@ const adminTranslations = {
     adminNavBranches: "Branches",
     adminNavCheckout: "Paiement",
     adminLanguageLabel: "Langue",
+    adminTheme: "Theme",
     adminAccessEyebrow: "Acces market rep",
     adminLoginTitle: "Connectez-vous pour verifier les commandes",
     adminPasswordLabel: "Mot de passe admin",
@@ -242,6 +246,7 @@ const adminTranslations = {
     adminNavBranches: "Amashami",
     adminNavCheckout: "Checkout",
     adminLanguageLabel: "Ururimi",
+    adminTheme: "Insanganyamatsiko",
     adminAccessEyebrow: "Uburyo bwa market rep",
     adminLoginTitle: "Injira urebe ama-order",
     adminPasswordLabel: "Ijambobanga rya admin",
@@ -344,6 +349,7 @@ const adminTranslations = {
 document.addEventListener("DOMContentLoaded", initAdminPage);
 
 function initAdminPage() {
+  applyTheme();
   applyLanguage();
   bindAdminControls();
 
@@ -379,6 +385,10 @@ function applyLanguage() {
   });
 }
 
+function applyTheme() {
+  document.body.classList.toggle("dark", adminState.theme === "dark");
+}
+
 function getCurrentStats() {
   return {
     orderCount: adminState.orders.length,
@@ -399,6 +409,7 @@ function bindAdminControls() {
   const createProductForm = document.getElementById("createProductForm");
   const createBranchForm = document.getElementById("createBranchForm");
   const languageSelect = document.getElementById("languageSelect");
+  const themeToggle = document.getElementById("themeToggle");
   const roleViewSelect = document.getElementById("adminRoleView");
   const viewerNameSelect = document.getElementById("adminViewerName");
 
@@ -415,6 +426,12 @@ function bindAdminControls() {
       renderBranches(adminState.branches);
     });
   }
+
+  themeToggle?.addEventListener("click", () => {
+    adminState.theme = adminState.theme === "dark" ? "light" : "dark";
+    saveToStorage(ADMIN_THEME_KEY, adminState.theme);
+    applyTheme();
+  });
 
   if (roleViewSelect) {
     roleViewSelect.value = adminState.roleView;

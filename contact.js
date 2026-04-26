@@ -1,7 +1,9 @@
 const CONTACT_LANGUAGE_KEY = "simba-language";
+const CONTACT_THEME_KEY = "simba-theme";
 
 const contactState = {
   language: loadFromStorage(CONTACT_LANGUAGE_KEY, "en"),
+  theme: loadFromStorage(CONTACT_THEME_KEY, "light"),
 };
 
 const contactTranslations = {
@@ -12,6 +14,7 @@ const contactTranslations = {
     contactNavBranches: "Branches",
     contactNavAbout: "About",
     contactLanguageLabel: "Language",
+    contactTheme: "Theme",
     contactHeroEyebrow: "Contact",
     contactHeroTitle: "Reach Simba Supermarket",
     contactHeroText: "Use the branch page to find your nearest store, or contact the team for delivery, pickup, and order support.",
@@ -34,6 +37,7 @@ const contactTranslations = {
     contactNavBranches: "Branches",
     contactNavAbout: "A propos",
     contactLanguageLabel: "Langue",
+    contactTheme: "Theme",
     contactHeroEyebrow: "Contact",
     contactHeroTitle: "Joindre Simba Supermarket",
     contactHeroText: "Utilisez la page des branches pour trouver votre magasin le plus proche, ou contactez l'equipe pour la livraison, le retrait et l'assistance commande.",
@@ -56,6 +60,7 @@ const contactTranslations = {
     contactNavBranches: "Amashami",
     contactNavAbout: "Ibyacu",
     contactLanguageLabel: "Ururimi",
+    contactTheme: "Insanganyamatsiko",
     contactHeroEyebrow: "Twandikire",
     contactHeroTitle: "Vugana na Simba Supermarket",
     contactHeroText: "Koresha urupapuro rw'amashami ushake iduka rikwegereye, cyangwa wandikire ikipe ku bijyanye na delivery, pickup n'ubufasha bwa order.",
@@ -76,14 +81,22 @@ const contactTranslations = {
 document.addEventListener("DOMContentLoaded", initContactPage);
 
 function initContactPage() {
+  applyTheme();
   applyLanguage();
   const languageSelect = document.getElementById("languageSelect");
-  if (!languageSelect) return;
-  languageSelect.value = contactState.language;
-  languageSelect.addEventListener("change", (event) => {
-    contactState.language = event.target.value;
-    saveToStorage(CONTACT_LANGUAGE_KEY, contactState.language);
-    applyLanguage();
+  const themeToggle = document.getElementById("themeToggle");
+  if (languageSelect) {
+    languageSelect.value = contactState.language;
+    languageSelect.addEventListener("change", (event) => {
+      contactState.language = event.target.value;
+      saveToStorage(CONTACT_LANGUAGE_KEY, contactState.language);
+      applyLanguage();
+    });
+  }
+  themeToggle?.addEventListener("click", () => {
+    contactState.theme = contactState.theme === "dark" ? "light" : "dark";
+    saveToStorage(CONTACT_THEME_KEY, contactState.theme);
+    applyTheme();
   });
 }
 
@@ -104,6 +117,10 @@ function applyLanguage() {
   document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
     element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
   });
+}
+
+function applyTheme() {
+  document.body.classList.toggle("dark", contactState.theme === "dark");
 }
 
 function loadFromStorage(key, fallback) {

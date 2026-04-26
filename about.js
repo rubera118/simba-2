@@ -1,7 +1,9 @@
 const ABOUT_LANGUAGE_KEY = "simba-language";
+const ABOUT_THEME_KEY = "simba-theme";
 
 const aboutState = {
   language: loadFromStorage(ABOUT_LANGUAGE_KEY, "en"),
+  theme: loadFromStorage(ABOUT_THEME_KEY, "light"),
 };
 
 const aboutTranslations = {
@@ -12,6 +14,7 @@ const aboutTranslations = {
     aboutNavBranches: "Branches",
     aboutNavContact: "Contact",
     aboutLanguageLabel: "Language",
+    aboutTheme: "Theme",
     aboutHeroEyebrow: "About us",
     aboutHeroTitle: "Simba Supermarket for modern everyday shopping",
     aboutHeroText:
@@ -34,6 +37,7 @@ const aboutTranslations = {
     aboutNavBranches: "Branches",
     aboutNavContact: "Contact",
     aboutLanguageLabel: "Langue",
+    aboutTheme: "Theme",
     aboutHeroEyebrow: "A propos",
     aboutHeroTitle: "Simba Supermarket pour un shopping quotidien moderne",
     aboutHeroText:
@@ -56,6 +60,7 @@ const aboutTranslations = {
     aboutNavBranches: "Amashami",
     aboutNavContact: "Twandikire",
     aboutLanguageLabel: "Ururimi",
+    aboutTheme: "Insanganyamatsiko",
     aboutHeroEyebrow: "Ibyerekeye twe",
     aboutHeroTitle: "Simba Supermarket igenewe guhaha kwa buri munsi mu buryo bwa none",
     aboutHeroText:
@@ -76,14 +81,22 @@ const aboutTranslations = {
 document.addEventListener("DOMContentLoaded", initAboutPage);
 
 function initAboutPage() {
+  applyTheme();
   applyLanguage();
   const languageSelect = document.getElementById("languageSelect");
-  if (!languageSelect) return;
-  languageSelect.value = aboutState.language;
-  languageSelect.addEventListener("change", (event) => {
-    aboutState.language = event.target.value;
-    saveToStorage(ABOUT_LANGUAGE_KEY, aboutState.language);
-    applyLanguage();
+  const themeToggle = document.getElementById("themeToggle");
+  if (languageSelect) {
+    languageSelect.value = aboutState.language;
+    languageSelect.addEventListener("change", (event) => {
+      aboutState.language = event.target.value;
+      saveToStorage(ABOUT_LANGUAGE_KEY, aboutState.language);
+      applyLanguage();
+    });
+  }
+  themeToggle?.addEventListener("click", () => {
+    aboutState.theme = aboutState.theme === "dark" ? "light" : "dark";
+    saveToStorage(ABOUT_THEME_KEY, aboutState.theme);
+    applyTheme();
   });
 }
 
@@ -104,6 +117,10 @@ function applyLanguage() {
   document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
     element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
   });
+}
+
+function applyTheme() {
+  document.body.classList.toggle("dark", aboutState.theme === "dark");
 }
 
 function loadFromStorage(key, fallback) {
