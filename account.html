@@ -76,8 +76,24 @@
                   <span data-i18n="accountEmailLabel">Email</span>
                   <input type="email" name="email" placeholder="you@example.com" data-i18n-placeholder="accountEmailPlaceholder" required />
                 </label>
-                <button class="ghost-button full-width" type="submit" data-i18n="accountResetAction">Send reset link</button>
+                <button class="ghost-button full-width" type="submit" data-i18n="accountResetAction">Send reset code</button>
                 <p id="forgotPasswordMessage" class="checkout-message" aria-live="polite"></p>
+              </form>
+              <form id="resetPasswordConfirmForm" class="checkout-form">
+                <label class="field">
+                  <span data-i18n="accountEmailLabel">Email</span>
+                  <input type="email" name="email" placeholder="you@example.com" data-i18n-placeholder="accountEmailPlaceholder" required />
+                </label>
+                <label class="field">
+                  <span data-i18n="accountResetCodeLabel">Reset code</span>
+                  <input type="text" name="code" placeholder="123456" data-i18n-placeholder="accountResetCodePlaceholder" inputmode="numeric" maxlength="6" required />
+                </label>
+                <label class="field">
+                  <span data-i18n="accountResetNewPasswordLabel">New password</span>
+                  <input type="password" name="newPassword" placeholder="Enter a new password" data-i18n-placeholder="accountResetNewPasswordPlaceholder" required />
+                </label>
+                <button class="primary-button full-width" type="submit" data-i18n="accountResetConfirmAction">Verify code and reset password</button>
+                <p id="resetPasswordConfirmMessage" class="checkout-message" aria-live="polite"></p>
               </form>
             </div>
           </section>

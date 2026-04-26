@@ -19,6 +19,8 @@ const ADMIN_PASSWORD = process.env.SIMBA_ADMIN_PASSWORD || "simba-admin-2026";
 const TOKEN_SECRET = process.env.SIMBA_TOKEN_SECRET || "simba-demo-secret";
 const GROQ_API_KEY = process.env.SIMBA_GROQ_API_KEY || "";
 const GROQ_MODEL = process.env.SIMBA_GROQ_MODEL || "llama-3.3-70b-versatile";
+const RESEND_API_KEY = process.env.RESEND_API_KEY || "";
+const EMAIL_FROM = process.env.SIMBA_EMAIL_FROM || "";
 const ORDER_STATUSES = ["received", "accepted", "preparing", "ready-for-pickup", "completed", "cancelled", "delivered"];
 const ALLOWED_ORIGINS = (process.env.SIMBA_ALLOWED_ORIGINS || "*")
   .split(",")
@@ -262,6 +264,8 @@ function normalizeCustomer(customer) {
     phone: String(customer.phone || ""),
     address: String(customer.address || ""),
     passwordHash: String(customer.passwordHash || ""),
+    resetCodeHash: String(customer.resetCodeHash || ""),
+    resetCodeExpiresAt: customer.resetCodeExpiresAt || null,
     createdAt: customer.createdAt || new Date().toISOString(),
   };
 }
@@ -365,6 +369,14 @@ function getAuthToken(payload) {
 
 function hashPassword(password) {
   return crypto.createHash("sha256").update(password).digest("hex");
+}
+
+function hashResetCode(code) {
+  return crypto.createHash("sha256").update(`simba-reset:${code}`).digest("hex");
+}
+
+function createResetCode() {
+  return String(Math.floor(100000 + Math.random() * 900000));
 }
 
 function sanitizeCustomer(customer) {
@@ -687,6 +699,22 @@ async function handleCustomerLogin(request, response) {
     exp: Date.now() + 1000 * 60 * 60 * 24 * 7,
   });
 
+  if (canSendEmail()) {
+    try {
+      await sendTransactionalEmail(
+        customer.email,
+        "Simba Supermarket login alert",
+        `
+          <p>Hello ${customer.name || "customer"},</p>
+          <p>You have successfully signed in to your Simba Supermarket account.</p>
+          <p>If this was not you, please reset your password immediately.</p>
+        `
+      );
+    } catch {
+      // Do not block login if email delivery fails.
+    }
+  }
+
   sendJson(request, response, 200, {
     token,
     customer: sanitizeCustomer(customer),
@@ -702,8 +730,70 @@ async function handleCustomerForgotPassword(request, response) {
     return;
   }
 
+  const customers = await readCustomers();
+  const customer = customers.find((entry) => entry.email === email);
+
+  if (customer) {
+    const code = createResetCode();
+    customer.resetCodeHash = hashResetCode(code);
+    customer.resetCodeExpiresAt = new Date(Date.now() + 1000 * 60 * 15).toISOString();
+    await writeCustomers(customers);
+
+    if (canSendEmail()) {
+      try {
+        await sendTransactionalEmail(
+          customer.email,
+          "Your Simba Supermarket reset code",
+          `
+            <p>Hello ${customer.name || "customer"},</p>
+            <p>Your Simba Supermarket password reset code is:</p>
+            <p style="font-size:28px;font-weight:700;letter-spacing:0.2em;">${code}</p>
+            <p>This code expires in 15 minutes.</p>
+          `
+        );
+      } catch {
+        // Keep response generic even if mail fails.
+      }
+    }
+  }
+
   sendJson(request, response, 200, {
-    message: "If that account exists, a password reset link has been prepared for demo use.",
+    message: "If that account exists, a password reset code has been sent.",
+  });
+}
+
+async function handleCustomerResetPassword(request, response) {
+  const body = await collectRequestBody(request);
+  const email = String(body.email || "").trim().toLowerCase();
+  const code = String(body.code || "").trim();
+  const newPassword = String(body.newPassword || "");
+
+  if (!email || !/^\d{6}$/.test(code) || newPassword.length < 6) {
+    sendJson(request, response, 400, { error: "Email, 6-digit code, and new password are required" });
+    return;
+  }
+
+  const customers = await readCustomers();
+  const customer = customers.find((entry) => entry.email === email);
+
+  if (
+    !customer ||
+    !customer.resetCodeHash ||
+    customer.resetCodeHash !== hashResetCode(code) ||
+    !customer.resetCodeExpiresAt ||
+    Date.now() > new Date(customer.resetCodeExpiresAt).getTime()
+  ) {
+    sendJson(request, response, 400, { error: "Invalid or expired reset code" });
+    return;
+  }
+
+  customer.passwordHash = hashPassword(newPassword);
+  customer.resetCodeHash = "";
+  customer.resetCodeExpiresAt = null;
+  await writeCustomers(customers);
+
+  sendJson(request, response, 200, {
+    message: "Password updated successfully.",
   });
 }
 
@@ -740,6 +830,22 @@ async function handleCustomerGoogleAuth(request, response) {
     customerId: customer.id,
     exp: Date.now() + 1000 * 60 * 60 * 24 * 7,
   });
+
+  if (canSendEmail()) {
+    try {
+      await sendTransactionalEmail(
+        customer.email,
+        "Simba Supermarket login alert",
+        `
+          <p>Hello ${customer.name || "customer"},</p>
+          <p>You have successfully signed in to your Simba Supermarket account.</p>
+          <p>If this was not you, please reset your password immediately.</p>
+        `
+      );
+    } catch {
+      // Do not block login if email delivery fails.
+    }
+  }
 
   sendJson(request, response, 200, {
     token,
@@ -857,6 +963,30 @@ function buildAssistantFallback(query, products, language = "en") {
     followUps: getAssistantFollowUps(language, category),
     source: "fallback",
   };
+}
+
+function canSendEmail() {
+  return Boolean(RESEND_API_KEY && EMAIL_FROM);
+}
+
+async function sendTransactionalEmail(to, subject, html) {
+  if (!canSendEmail() || typeof fetch !== "function") return false;
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${RESEND_API_KEY}`,
+    },
+    body: JSON.stringify({
+      from: EMAIL_FROM,
+      to: [to],
+      subject,
+      html,
+    }),
+  });
+
+  return response.ok;
 }
 
 async function requestGroqAssistantResult(query, branch, products, language) {
@@ -1306,6 +1436,11 @@ async function requestListener(request, response) {
 
     if (request.method === "POST" && pathname === "/api/customers/forgot-password") {
       await handleCustomerForgotPassword(request, response);
+      return;
+    }
+
+    if (request.method === "POST" && pathname === "/api/customers/reset-password") {
+      await handleCustomerResetPassword(request, response);
       return;
     }
 

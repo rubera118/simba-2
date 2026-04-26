@@ -42,7 +42,12 @@ const accountTranslations = {
     accountGoogleAction: "Continue with Google",
     accountResetEyebrow: "Reset access",
     accountForgotTitle: "Forgot your password?",
-    accountResetAction: "Send reset link",
+    accountResetAction: "Send reset code",
+    accountResetCodeLabel: "Reset code",
+    accountResetCodePlaceholder: "123456",
+    accountResetNewPasswordLabel: "New password",
+    accountResetNewPasswordPlaceholder: "Enter a new password",
+    accountResetConfirmAction: "Verify code and reset password",
     accountNewCustomer: "New customer",
     accountCreateTitle: "Create account",
     accountFullNameLabel: "Full name",
@@ -80,9 +85,14 @@ const accountTranslations = {
     accountReviewCommentPlaceholder: "Tell Simba how the pickup went.",
     accountReviewSubmit: "Submit review",
     accountResetEnterEmail: "Enter your email address first.",
-    accountResetPreparing: "Preparing reset link...",
-    accountResetPrepared: "If that account exists, a reset link has been prepared for demo use.",
-    accountResetDemoSaved: "Demo reset saved locally. In production this would email a secure reset link.",
+    accountResetPreparing: "Sending reset code...",
+    accountResetPrepared: "If that account exists, a reset code has been sent.",
+    accountResetDemoSaved: "Reset code saved locally for demo mode. In production this would be emailed securely.",
+    accountResetCodeEnter: "Enter the reset code sent to your email.",
+    accountResetCodeInvalid: "Enter a valid 6-digit reset code.",
+    accountResetPasswordUpdated: "Your password has been updated. You can sign in now.",
+    accountResetPasswordUpdating: "Verifying code and updating password...",
+    accountResetPasswordFailed: "Could not reset your password right now.",
     accountReviewChooseRating: "Choose a rating before submitting.",
     accountReviewSaved: "Thanks. Your branch review has been saved.",
     accountFulfilmentPickup: "Gufatira ku ishami",
@@ -137,7 +147,12 @@ const accountTranslations = {
     accountGoogleAction: "Continuer avec Google",
     accountResetEyebrow: "Reinitialisation",
     accountForgotTitle: "Mot de passe oublie ?",
-    accountResetAction: "Envoyer le lien",
+    accountResetAction: "Envoyer le code",
+    accountResetCodeLabel: "Code de reinitialisation",
+    accountResetCodePlaceholder: "123456",
+    accountResetNewPasswordLabel: "Nouveau mot de passe",
+    accountResetNewPasswordPlaceholder: "Entrez un nouveau mot de passe",
+    accountResetConfirmAction: "Verifier le code et reinitialiser",
     accountNewCustomer: "Nouveau client",
     accountCreateTitle: "Creer un compte",
     accountFullNameLabel: "Nom complet",
@@ -175,9 +190,14 @@ const accountTranslations = {
     accountReviewCommentPlaceholder: "Dites a Simba comment le retrait s'est passe.",
     accountReviewSubmit: "Envoyer l'avis",
     accountResetEnterEmail: "Entrez d'abord votre adresse email.",
-    accountResetPreparing: "Preparation du lien de reinitialisation...",
-    accountResetPrepared: "Si ce compte existe, un lien de reinitialisation a ete prepare pour la demo.",
-    accountResetDemoSaved: "Reinitialisation demo enregistree localement. En production, un lien securise serait envoye par email.",
+    accountResetPreparing: "Envoi du code de reinitialisation...",
+    accountResetPrepared: "Si ce compte existe, un code de reinitialisation a ete envoye.",
+    accountResetDemoSaved: "Code de demo enregistre localement. En production, il serait envoye par email de maniere securisee.",
+    accountResetCodeEnter: "Entrez le code de reinitialisation recu par email.",
+    accountResetCodeInvalid: "Entrez un code de reinitialisation valide a 6 chiffres.",
+    accountResetPasswordUpdated: "Votre mot de passe a ete mis a jour. Vous pouvez vous connecter maintenant.",
+    accountResetPasswordUpdating: "Verification du code et mise a jour du mot de passe...",
+    accountResetPasswordFailed: "Impossible de reinitialiser votre mot de passe pour le moment.",
     accountReviewChooseRating: "Choisissez une note avant d'envoyer.",
     accountReviewSaved: "Merci. Votre avis sur la branche a ete enregistre.",
     accountFulfilmentPickup: "Retrait",
@@ -232,7 +252,12 @@ const accountTranslations = {
     accountGoogleAction: "Komeza na Google",
     accountResetEyebrow: "Gusubirana uburenganzira",
     accountForgotTitle: "Wibagiwe ijambobanga?",
-    accountResetAction: "Ohereza link",
+    accountResetAction: "Ohereza code",
+    accountResetCodeLabel: "Code yo gusubiramo",
+    accountResetCodePlaceholder: "123456",
+    accountResetNewPasswordLabel: "Ijambobanga rishya",
+    accountResetNewPasswordPlaceholder: "Andika ijambobanga rishya",
+    accountResetConfirmAction: "Emeza code maze usubize ijambobanga",
     accountNewCustomer: "Umukiriya mushya",
     accountCreateTitle: "Kora konti",
     accountFullNameLabel: "Amazina yose",
@@ -270,9 +295,14 @@ const accountTranslations = {
     accountReviewCommentPlaceholder: "Bwira Simba uko pickup yagenze.",
     accountReviewSubmit: "Ohereza isuzuma",
     accountResetEnterEmail: "Banza wandike aderesi ya imeyili.",
-    accountResetPreparing: "Birimo gutegura link yo gusubirana ijambobanga...",
-    accountResetPrepared: "Niba iyo konti ibaho, link yo gusubirana ijambobanga yateguwe kuri demo.",
-    accountResetDemoSaved: "Reset ya demo yabitswe kuri iki gikoresho. Mu buryo nyabwo, email ifite link yizewe ni yo yakoherezwa.",
+    accountResetPreparing: "Birimo koherezwa code yo gusubirana ijambobanga...",
+    accountResetPrepared: "Niba iyo konti ibaho, code yo gusubirana ijambobanga yoherejwe.",
+    accountResetDemoSaved: "Code ya demo yabitswe kuri iki gikoresho. Mu buryo nyabwo, yoherezwa kuri email mu buryo bwizewe.",
+    accountResetCodeEnter: "Andika code woherejwe kuri email.",
+    accountResetCodeInvalid: "Andika code y'igitsina 6 yemewe.",
+    accountResetPasswordUpdated: "Ijambobanga ryawe ryavuguruwe. Ushobora kwinjira ubu.",
+    accountResetPasswordUpdating: "Turimo kwemeza code no kuvugurura ijambobanga...",
+    accountResetPasswordFailed: "Ntibyashobotse gusubiza ijambobanga ubu.",
     accountReviewChooseRating: "Banza uhitemo amanota mbere yo kohereza.",
     accountReviewSaved: "Murakoze. Isuzuma ryanyu ryabitswe.",
     accountFulfilmentPickup: "Pickup",
@@ -359,6 +389,7 @@ function bindAccountControls() {
   const loginForm = document.getElementById("loginForm");
   const registerForm = document.getElementById("registerForm");
   const forgotPasswordForm = document.getElementById("forgotPasswordForm");
+  const resetPasswordConfirmForm = document.getElementById("resetPasswordConfirmForm");
   const logoutButton = document.getElementById("logoutAccount");
   const googleSignInButton = document.getElementById("googleSignInButton");
   const languageSelect = document.getElementById("languageSelect");
@@ -406,7 +437,16 @@ function bindAccountControls() {
     event.preventDefault();
     const formData = new FormData(forgotPasswordForm);
     await requestPasswordReset(String(formData.get("email") || ""));
-    forgotPasswordForm.reset();
+  });
+
+  resetPasswordConfirmForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(resetPasswordConfirmForm);
+    await confirmPasswordReset({
+      email: String(formData.get("email") || ""),
+      code: String(formData.get("code") || ""),
+      newPassword: String(formData.get("newPassword") || ""),
+    });
   });
 
   googleSignInButton?.addEventListener("click", async () => {
@@ -765,6 +805,52 @@ async function requestPasswordReset(email) {
     });
     saveToStorage(ACCOUNT_STORAGE_KEYS.passwordResets, requests);
     message.textContent = t("accountResetDemoSaved");
+  }
+}
+
+async function confirmPasswordReset(payload) {
+  const message = document.getElementById("resetPasswordConfirmMessage");
+  if (!message) return;
+
+  const email = String(payload.email || "").trim();
+  const code = String(payload.code || "").trim();
+  const newPassword = String(payload.newPassword || "");
+
+  if (!email) {
+    message.textContent = t("accountResetEnterEmail");
+    return;
+  }
+
+  if (!/^\d{6}$/.test(code)) {
+    message.textContent = t("accountResetCodeInvalid");
+    return;
+  }
+
+  if (newPassword.length < 6) {
+    message.textContent = t("accountErrorPasswordShort");
+    return;
+  }
+
+  message.textContent = t("accountResetPasswordUpdating");
+
+  try {
+    const response = await fetch(apiUrl("/api/customers/reset-password"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, code, newPassword }),
+    });
+
+    await parseApiResponse(response, t("accountResetPasswordFailed"));
+    message.textContent = t("accountResetPasswordUpdated");
+  } catch (error) {
+    if (shouldShowBackendConfigurationHint(error)) {
+      message.textContent = error.message;
+      return;
+    }
+
+    message.textContent = t("accountLocalUnsupported");
   }
 }
 

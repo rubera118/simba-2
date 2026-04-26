@@ -16,3 +16,7 @@ services:
         sync: false
       - key: SIMBA_GROQ_API_KEY
         sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: SIMBA_EMAIL_FROM
+        sync: false
