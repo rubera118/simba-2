@@ -38,6 +38,9 @@ const accountTranslations = {
     accountNavMarketRep: "Market Rep",
     accountLanguageLabel: "Language",
     accountTheme: "Theme",
+    accountAlertSignedIn: "Signed in successfully.",
+    accountAlertAccountCreated: "Account created successfully.",
+    accountAlertSignedOut: "Logged out successfully.",
     accountWelcomeBack: "Welcome back",
     accountSignInTitle: "Sign in",
     accountEmailLabel: "Email",
@@ -146,6 +149,9 @@ const accountTranslations = {
     accountNavMarketRep: "Market Rep",
     accountLanguageLabel: "Langue",
     accountTheme: "Theme",
+    accountAlertSignedIn: "Connexion reussie.",
+    accountAlertAccountCreated: "Compte cree avec succes.",
+    accountAlertSignedOut: "Deconnexion reussie.",
     accountWelcomeBack: "Bon retour",
     accountSignInTitle: "Se connecter",
     accountEmailLabel: "Email",
@@ -254,6 +260,9 @@ const accountTranslations = {
     accountNavMarketRep: "Market Rep",
     accountLanguageLabel: "Ururimi",
     accountTheme: "Insanganyamatsiko",
+    accountAlertSignedIn: "Kwinjira byagenze neza.",
+    accountAlertAccountCreated: "Konti yakozwe neza.",
+    accountAlertSignedOut: "Gusohoka byagenze neza.",
     accountWelcomeBack: "Murakaza neza",
     accountSignInTitle: "Injira",
     accountEmailLabel: "Imeyili",
@@ -362,6 +371,28 @@ function t(key, variables = {}) {
     (message, [name, value]) => message.replaceAll(`{${name}}`, String(value)),
     template
   );
+}
+
+let accountAlertTimer = null;
+
+function showAccountAlert(message, variant = "success") {
+  const alertElement = document.getElementById("accountAlert");
+  if (!alertElement || !message) return;
+
+  if (accountAlertTimer) {
+    window.clearTimeout(accountAlertTimer);
+  }
+
+  alertElement.textContent = message;
+  alertElement.className = `site-alert site-alert-${variant}`;
+  accountAlertTimer = window.setTimeout(hideAccountAlert, 4500);
+}
+
+function hideAccountAlert() {
+  const alertElement = document.getElementById("accountAlert");
+  if (!alertElement) return;
+  alertElement.textContent = "";
+  alertElement.className = "site-alert hidden";
 }
 
 function applyLanguage() {
@@ -498,6 +529,7 @@ function bindAccountControls() {
       saveToStorage(ACCOUNT_STORAGE_KEYS.profile, accountState.profile);
       message.textContent = "";
       await loadAccountDashboard();
+      showAccountAlert(t("accountAlertSignedIn"));
     } catch (error) {
       if (shouldUseLocalAccountFallback(error)) {
         try {
@@ -508,14 +540,17 @@ function bindAccountControls() {
           saveToStorage(ACCOUNT_STORAGE_KEYS.profile, accountState.profile);
           message.textContent = "";
           await loadAccountDashboard();
+          showAccountAlert(t("accountAlertSignedIn"));
           return;
         } catch (fallbackError) {
           message.textContent = fallbackError.message;
+          showAccountAlert(fallbackError.message, "error");
           return;
         }
       }
 
       message.textContent = error.message;
+      showAccountAlert(error.message, "error");
     }
   });
 
@@ -527,6 +562,7 @@ function bindAccountControls() {
     localStorage.removeItem(ACCOUNT_STORAGE_KEYS.profile);
     document.getElementById("accountDashboard").classList.add("hidden");
     document.getElementById("accountAuthView").classList.remove("hidden");
+    showAccountAlert(t("accountAlertSignedOut"));
   });
 }
 
@@ -552,6 +588,7 @@ async function authenticateCustomer(url, payload, messageId) {
     saveToStorage(ACCOUNT_STORAGE_KEYS.profile, accountState.profile);
     message.textContent = "";
     await loadAccountDashboard();
+    showAccountAlert(getAuthSuccessBanner(url));
   } catch (error) {
     if (shouldUseLocalAccountFallback(error)) {
       try {
@@ -562,15 +599,18 @@ async function authenticateCustomer(url, payload, messageId) {
         saveToStorage(ACCOUNT_STORAGE_KEYS.profile, accountState.profile);
         message.textContent = getLocalModeSuccessMessage(url);
         await loadAccountDashboard();
+        showAccountAlert(getAuthSuccessBanner(url));
         message.textContent = "";
         return;
       } catch (fallbackError) {
         message.textContent = fallbackError.message;
+        showAccountAlert(fallbackError.message, "error");
         return;
       }
     }
 
     message.textContent = error.message;
+    showAccountAlert(error.message, "error");
   }
 }
 
@@ -1150,6 +1190,13 @@ function getLocalModeSuccessMessage(url) {
     return t("accountLocalLoginSuccess");
   }
   return t("accountLocalSignedIn");
+}
+
+function getAuthSuccessBanner(url) {
+  if (url.includes("/register")) {
+    return t("accountAlertAccountCreated");
+  }
+  return t("accountAlertSignedIn");
 }
 
 async function handleLocalAccountAuth(url, payload) {

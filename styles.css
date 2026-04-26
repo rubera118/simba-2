@@ -1799,6 +1799,39 @@ body.dark .skeleton-line::after {
   min-height: 1.5rem;
 }
 
+.site-alert {
+  margin-bottom: 1rem;
+  padding: 0.95rem 1rem;
+  border-radius: 18px;
+  border: 1px solid transparent;
+  font-weight: 700;
+  box-shadow: var(--shadow);
+}
+
+.site-alert-success {
+  color: #0f5132;
+  background: #d1fae5;
+  border-color: #86efac;
+}
+
+.site-alert-error {
+  color: #7f1d1d;
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+body.dark .site-alert-success {
+  color: #d1fae5;
+  background: rgba(22, 101, 52, 0.38);
+  border-color: rgba(74, 222, 128, 0.45);
+}
+
+body.dark .site-alert-error {
+  color: #fecaca;
+  background: rgba(127, 29, 29, 0.38);
+  border-color: rgba(252, 165, 165, 0.4);
+}
+
 .icon-button:hover,
 .cart-button:hover,
 .primary-button:hover,
