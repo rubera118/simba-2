@@ -713,7 +713,8 @@ async function handleCustomerLogin(request, response) {
           <p>If this was not you, please reset your password immediately.</p>
         `
       );
-    } catch {
+    } catch (error) {
+      console.warn("[email] Login alert delivery failed:", error.message);
       // Do not block login if email delivery fails.
     }
   }
@@ -730,6 +731,14 @@ async function handleCustomerForgotPassword(request, response) {
 
   if (!email) {
     sendJson(request, response, 400, { error: "Email is required" });
+    return;
+  }
+
+  if (!canSendEmail()) {
+    console.error("[email] Password reset requested but email delivery is not configured.");
+    sendJson(request, response, 503, {
+      error: "Password reset email service is not available right now. Please try again later.",
+    });
     return;
   }
 
@@ -754,8 +763,12 @@ async function handleCustomerForgotPassword(request, response) {
             <p>This code expires in 15 minutes.</p>
           `
         );
-      } catch {
-        // Keep response generic even if mail fails.
+      } catch (error) {
+        console.error("[email] Password reset delivery failed:", error.message);
+        sendJson(request, response, 502, {
+          error: "We could not deliver the reset code email right now. Please try again later.",
+        });
+        return;
       }
     }
   }
@@ -845,7 +858,8 @@ async function handleCustomerGoogleAuth(request, response) {
           <p>If this was not you, please reset your password immediately.</p>
         `
       );
-    } catch {
+    } catch (error) {
+      console.warn("[email] Google login alert delivery failed:", error.message);
       // Do not block login if email delivery fails.
     }
   }
@@ -973,7 +987,13 @@ function canSendEmail() {
 }
 
 async function sendTransactionalEmail(to, subject, html) {
-  if (!canSendEmail() || typeof fetch !== "function") return false;
+  if (!canSendEmail()) {
+    throw new Error("Email delivery is not configured on the server.");
+  }
+
+  if (typeof fetch !== "function") {
+    throw new Error("Fetch is not available in this Node runtime.");
+  }
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -989,7 +1009,12 @@ async function sendTransactionalEmail(to, subject, html) {
     }),
   });
 
-  return response.ok;
+  if (!response.ok) {
+    const responseText = await response.text();
+    throw new Error(`Resend email request failed (${response.status}): ${responseText || "No response body"}`);
+  }
+
+  return true;
 }
 
 async function requestGroqAssistantResult(query, branch, products, language) {
@@ -1500,6 +1525,11 @@ async function start() {
   const server = http.createServer(requestListener);
   server.listen(PORT, HOST, () => {
     console.log(`Simba Supermarket server running at http://${HOST}:${PORT}`);
+    console.log(
+      `[email] Resend configured: ${canSendEmail() ? "yes" : "no"} (api key: ${RESEND_API_KEY ? "present" : "missing"}, from: ${
+        EMAIL_FROM || "missing"
+      })`
+    );
   });
 }
 

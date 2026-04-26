@@ -798,13 +798,18 @@ async function requestPasswordReset(email) {
       return;
     }
 
-    const requests = loadFromStorage(ACCOUNT_STORAGE_KEYS.passwordResets, []);
-    requests.unshift({
-      email,
-      createdAt: new Date().toISOString(),
-    });
-    saveToStorage(ACCOUNT_STORAGE_KEYS.passwordResets, requests);
-    message.textContent = t("accountResetDemoSaved");
+    if (shouldUseLocalAccountFallback(error)) {
+      const requests = loadFromStorage(ACCOUNT_STORAGE_KEYS.passwordResets, []);
+      requests.unshift({
+        email,
+        createdAt: new Date().toISOString(),
+      });
+      saveToStorage(ACCOUNT_STORAGE_KEYS.passwordResets, requests);
+      message.textContent = t("accountResetDemoSaved");
+      return;
+    }
+
+    message.textContent = error.message || t("accountResetFailed");
   }
 }
 
@@ -850,7 +855,12 @@ async function confirmPasswordReset(payload) {
       return;
     }
 
-    message.textContent = t("accountLocalUnsupported");
+    if (shouldUseLocalAccountFallback(error)) {
+      message.textContent = t("accountLocalUnsupported");
+      return;
+    }
+
+    message.textContent = error.message || t("accountResetPasswordFailed");
   }
 }
 
