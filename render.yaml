@@ -9,11 +9,11 @@ services:
       - key: HOST
         value: 0.0.0.0
       - key: SIMBA_ADMIN_PASSWORD
-        sync: false
+        value: simba-admin-2026
       - key: SIMBA_TOKEN_SECRET
         generateValue: true
       - key: SIMBA_ALLOWED_ORIGINS
-        sync: false
+        value: "https://rubera118.github.io,https://www.thenimbas.com"
       - key: SIMBA_GROQ_API_KEY
         sync: false
       - key: RESEND_API_KEY
