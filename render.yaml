@@ -13,7 +13,7 @@ services:
       - key: SIMBA_TOKEN_SECRET
         generateValue: true
       - key: SIMBA_ALLOWED_ORIGINS
-        value: "https://rubera118.github.io,https://www.thenimbas.com"
+        value: "https://rubera118.github.io,https://simba-supermarket-api.onrender.com"
       - key: SIMBA_GROQ_API_KEY
         sync: false
       - key: RESEND_API_KEY
