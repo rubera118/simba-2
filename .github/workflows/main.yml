@@ -29,7 +29,7 @@ jobs:
 
       - name: Check JavaScript syntax
         run: |
-          for file in server.js script.js product.js checkout.js account.js admin.js branches.js about.js contact.js groq-client.js config.js branches-data.js products-data.js; do
+          for file in server.js script.js product.js checkout.js account.js admin.js branches.js branches-store.js about.js contact.js groq-client.js config.js branches-data.js products-data.js; do
             if [ -f "$file" ]; then
               node --check "$file"
             fi
@@ -51,7 +51,7 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir -p _site
-          cp index.html product.html checkout.html account.html admin.html branches.html about.html contact.html styles.css script.js product.js checkout.js account.js admin.js branches.js about.js contact.js config.js groq-client.js branches-data.js products-data.js products.json _site/
+          cp index.html product.html checkout.html account.html admin.html branches.html branch-store.html about.html contact.html styles.css script.js product.js checkout.js account.js admin.js branches.js branch-store.js about.js contact.js config.js groq-client.js branches-data.js products-data.js products.json _site/
           cp -R assets _site/assets
 
       - name: Upload site artifact
