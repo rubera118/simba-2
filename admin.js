@@ -118,6 +118,8 @@ const adminTranslations = {
     adminNoProducts: "No products match the current search.",
     adminInStockSuffix: "in stock",
     adminSaveProduct: "Save product",
+    adminDeleteProduct: "Delete",
+    adminDeleteConfirm: "Delete this product?",
     adminNoBranches: "No branches created yet.",
     adminActiveStatus: "Active",
     adminHiddenStatus: "Hidden",
@@ -223,6 +225,8 @@ const adminTranslations = {
     adminNoProducts: "Aucun produit ne correspond a la recherche actuelle.",
     adminInStockSuffix: "en stock",
     adminSaveProduct: "Enregistrer le produit",
+    adminDeleteProduct: "Supprimer",
+    adminDeleteConfirm: "Supprimer ce produit?",
     adminNoBranches: "Aucune branche creee pour le moment.",
     adminActiveStatus: "Active",
     adminHiddenStatus: "Masquee",
@@ -328,6 +332,8 @@ const adminTranslations = {
     adminNoProducts: "Nta bicuruzwa bihuye n'ibyo washakishije.",
     adminInStockSuffix: "biri muri stock",
     adminSaveProduct: "Bika igicuruzwa",
+    adminDeleteProduct: "Kuraho",
+    adminDeleteConfirm: "Kuraho igicuruzwa?",
     adminNoBranches: "Nta mashami arakorwa.",
     adminActiveStatus: "Rikora",
     adminHiddenStatus: "Rihishe",
@@ -977,6 +983,7 @@ function renderProducts(products) {
               <span>${t("adminVisibleInStore")}</span>
             </label>
             <button class="primary-button" type="button" data-save-product="${product.id}">${t("adminSaveProduct")}</button>
+            <button class="ghost-button" type="button" data-delete-product="${product.id}">${t("adminDeleteProduct")}</button>
           </div>
         </article>
       `
@@ -995,6 +1002,23 @@ function renderProducts(products) {
       } finally {
         button.disabled = false;
         button.textContent = t("adminSaveProduct");
+      }
+    });
+  });
+
+  container.querySelectorAll("[data-delete-product]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const productId = button.dataset.deleteProduct;
+      if (!confirm(t("adminDeleteConfirm"))) return;
+      button.disabled = true;
+      button.textContent = t("adminSaving");
+      try {
+        const products = adminState.products.filter(p => p.id !== productId);
+        await patchAdmin(apiUrl(`/api/admin/products/${productId}`), { active: false });
+        await loadDashboard();
+      } finally {
+        button.disabled = false;
+        button.textContent = t("adminDeleteProduct");
       }
     });
   });
