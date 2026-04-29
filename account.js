@@ -39,6 +39,7 @@ const accountTranslations = {
     accountLanguageLabel: "Language",
     accountTheme: "Theme",
     accountAlertSignedIn: "Signed in successfully.",
+    accountAlertEmailSimulation: "Demo email notification simulated for this sign-in.",
     accountAlertAccountCreated: "Account created successfully.",
     accountAlertSignedOut: "Logged out successfully.",
     accountWelcomeBack: "Welcome back",
@@ -109,6 +110,7 @@ const accountTranslations = {
     accountFulfilmentDelivery: "Kuzanirwa",
     accountBackendConnected: "Account services are connected to {url}.",
     accountBackendLocalMode: "Account creation and sign-in will use browser storage on this live site until a backend URL is connected in config.js.",
+    accountBackendEmailNote: "In production, login and reset events would trigger a backend email service such as Resend or SendGrid.",
     accountBackendMissing: "The account API backend is not configured for this site. Add your deployed backend URL in config.js so signup and login can work.",
     accountBackendInvalid: "The account service returned an invalid response. Check that the backend is running and reachable from this site.",
     accountErrorEmailRequired: "Email address is required.",
@@ -149,6 +151,7 @@ const accountTranslations = {
     accountLanguageLabel: "Langue",
     accountTheme: "Theme",
     accountAlertSignedIn: "Connexion reussie.",
+    accountAlertEmailSimulation: "Notification email de demonstration simulee pour cette connexion.",
     accountAlertAccountCreated: "Compte cree avec succes.",
     accountAlertSignedOut: "Deconnexion reussie.",
     accountWelcomeBack: "Bon retour",
@@ -219,6 +222,7 @@ const accountTranslations = {
     accountFulfilmentDelivery: "Livraison",
     accountBackendConnected: "Les services de compte sont connectes a {url}.",
     accountBackendLocalMode: "La creation de compte et la connexion utiliseront le stockage du navigateur sur ce site tant qu'aucune URL backend n'est configuree dans config.js.",
+    accountBackendEmailNote: "En production, la connexion et la reinitialisation declencheraient un service email backend comme Resend ou SendGrid.",
     accountBackendMissing: "Le backend du compte n'est pas configure pour ce site. Ajoutez l'URL de votre backend deploye dans config.js afin que l'inscription et la connexion fonctionnent.",
     accountBackendInvalid: "Le service de compte a renvoye une reponse invalide. Verifiez que le backend fonctionne et reste accessible depuis ce site.",
     accountErrorEmailRequired: "L'adresse email est obligatoire.",
@@ -259,6 +263,7 @@ const accountTranslations = {
     accountLanguageLabel: "Ururimi",
     accountTheme: "Insanganyamatsiko",
     accountAlertSignedIn: "Kwinjira byagenze neza.",
+    accountAlertEmailSimulation: "Imeyili ya demo ijyanye no kwinjira yasimulatiwe.",
     accountAlertAccountCreated: "Konti yakozwe neza.",
     accountAlertSignedOut: "Gusohoka byagenze neza.",
     accountWelcomeBack: "Murakaza neza",
@@ -329,6 +334,7 @@ const accountTranslations = {
     accountFulfilmentDelivery: "Delivery",
     accountBackendConnected: "Serivisi za konti zahujwe na {url}.",
     accountBackendLocalMode: "Gukora konti no kwinjira bizakoresha browser storage kuri iyi site kugeza igihe URL ya backend izashyirirwa muri config.js.",
+    accountBackendEmailNote: "Mu buryo nyabwo, kwinjira no gusubirana ijambobanga byakoresha serivisi ya email ya backend nka Resend cyangwa SendGrid.",
     accountBackendMissing: "Backend ya konti ntabwo yashyizwe kuri iyi site. Ongeramo URL ya backend yawe muri config.js kugira ngo kwiyandikisha no kwinjira bikore.",
     accountBackendInvalid: "Serivisi ya konti yagaruye igisubizo kitari cyo. Reba niba backend iri gukora kandi ishobora kugerwaho n'iyi site.",
     accountErrorEmailRequired: "Aderesi ya imeyili irakenewe.",
@@ -1121,11 +1127,11 @@ function getBackendConfigurationMessage() {
   const isGitHubPages = window.location.hostname.endsWith("github.io");
 
   if (baseUrl) {
-    return t("accountBackendConnected", { url: baseUrl });
+    return `${t("accountBackendConnected", { url: baseUrl })} ${t("accountBackendEmailNote")}`;
   }
 
   if (isGitHubPages) {
-    return t("accountBackendLocalMode");
+    return `${t("accountBackendLocalMode")} ${t("accountBackendEmailNote")}`;
   }
 
   return "";
@@ -1237,7 +1243,7 @@ function getAuthSuccessBanner(url) {
   if (url.includes("/register")) {
     return t("accountAlertAccountCreated");
   }
-  return t("accountAlertSignedIn");
+  return `${t("accountAlertSignedIn")} ${t("accountAlertEmailSimulation")}`;
 }
 
 async function handleLocalAccountAuth(url, payload) {

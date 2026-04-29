@@ -1301,6 +1301,10 @@ async function handleAdminPatch(request, response, pathname) {
       return;
     }
 
+    product.name = body.name !== undefined ? String(body.name || product.name) : product.name;
+    product.category = body.category !== undefined ? String(body.category || product.category) : product.category;
+    product.subcategory = body.subcategory !== undefined ? String(body.subcategory || product.subcategory) : product.subcategory;
+    product.image = body.image !== undefined ? String(body.image || product.image) : product.image;
     product.price = nextPrice;
     product.stock = Math.max(0, Math.floor(nextStock));
     if (body.branchStock && typeof body.branchStock === "object") {
@@ -1343,6 +1347,28 @@ async function handleAdminPatch(request, response, pathname) {
 
     await writeBranches(branches);
     sendJson(request, response, 200, { branch });
+    return;
+  }
+
+  sendJson(request, response, 404, { error: "Admin endpoint not found" });
+}
+
+async function handleAdminDelete(request, response, pathname) {
+  if (!requireAdmin(request, response)) return;
+
+  if (pathname.startsWith("/api/admin/products/")) {
+    const productId = pathname.split("/").pop();
+    const products = await readProducts();
+    const productIndex = products.findIndex((entry) => entry.id === productId);
+
+    if (productIndex === -1) {
+      sendJson(request, response, 404, { error: "Product not found" });
+      return;
+    }
+
+    const [product] = products.splice(productIndex, 1);
+    await writeProducts(products);
+    sendJson(request, response, 200, { product, deleted: true });
     return;
   }
 
@@ -1568,6 +1594,11 @@ async function requestListener(request, response) {
 
     if (request.method === "PATCH" && pathname.startsWith("/api/admin/")) {
       await handleAdminPatch(request, response, pathname);
+      return;
+    }
+
+    if (request.method === "DELETE" && pathname.startsWith("/api/admin/")) {
+      await handleAdminDelete(request, response, pathname);
       return;
     }
 

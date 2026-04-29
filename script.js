@@ -790,6 +790,7 @@ const elements = {
   selectedBranchName: document.getElementById("selectedBranchName"),
   selectedBranchAddress: document.getElementById("selectedBranchAddress"),
   branchHighlights: document.getElementById("branchHighlights"),
+  selectedBranchShopLink: document.getElementById("selectedBranchShopLink"),
   heroProductCount: document.getElementById("heroProductCount"),
   heroBranchCount: document.getElementById("heroBranchCount"),
   assistantSearchInput: document.getElementById("assistantSearchInput"),
@@ -1059,6 +1060,9 @@ function renderBranchControls() {
   if (elements.branchSelect) elements.branchSelect.value = selectedBranch.id;
   if (elements.selectedBranchName) elements.selectedBranchName.textContent = selectedBranch.name;
   if (elements.selectedBranchAddress) elements.selectedBranchAddress.textContent = selectedBranch.address;
+  if (elements.selectedBranchShopLink) {
+    elements.selectedBranchShopLink.href = `branch-store.html?branchId=${encodeURIComponent(selectedBranch.id)}`;
+  }
   if (elements.heroProductCount) {
     elements.heroProductCount.textContent = new Intl.NumberFormat("en-RW").format(appState.products.length || window.SIMBA_PRODUCTS?.length || 0);
   }
@@ -1085,7 +1089,7 @@ function renderBranchHighlights() {
           </div>
           <p class="toolbar-note">${branch.address}</p>
           <div class="showcase-footer">
-            <a class="ghost-button" href="branches.html">Details</a>
+            <a class="ghost-button" href="branch-store.html?branchId=${encodeURIComponent(branch.id)}">Details</a>
             <button class="primary-button" type="button" data-branch-highlight="${branch.id}">
               ${branch.id === selectedBranch.id ? "Selected" : "Select"}
             </button>

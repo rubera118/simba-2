@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title data-i18n-document-title="branchStoreTitle">Branch Store | Simba Supermarket</title>
+    <title data-i18n-document-title="branchStorePageTitle">Branch Store | Simba Supermarket</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -16,118 +16,90 @@
   <body data-page="branch-store">
     <div class="site-shell">
       <header class="topbar">
-        <a class="brand" href="index.html" aria-label="Simba Supermarket home">
+        <a class="brand" href="./index.html" aria-label="Simba Supermarket home">
           <img class="brand-logo" src="assets/simba-logo.svg" alt="Simba Supermarket logo" />
           <span>
             <strong>Simba Supermarket</strong>
-            <small data-i18n="branchStoreTagline">Shop from {branchName}</small>
+            <small data-i18n="branchStoreTagline">Branch mini store</small>
           </span>
         </a>
 
         <div class="topbar-actions">
-          <a class="ghost-button" href="branches.html" data-i18n="branchStoreAllBranches">All branches</a>
+          <a class="ghost-button" href="./index.html" data-i18n="branchStoreNavHome">Home</a>
+          <a class="ghost-button" href="./branches.html" data-i18n="branchStoreNavBranches">Branches</a>
+          <a class="ghost-button" href="./checkout.html" data-i18n="branchStoreNavCheckout">Checkout</a>
           <label class="lang-picker">
-            <select id="languageSelect" aria-label="Select language" data-i18n-aria-label="languageLabel">
+            <span class="sr-only" data-i18n="branchStoreLanguageLabel">Language</span>
+            <select id="languageSelect" aria-label="Select language" data-i18n-aria-label="branchStoreLanguageLabel">
               <option value="en">English</option>
               <option value="fr">Francais</option>
               <option value="rw">Kinyarwanda</option>
             </select>
           </label>
-          <button id="themeToggle" class="icon-button" type="button" data-i18n="theme">Theme</button>
-          <button id="cartToggle" class="cart-button" type="button" aria-label="Open shopping cart">
-            <span data-i18n="cart">Cart</span>
-            <strong id="cartCount">0</strong>
-          </button>
+          <button id="themeToggle" class="icon-button" type="button" data-i18n="branchStoreTheme">Theme</button>
         </div>
       </header>
 
-      <main>
-        <section class="hero hero-redesign branch-hero">
-          <div class="hero-copy">
-            <p class="eyebrow" data-i18n="branchStoreEyebrow">Simba branch</p>
-            <h1 id="branchNameTitle">{branchName}</h1>
-            <p id="branchDescription" data-i18n="branchStoreDescription">Your local Simba supermarket for fresh groceries and everyday essentials.</p>
-            
-            <div class="hero-cta">
-              <a class="primary-button" href="#products" data-i18n="branchStoreShopNow">Shop now</a>
-              <a class="ghost-button" href="branches.html" data-i18n="branchStoreChangeBranch">Change branch</a>
-            </div>
+      <main class="branch-store-layout">
+        <section id="branchHero" class="branch-store-hero"></section>
 
-            <div class="branch-info-grid">
-              <article>
-                <strong data-i18n="branchStoreAddress">Address</strong>
-                <span id="branchAddress">{branchAddress}</span>
-              </article>
-              <article>
-                <strong data-i18n="branchStoreHours">Hours</strong>
-                <span id="branchHours">{branchHours}</span>
-              </article>
-              <article>
-                <strong data-i18n="branchStorePhone">Phone</strong>
-                <span id="branchPhone">{branchPhone}</span>
-              </article>
-              <article>
-                <strong data-i18n="branchStoreDelivery">Delivery fee</strong>
-                <span id="branchDeliveryFee">{branchDeliveryFee}</span>
-              </article>
-            </div>
-          </div>
-
-          <div class="hero-showcase">
-            <article class="hero-visual-card">
-              <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=800&q=80" alt="Branch store" />
-            </article>
-            <article class="hero-spotlight spotlight-main">
-              <p class="eyebrow" data-i18n="branchStorePickupTitle">Pickup available</p>
-              <h2 data-i18n="branchStorePickupSubtitle">Order online, pick up in store</h2>
-              <p data-i18n="branchStorePickupText">Skip the queue. We prepare your order for fast in-store pickup.</p>
-            </article>
-          </div>
-        </section>
-
-        <section class="showcase-panel">
+        <section class="showcase-panel branch-store-toolbar">
           <div class="toolbar-header">
             <div>
-              <p class="eyebrow" data-i18n="branchStoreProductsEyebrow">Available now</p>
-              <h2 data-i18n="branchStoreProductsTitle">Products at this branch</h2>
+              <p class="eyebrow" data-i18n="branchStoreSearchEyebrow">Branch search</p>
+              <h2 data-i18n="branchStoreSearchTitle">Ask this branch what you need</h2>
+            </div>
+            <p class="toolbar-note" data-i18n="branchStoreSearchText">
+              Search this branch like a mini store homepage with branch stock already applied.
+            </p>
+          </div>
+
+          <div class="search-band-form">
+            <label class="field search-band-field">
+              <span data-i18n="branchStoreSearchLabel">Conversational search</span>
+              <input
+                id="branchStoreSearchInput"
+                type="search"
+                placeholder="I need something for breakfast"
+                data-i18n-placeholder="branchStoreSearchPlaceholder"
+              />
+            </label>
+            <div class="assistant-actions">
+              <button id="branchStoreSearchButton" class="primary-button" type="button" data-i18n="branchStoreSearchAction">Search</button>
+              <a class="ghost-button" href="./checkout.html" data-i18n="branchStoreCheckoutAction">Checkout</a>
             </div>
           </div>
-          
-          <div class="toolbar-controls">
-            <label class="field">
-              <span data-i18n="searchLabel">Search</span>
-              <input id="branchProductSearch" type="search" placeholder="Search products..." data-i18n-placeholder="searchPlaceholder" />
-            </label>
-            <label class="field">
-              <span data-i18n="categoryLabel">Category</span>
-              <select id="branchCategoryFilter"></select>
-            </label>
+
+          <div class="chip-row">
+            <button class="chip branch-store-prompt" type="button" data-query="fresh milk">Fresh milk</button>
+            <button class="chip branch-store-prompt" type="button" data-query="breakfast">Breakfast</button>
+            <button class="chip branch-store-prompt" type="button" data-query="drinks">Cold drinks</button>
+            <button class="chip branch-store-prompt" type="button" data-query="cleaning">Cleaning</button>
           </div>
         </section>
 
-        <section id="branchProductsGrid" class="catalog-grid"></section>
+        <section class="trust-strip trust-strip-modern">
+          <article>
+            <strong data-i18n="branchStoreInfoLocation">Location</strong>
+            <span id="branchInfoAddress">-</span>
+          </article>
+          <article>
+            <strong data-i18n="branchStoreInfoHours">Working hours</strong>
+            <span id="branchInfoHours">-</span>
+          </article>
+          <article>
+            <strong data-i18n="branchStoreInfoContact">Contact</strong>
+            <span id="branchInfoPhone">-</span>
+          </article>
+        </section>
+
+        <section class="status-row">
+          <p id="branchStoreResultsSummary"></p>
+        </section>
+
+        <section id="branchStoreProducts" class="catalog-grid" aria-live="polite"></section>
       </main>
     </div>
-
-    <aside id="cartDrawer" class="cart-drawer" aria-hidden="true">
-      <div class="cart-header">
-        <div>
-          <p class="eyebrow" data-i18n="cartBadge">Your basket</p>
-          <h2 data-i18n="cartTitle">Shopping cart</h2>
-        </div>
-        <button id="closeCart" class="icon-button" type="button" aria-label="Close cart">Close</button>
-      </div>
-      <div id="cartItems" class="cart-items"></div>
-      <div class="cart-footer">
-        <div class="cart-summary-line">
-          <span data-i18n="subtotal">Subtotal</span>
-          <strong id="cartSubtotal">RWF 0</strong>
-        </div>
-        <a class="primary-button full-width" href="checkout.html" data-i18n="checkout">Proceed to checkout</a>
-      </div>
-    </aside>
-
-    <div id="overlay" class="overlay" hidden></div>
 
     <script src="config.js" defer></script>
     <script src="branches-data.js" defer></script>

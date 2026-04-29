@@ -71,6 +71,21 @@
           </div>
 
           <div id="adminStats" class="admin-stats"></div>
+          <div class="admin-toolbar">
+            <div class="date-filter">
+              <span data-i18n="adminDateRange">Date range</span>
+              <select id="dateRange">
+                <option value="all" data-i18n="adminDateAll">All time</option>
+                <option value="today" data-i18n="adminDateToday">Today</option>
+                <option value="week" data-i18n="adminDateWeek">This week</option>
+                <option value="month" data-i18n="adminDateMonth">This month</option>
+              </select>
+            </div>
+            <div class="export-actions">
+              <button id="exportOrders" class="ghost-button" type="button" data-i18n="adminExportOrders">Export orders</button>
+              <button id="exportProducts" class="ghost-button" type="button" data-i18n="adminExportProducts">Export products</button>
+            </div>
+          </div>
           <section class="admin-section">
             <div class="toolbar-header compact-header">
               <div>

@@ -31,26 +31,32 @@ const translations = {
     pickupOption: "Pick-up",
     deliveryOption: "Delivery",
     fullName: "Full name",
+    fullNamePlaceholder: "Aline Uwimana",
     phoneNumber: "Phone number",
+    phoneNumberPlaceholder: "+250 788 123 456",
     address: "Delivery address",
+    addressPlaceholder: "Kigali, KG 11 Ave",
     notes: "Delivery notes",
+    notesPlaceholder: "Apartment number, landmarks, preferred time",
     paymentEyebrow: "MoMo",
     paymentTitle: "MoMo deposit to confirm your order",
     depositText: "A small non-refundable deposit confirms the order so branch staff can start preparing it.",
     network: "Network",
     momoNumber: "MoMo number",
-    placeOrder: "Place order",
+    momoNumberPlaceholder: "+250 78X XXX XXX",
+    placeOrder: "Confirm order",
+    paymentSimulationNote: "Demo payment simulation: the site will confirm the order after validating the form and deposit details.",
     orderSummary: "Order summary",
     cartTitle: "Shopping cart",
     subtotal: "Subtotal",
     deliveryFee: "Delivery fee",
     total: "Total",
     emptyCart: "Your cart is empty. Please return home and add products first.",
-    checkoutSuccess: "Order placed successfully! Order ID: {orderId}. Show this at the branch to pick up your items.",
+    checkoutSuccess: "Order placed successfully. Your branch has received the request.",
     home: "Continue shopping",
     orderNumber: "Order number",
-    orderPlacedTitle: "Order confirmed!",
-    orderPlacedText: "Your order has been saved. Use the order ID at the branch to collect your items.",
+    orderPlacedTitle: "Order received",
+    orderPlacedText: "Your order has been recorded and sent through the storefront flow.",
     orderCustomer: "Customer",
     orderPayment: "Payment",
     orderDelivery: "Delivery",
@@ -64,7 +70,17 @@ const translations = {
     formError: "Please complete all delivery and payment fields before placing the order.",
     checkoutError: "We could not place the order right now. Please make sure the backend server is running.",
     checkoutProcessing: "Processing order...",
-    checkoutLocalSuccess: "Order saved locally for this device because the backend is unavailable.",
+checkoutLocalSuccess: "Order saved locally for this device because the backend is unavailable.",
+    checkoutPrintReceipt: "Print receipt",
+    checkoutEstimatedTime: "Estimated preparation time",
+    checkoutMinutes: "{count} minutes",
+    checkoutWhatsNext: "What's next?",
+    checkoutNextStep1: "Preparation started",
+    checkoutNextStep1Text: "Our team is preparing your order right now.",
+    checkoutNextStep2: "SMS confirmation",
+    checkoutNextStep2Text: "You will receive an SMS when your order is ready for pickup.",
+    checkoutNextStep3: "Pick up your order",
+    checkoutNextStep3Text: "Visit the pickup counter with your receipt.",
   },
   fr: {
     checkoutPageTitle: "Paiement | Simba Supermarket",
@@ -84,26 +100,32 @@ const translations = {
     pickupOption: "Retrait",
     deliveryOption: "Livraison",
     fullName: "Nom complet",
+    fullNamePlaceholder: "Aline Uwimana",
     phoneNumber: "Numero de telephone",
+    phoneNumberPlaceholder: "+250 788 123 456",
     address: "Adresse de livraison",
+    addressPlaceholder: "Kigali, KG 11 Ave",
     notes: "Notes de livraison",
+    notesPlaceholder: "Appartement, point de repere, heure preferee",
     paymentEyebrow: "MoMo",
     paymentTitle: "Depot MoMo pour confirmer la commande",
     depositText: "Un petit depot non remboursable confirme la commande pour que l'equipe commence la preparation.",
     network: "Reseau",
     momoNumber: "Numero MoMo",
-    placeOrder: "Valider la commande",
+    momoNumberPlaceholder: "+250 78X XXX XXX",
+    placeOrder: "Confirmer la commande",
+    paymentSimulationNote: "Simulation de paiement demo : le site confirme la commande apres validation du formulaire et du depot.",
     orderSummary: "Resume de commande",
     cartTitle: "Panier",
     subtotal: "Sous-total",
     deliveryFee: "Frais de livraison",
     total: "Total",
     emptyCart: "Votre panier est vide. Retournez a l'accueil et ajoutez des produits.",
-    checkoutSuccess: "Commande validee avec succes. Ceci est une simulation MoMo pour la demonstration.",
+    checkoutSuccess: "Commande validee avec succes. La branche a bien recu la demande.",
     home: "Continuer vos achats",
     orderNumber: "Numero de commande",
     orderPlacedTitle: "Commande recue",
-    orderPlacedText: "Nous avons enregistre cette commande sur l'appareil pour une demonstration complete de la boutique.",
+    orderPlacedText: "Votre commande a bien ete enregistree dans le parcours de la boutique.",
     orderCustomer: "Client",
     orderPayment: "Paiement",
     orderDelivery: "Livraison",
@@ -117,7 +139,17 @@ const translations = {
     formError: "Veuillez remplir toutes les informations de livraison et de paiement avant de valider.",
     checkoutError: "Impossible d'envoyer la commande maintenant. Verifiez que le serveur backend fonctionne.",
     checkoutProcessing: "Traitement de la commande...",
-    checkoutLocalSuccess: "La commande a ete enregistree localement sur cet appareil car le backend est indisponible.",
+checkoutLocalSuccess: "La commande a ete enregistree localement sur cet appareil car le backend est indisponible.",
+    checkoutPrintReceipt: "Imprimer le recu",
+    checkoutEstimatedTime: "Temps de preparation estime",
+    checkoutMinutes: "{count} minutes",
+    checkoutWhatsNext: "Et ensuite ?",
+    checkoutNextStep1: "Preparation en cours",
+    checkoutNextStep1Text: "Notre equipe prepare votre commande des maintenant.",
+    checkoutNextStep2: "Confirmation par SMS",
+    checkoutNextStep2Text: "Vous recevrez un SMS quand commande sera prete pour retrait.",
+    checkoutNextStep3: "Retirez votre commande",
+    checkoutNextStep3Text: "Presentez-vous au comptoir de retrait avec votre recu.",
   },
   rw: {
     checkoutPageTitle: "Checkout | Simba Supermarket",
@@ -137,26 +169,32 @@ const translations = {
     pickupOption: "Pickup",
     deliveryOption: "Delivery",
     fullName: "Amazina yose",
+    fullNamePlaceholder: "Aline Uwimana",
     phoneNumber: "Numero ya telefone",
+    phoneNumberPlaceholder: "+250 788 123 456",
     address: "Aderesi yo koherezaho",
+    addressPlaceholder: "Kigali, KG 11 Ave",
     notes: "Ubutumwa bwo kohereza",
+    notesPlaceholder: "Apartment, ibyo umuntu yakwereka, cyangwa igihe wifuza",
     paymentEyebrow: "MoMo",
     paymentTitle: "Kubitsa MoMo kugira ngo wemeze order",
     depositText: "Ubwishyu buto butagaruka bwemeza order kugira ngo abakozi batangire kuyitegura.",
     network: "Umuyoboro",
     momoNumber: "Numero ya MoMo",
-    placeOrder: "Ohereza itumiza",
+    momoNumberPlaceholder: "+250 78X XXX XXX",
+    placeOrder: "Emeza order",
+    paymentSimulationNote: "Igerageza rya payment: site yemeza order nyuma yo gusuzuma form na deposit.",
     orderSummary: "Incamake y'itumiza",
     cartTitle: "Agaseke",
     subtotal: "Igiteranyo mbere",
     deliveryFee: "Amafaranga yo kohereza",
     total: "Igiteranyo",
     emptyCart: "Agaseke karimo ubusa. Subira ahabanza wongere ibicuruzwa.",
-    checkoutSuccess: "Itumiza ryakiriwe neza. Ibi ni ukwigereranya kwa MoMo gusa.",
+    checkoutSuccess: "Itumiza ryakiriwe neza. Ishami ryabonye ubusabe bwawe.",
     home: "Komeza guhaha",
     orderNumber: "Nomero y'itumiza",
     orderPlacedTitle: "Itumiza ryakiriwe",
-    orderPlacedText: "Iri tumiza ryabitswe kuri iki gikoresho kugira ngo demo y'iduka igaragare ikora neza.",
+    orderPlacedText: "Itumiza ryawe ryanditswe neza mu rugendo rw'iduka.",
     orderCustomer: "Umukiriya",
     orderPayment: "Kwishyura",
     orderDelivery: "Kohereza",
@@ -170,7 +208,17 @@ const translations = {
     formError: "Uzuza amakuru yose yo kohereza no kwishyura mbere yo kohereza itumiza.",
     checkoutError: "Ntitwabashije kohereza itumiza ubu. Reba niba server ya backend iri gukora.",
     checkoutProcessing: "Birimo gutunganya order...",
-    checkoutLocalSuccess: "Order yabitswe kuri iki gikoresho kubera ko backend itaboneka.",
+checkoutLocalSuccess: "Order yabitswe kuri iki gikoresho kubera ko backend itaboneka.",
+    checkoutPrintReceipt: "Fungura ikagaragambiro",
+    checkoutEstimatedTime: "Igihe cyitegurushe",
+    checkoutMinutes: "iminuti {count}",
+    checkoutWhatsNext: "Ninde ugerageraho?",
+    checkoutNextStep1: "Birategurwa",
+    checkoutNextStep1Text: "Ikipe iri gutegura order yawe ubu.",
+    checkoutNextStep2: "SMS yo kwemera",
+    checkoutNextStep2Text: "Uzakira SMS iyo order yiteguye gufatwa.",
+    checkoutNextStep3: "Fata order yawe",
+    checkoutNextStep3Text: "Ijya ku compterret kugira ngo ufate order yawe.",
   },
 };
 
@@ -301,6 +349,11 @@ function applyLanguage() {
   document.querySelectorAll("[data-i18n-aria-label]").forEach((node) => {
     const key = node.dataset.i18nAriaLabel;
     if (copy[key]) node.setAttribute("aria-label", copy[key]);
+  });
+
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((node) => {
+    const key = node.dataset.i18nPlaceholder;
+    if (copy[key]) node.setAttribute("placeholder", copy[key]);
   });
 
   const confirmation = document.getElementById("orderConfirmation");
@@ -552,15 +605,106 @@ function renderOrderConfirmation() {
       </div>
       <div class="summary-row">
         <span>${copy.pickupTime}</span>
-        <strong>${state.lastOrder.fulfilment?.pickupTime || document.getElementById("pickupTimeSelect")?.value || ""}</strong>
+<strong>${state.lastOrder.fulfilment?.pickupTime || document.getElementById("pickupTimeSelect")?.value || ""}</strong>
       </div>
       <div class="summary-row total-row">
         <span>${copy.total}</span>
         <strong>${formatCurrency(state.lastOrder.total)}</strong>
       </div>
     </div>
-    <a class="primary-button" href="index.html">${copy.home}</a>
+    <div class="confirmation-next-steps">
+      <h3>${copy.checkoutWhatsNext}</h3>
+      <div class="next-step">
+        <span class="step-icon">1</span>
+        <div>
+          <strong>${copy.checkoutNextStep1}</strong>
+          <p>${copy.checkoutNextStep1Text}</p>
+        </div>
+      </div>
+      <div class="next-step">
+        <span class="step-icon">2</span>
+        <div>
+          <strong>${copy.checkoutNextStep2}</strong>
+          <p>${copy.checkoutNextStep2Text}</p>
+        </div>
+      </div>
+      <div class="next-step">
+        <span class="step-icon">3</span>
+        <div>
+          <strong>${copy.checkoutNextStep3}</strong>
+          <p>${copy.checkoutNextStep3Text}</p>
+        </div>
+      </div>
+    </div>
+    <div class="confirmation-actions">
+      <a class="primary-button" href="index.html">${copy.home}</a>
+      <button class="ghost-button" onclick="printReceipt()">${copy.checkoutPrintReceipt}</button>
+    </div>
   `;
+}
+
+function printReceipt() {
+  const printWindow = window.open("", "_blank");
+  if (!printWindow) return;
+
+  const order = state.lastOrder;
+  const copy = translations[state.language] || translations.en;
+
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>${copy.orderNumber}: ${order.id}</title>
+      <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 400px; margin: 0 auto; }
+        h1 { font-size: 18px; margin-bottom: 5px; }
+        .header { border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+        .order-id { font-size: 24px; font-weight: bold; }
+        .item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .total { font-weight: bold; font-size: 18px; margin-top: 20px; }
+        .footer { margin-top: 30px; font-size: 12px; color: #666; }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <h1>Simba Supermarket</h1>
+        <p>${copy.orderNumber}: <span class="order-id">${order.id}</span></p>
+      </div>
+      <div class="items">
+        ${order.items?.map(item => `
+          <div class="item">
+            <span>${item.name} x${item.quantity}</span>
+            <span>${formatCurrency(item.lineTotal || item.price * item.quantity)}</span>
+          </div>
+        `).join("") || ""}
+      </div>
+      <div class="item">
+        <span>${copy.subtotal}</span>
+        <span>${formatCurrency(order.subtotal)}</span>
+      </div>
+      <div class="item">
+        <span>${copy.deliveryFee}</span>
+        <span>${formatCurrency(order.deliveryFee)}</span>
+      </div>
+      <div class="item">
+        <span>${copy.depositLabel}</span>
+        <span>${formatCurrency(order.payment?.deposit || state.deposit)}</span>
+      </div>
+      <div class="total">
+        <span>${copy.total}</span>
+        <span>${formatCurrency(order.total)}</span>
+      </div>
+      <div class="footer">
+        <p><strong>${copy.branchSummary}:</strong> ${order.branch?.name || ""}</p>
+        <p><strong>${copy.pickupTime}:</strong> ${order.fulfilment?.pickupTime || ""}</p>
+        <p><strong>${copy.orderCustomer}:</strong> ${order.customer?.name || ""}</p>
+        <p><strong>${copy.orderPayment}:</strong> ${order.payment?.network || ""}</p>
+      </div>
+    </body>
+    </html>
+  `);
+  printWindow.document.close();
+  printWindow.print();
 }
 
 function hydrateCustomerDetails() {
@@ -622,14 +766,25 @@ function applyFulfilmentMode() {
 
   if (addressField) {
     addressField.required = mode === "delivery";
-    addressField.placeholder = mode === "pickup" ? "Optional pickup note or meeting point" : "Kigali, KG 11 Ave";
+    addressField.placeholder =
+      mode === "pickup"
+        ? {
+            en: "Optional pickup note or meeting point",
+            fr: "Note de retrait ou point de rencontre facultatif",
+            rw: "Ubutumwa bwa pickup cyangwa aho muhura niba bikenewe",
+          }[state.language] || "Optional pickup note or meeting point"
+        : copy.addressPlaceholder;
   }
 
   if (notesField) {
     notesField.placeholder =
       mode === "pickup"
-        ? "Pickup contact, vehicle info, or any note for the branch team"
-        : "Apartment number, landmarks, preferred time";
+        ? {
+            en: "Pickup contact, vehicle info, or any note for the branch team",
+            fr: "Contact de retrait, infos du vehicule, ou note pour la branche",
+            rw: "Uburyo bwo kuboneka kuri pickup, amakuru y'imodoka, cyangwa ubutumwa bwo ku ishami",
+          }[state.language] || "Pickup contact, vehicle info, or any note for the branch team"
+        : copy.notesPlaceholder;
   }
 }
 

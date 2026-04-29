@@ -28,7 +28,6 @@ const branchTranslations = {
     branchesSelectedEyebrow: "Selected branch",
     branchesOpenMap: "Open map",
     branchesShopBranch: "Shop this branch",
-    branchesShopThisBranch: "Shop this branch",
     branchesAddress: "Address",
     branchesHours: "Hours",
     branchesDeliveryFee: "Delivery fee",
@@ -66,7 +65,6 @@ const branchTranslations = {
     branchesSelectedEyebrow: "Branche choisie",
     branchesOpenMap: "Ouvrir la carte",
     branchesShopBranch: "Acheter dans cette branche",
-    branchesShopThisBranch: "Acheter dans cette branche",
     branchesAddress: "Adresse",
     branchesHours: "Horaires",
     branchesDeliveryFee: "Frais de livraison",
@@ -104,7 +102,6 @@ const branchTranslations = {
     branchesSelectedEyebrow: "Ishami ryatoranyijwe",
     branchesOpenMap: "Fungura ikarita",
     branchesShopBranch: "Gahahira kuri iri shami",
-    branchesShopThisBranch: "Gahahira kuri iri shami",
     branchesAddress: "Aderesi",
     branchesHours: "Amasaha",
     branchesDeliveryFee: "Amafaranga yo kohereza",
@@ -217,7 +214,7 @@ function renderBranchesPage() {
       </div>
       <div class="topbar-actions">
         <a class="ghost-button" href="${currentBranch.mapUrl}" target="_blank" rel="noreferrer">${t("branchesOpenMap")}</a>
-        <a class="primary-button" href="./branch-store.html?branch=${currentBranch.id}">${t("branchesShopBranch")}</a>
+        <a class="primary-button" href="./branch-store.html?branchId=${encodeURIComponent(currentBranch.id)}">${t("branchesShopBranch")}</a>
       </div>
     </div>
     <div class="admin-order-grid">
@@ -293,7 +290,7 @@ function renderBranchesPage() {
             <button class="primary-button" type="button" data-branch-select="${branch.id}">
               ${isSelected ? t("branchesSelectedAction") : t("branchesSelectAction")}
             </button>
-            <a class="ghost-button" href="./index.html#catalog" data-branch-shop="${branch.id}">${t("branchesSelectShopAction")}</a>
+            <a class="ghost-button" href="./branch-store.html?branchId=${encodeURIComponent(branch.id)}" data-branch-shop="${branch.id}">${t("branchesSelectShopAction")}</a>
           </div>
         </article>
       `;

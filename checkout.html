@@ -83,22 +83,22 @@
 
             <label class="field">
               <span data-i18n="fullName">Full name</span>
-              <input type="text" name="name" placeholder="Aline Uwimana" required />
+              <input type="text" name="name" placeholder="Aline Uwimana" data-i18n-placeholder="fullNamePlaceholder" required />
             </label>
 
             <label class="field">
               <span data-i18n="phoneNumber">Phone number</span>
-              <input type="tel" name="phone" placeholder="+250 788 123 456" required />
+              <input type="tel" name="phone" placeholder="+250 788 123 456" data-i18n-placeholder="phoneNumberPlaceholder" required />
             </label>
 
             <label class="field">
               <span data-i18n="address">Delivery address</span>
-              <input type="text" name="address" placeholder="Kigali, KG 11 Ave" required />
+              <input type="text" name="address" placeholder="Kigali, KG 11 Ave" data-i18n-placeholder="addressPlaceholder" required />
             </label>
 
             <label class="field">
               <span data-i18n="notes">Delivery notes</span>
-              <textarea name="notes" rows="4" placeholder="Apartment number, landmarks, preferred time"></textarea>
+              <textarea name="notes" rows="4" placeholder="Apartment number, landmarks, preferred time" data-i18n-placeholder="notesPlaceholder"></textarea>
             </label>
 
             <div class="payment-panel">
@@ -120,8 +120,9 @@
 
               <label class="field">
                 <span data-i18n="momoNumber">MoMo number</span>
-                <input type="tel" name="momoNumber" placeholder="+250 78X XXX XXX" required />
+                <input type="tel" name="momoNumber" placeholder="+250 78X XXX XXX" data-i18n-placeholder="momoNumberPlaceholder" required />
               </label>
+              <p class="toolbar-note" data-i18n="paymentSimulationNote">Demo payment simulation: the site will confirm the order after validating the form and deposit details.</p>
             </div>
 
             <button class="primary-button full-width" type="submit" data-i18n="placeOrder">Place order</button>

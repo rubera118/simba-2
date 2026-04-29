@@ -3,42 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title data-i18n-document-title="homePageTitle">Simba Super Market - Fresh Groceries Delivered to Your Door | Simba Super Market</title>
-    <meta name="description" content="Simba Super Market - Kigali's favourite supermarket with fresh groceries, household essentials, and fast delivery." />
+    <title data-i18n-document-title="homePageTitle">Simba Supermarket | Rwanda's Modern Online Supermarket</title>
+    <meta
+      name="description"
+      content="A modern reimagining of Simba Supermarket with grocery aisles, fresh picks, easy checkout, and fast online shopping in Rwanda."
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
     <script src="preferences.js"></script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body data-page="home">
     <div class="announcement-bar">
       <div class="announcement-inner">
-        <p data-i18n="announceText">Free delivery on orders over RWF 50,000 - Kigali only</p>
+        <p data-i18n="announceText">Modern shopping for Kigali families, offices, and everyday essentials.</p>
+        <span class="announce-pill" data-i18n="announcePill">Same-day delivery available</span>
       </div>
     </div>
 
     <div class="site-shell">
       <header class="topbar">
-        <a class="brand" href="index.html" aria-label="Simba Super Market home">
-          <img class="brand-logo" src="assets/simba-logo.svg" alt="Simba Super Market logo" />
+        <a class="brand" href="index.html" aria-label="Simba Supermarket home">
+          <img class="brand-logo" src="assets/simba-logo.svg" alt="Simba Supermarket logo" />
           <span>
-            <strong>Simba</strong>
-            <small>Super Market</small>
+            <strong>Simba Supermarket</strong>
+            <small data-i18n="brandTagline">Fresh groceries, home essentials, and fast shopping in Rwanda</small>
           </span>
         </a>
-
         <button id="navToggle" class="icon-button nav-toggle" type="button" aria-expanded="false" aria-controls="topbarPanel">
           <span data-i18n="menu">Menu</span>
         </button>
 
         <div id="topbarPanel" class="topbar-panel">
           <nav class="nav-links">
-            <a href="index.html" data-i18n="navHome" class="active">Home</a>
-            <a href="index.html#shop" data-i18n="navShop">Shop</a>
-            <a href="branches.html" data-i18n="navBranches">Branches</a>
-            <a href="blog.html" data-i18n="navBlog">Blog</a>
-            <a href="contact.html" data-i18n="navContact">Contact</a>
+            <a href="./index.html#aisles" data-i18n="navAisles">Aisles</a>
+            <a href="./index.html#featured" data-i18n="navFeatured">Featured</a>
+            <a href="./index.html#catalog" data-i18n="navShop">Products</a>
+            <a href="./branches.html" data-i18n="navBranches">Branches</a>
+            <a href="./about.html" data-i18n="navAbout">About</a>
+            <a href="./contact.html" data-i18n="navContact">Contact</a>
+            <a href="./checkout.html" data-i18n="navCheckout">Checkout</a>
+            <a href="./account.html" data-i18n="navAccount">Account</a>
           </nav>
 
           <div class="topbar-actions">
@@ -46,14 +55,20 @@
               <span data-i18n="branchLabel">Branch</span>
               <select id="branchSelect" aria-label="Select branch"></select>
             </label>
+
             <label class="lang-picker">
-              <select id="languageSelect" aria-label="Select language">
-                <option value="en">en</option>
-                <option value="fr">fr</option>
-                <option value="rw">rw</option>
+              <span class="sr-only" data-i18n="languageLabel">Language</span>
+              <select id="languageSelect" aria-label="Select language" data-i18n-aria-label="languageLabel">
+                <option value="en">English</option>
+                <option value="fr">Francais</option>
+                <option value="rw">Kinyarwanda</option>
               </select>
             </label>
-            <a href="account.html" class="icon-button" data-i18n="navAccount">Sign In</a>
+
+            <button id="themeToggle" class="icon-button" type="button" aria-label="Toggle dark mode">
+              <span class="theme-label" data-i18n="theme">Theme</span>
+            </button>
+
             <button id="cartToggle" class="cart-button" type="button" aria-label="Open shopping cart">
               <span data-i18n="cart">Cart</span>
               <strong id="cartCount">0</strong>
@@ -63,144 +78,392 @@
       </header>
 
       <main>
-        <section class="hero hero-banner">
-          <img src="https://placehold.co/1400x500/fc7d00/white?text=Simba+Super+Market" alt="Simba Super Market" />
-          <div class="hero-banner-content">
-            <h1>Kigali's Favourite Supermarket</h1>
-            <p data-i18n="heroText">Fresh Groceries Delivered to Your Door</p>
-            <p>Shop thousands of products - food, beverages, household essentials and more, delivered fast across Kigali.</p>
-            <div class="hero-cta">
-              <a class="primary-button" href="index.html#shop" data-i18n="shopNow">Shop Now</a>
-              <a class="ghost-button" href="index.html#featured" data-i18n="viewDemo">View Demo</a>
+        <section class="hero hero-storefront">
+          <article class="hero-banner-card">
+            <img
+              class="hero-banner-image"
+              src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1600&q=80"
+              alt="Fresh groceries arranged inside a modern supermarket"
+            />
+            <div class="hero-banner-overlay"></div>
+            <div class="hero-banner-content">
+              <div class="hero-copy">
+                <p class="eyebrow hero-badge" data-i18n="heroBadge">Simba Supermarket online</p>
+                <h1 data-i18n="heroTitle">Everything your home needs, from fresh produce to trusted daily essentials</h1>
+                <p data-i18n="heroText">
+                  Shop food products, cleaning supplies, drinks, beauty, kitchenware, and household favorites with a cleaner
+                  storefront built for everyday customers in Rwanda.
+                </p>
+
+                <div class="hero-cta">
+                  <a class="primary-button" href="#catalog" data-i18n="shopNow">Start shopping</a>
+                  <a class="ghost-button hero-ghost" href="#aisles" data-i18n="exploreAisles">Explore aisles</a>
+                </div>
+
+                <div class="search-suggestions hero-chip-row">
+                  <span data-i18n="popularSearches">Popular:</span>
+                  <button class="chip quick-search" data-search="rice" type="button">Rice</button>
+                  <button class="chip quick-search" data-search="juice" type="button">Juice</button>
+                  <button class="chip quick-search" data-search="detergent" type="button">Detergent</button>
+                  <button class="chip quick-search" data-search="milk" type="button">Milk</button>
+                </div>
+              </div>
+
+              <div class="hero-side-stack">
+                <article class="hero-side-card branch-hero-card">
+                  <p class="eyebrow" data-i18n="spotlightToday">Selected branch</p>
+                  <h2 id="selectedBranchName" data-i18n="spotlightTitle">Union Trade Centre</h2>
+                  <p id="selectedBranchAddress" data-i18n="spotlightText">3336+MHV Union Trade Centre, 1 KN 4 Ave, Kigali</p>
+                  <div class="hero-spotlight-actions">
+                    <a id="selectedBranchShopLink" class="primary-button" href="./index.html#catalog" data-i18n="shopThisBranch">Shop this branch</a>
+                    <a class="ghost-button hero-ghost" href="./branches.html" data-i18n="viewAllBranches">View all branches</a>
+                  </div>
+                </article>
+
+                <div class="hero-photo-grid">
+                  <article class="hero-photo-mini">
+                    <img
+                      src="https://images.unsplash.com/photo-1573246123716-6b1782bfc499?auto=format&fit=crop&w=900&q=80"
+                      alt="Fresh produce and fruit display"
+                    />
+                    <div class="hero-photo-copy">
+                      <span data-i18n="featureFresh">Clearer browsing</span>
+                      <strong data-i18n="featureFreshValue">Search by aisle, compare offers, and shop faster on any screen</strong>
+                    </div>
+                  </article>
+                  <article class="hero-photo-mini">
+                    <img
+                      src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=900&q=80"
+                      alt="Packaged groceries and daily essentials"
+                    />
+                    <div class="hero-photo-copy">
+                      <span data-i18n="featureTrusted">Better trust signals</span>
+                      <strong data-i18n="featureTrustedValue">Pickup, delivery, payment, and support stay visible while you shop</strong>
+                    </div>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <div class="hero-metrics hero-metrics-bar">
+            <article>
+              <strong>10</strong>
+              <span data-i18n="metricCategories">main shopping aisles</span>
+            </article>
+            <article>
+              <strong id="heroProductCount">789</strong>
+              <span data-i18n="metricProducts">real Simba products live</span>
+            </article>
+            <article>
+              <strong id="heroBranchCount">9</strong>
+              <span data-i18n="metricPayment">branches available</span>
+            </article>
+            <article>
+              <strong data-i18n="featureFast">Fast delivery</strong>
+              <span data-i18n="featureFastValue">Choose a branch first for better stock and delivery details</span>
+            </article>
+          </div>
+        </section>
+
+        <section class="showcase-panel search-band-panel">
+          <div class="search-band-header">
+            <p class="eyebrow" data-i18n="assistantBadge">Smart search</p>
+            <h2 data-i18n="assistantTitle">Ask Simba what you need</h2>
+            <p data-i18n="assistantNote">Try phrases like "I need breakfast", "show fresh milk", or "cheap cleaning products".</p>
+          </div>
+          <div class="search-band-form">
+            <label class="field search-band-field">
+              <span data-i18n="assistantInputLabel">Your request</span>
+              <input id="assistantSearchInput" type="search" placeholder="I need something for breakfast" data-i18n-placeholder="assistantPlaceholder" />
+            </label>
+            <div class="assistant-actions">
+              <button id="assistantSearchButton" class="primary-button" type="button" data-i18n="assistantAction">Ask Simba</button>
+              <button id="assistantResetButton" class="ghost-button" type="button" data-i18n="assistantReset">Reset</button>
             </div>
           </div>
+          <div class="chip-row assistant-prompt-row" aria-label="Suggested prompts">
+            <button class="chip assistant-prompt" type="button" data-assistant-prompt="Do you have fresh milk?">Do you have fresh milk?</button>
+            <button class="chip assistant-prompt" type="button" data-assistant-prompt="I need something for breakfast">I need something for breakfast</button>
+            <button class="chip assistant-prompt" type="button" data-assistant-prompt="Show cheap cleaning products">Show cheap cleaning products</button>
+          </div>
+          <div id="assistantStatus" class="assistant-status hidden" aria-live="polite"></div>
+          <div id="assistantResponse" class="assistant-response hidden" aria-live="polite"></div>
         </section>
 
-        <section class="search-section">
-          <h2 class="sr-only">Search Products</h2>
-          <div class="search-bar">
-            <input id="quickSearch" type="search" placeholder="Search" data-i18n-placeholder="searchPlaceholder" />
+        <section class="trust-strip trust-strip-modern">
+          <article>
+            <strong data-i18n="trustOneTitle">Shop by category</strong>
+            <span data-i18n="trustOneText">Main aisles inspired by the real Simba store structure</span>
+          </article>
+          <article>
+            <strong data-i18n="trustTwoTitle">Branch-aware shopping</strong>
+            <span data-i18n="trustTwoText">Selected branch stock, pickup, and delivery context carried into cart and checkout</span>
+          </article>
+          <article>
+            <strong data-i18n="trustThreeTitle">Everyday convenience</strong>
+            <span data-i18n="trustThreeText">Mobile-friendly browsing, account tools, and quick checkout with Mobile Money</span>
+          </article>
+        </section>
+
+        <section id="aisles" class="showcase-panel storefront-section">
+          <div class="toolbar-header">
+            <div>
+              <p class="eyebrow" data-i18n="aislesBadge">Main aisles</p>
+              <h2 data-i18n="aislesTitle">Browse the supermarket the modern way</h2>
+            </div>
+            <p class="toolbar-note" data-i18n="aislesText">
+              Instead of long old-style category lists, these quick tiles surface the main departments shoppers care about first.
+            </p>
           </div>
-          <div class="search-suggestions">
-            <button class="chip" type="button">Fresh milk</button>
-            <button class="chip" type="button">Where are your branches?</button>
-            <button class="chip" type="button">Cold drinks</button>
-            <button class="chip" type="button">Breakfast items</button>
-            <button class="chip" type="button">Vegetables</button>
+          <div id="categoryShowcase" class="category-showcase-grid"></div>
+        </section>
+
+        <section class="marketplace-stage storefront-discovery">
+          <aside class="departments-panel">
+            <div class="toolbar-header compact-header">
+              <div>
+                <p class="eyebrow" data-i18n="departmentsBadge">Departments</p>
+                <h2 data-i18n="departmentsTitle">Shop by department</h2>
+              </div>
+              <p class="toolbar-note" data-i18n="departmentsText">
+                Quick aisle shortcuts inspired by large marketplace navigation.
+              </p>
+            </div>
+            <label class="field department-search-field">
+              <span data-i18n="departmentSearchLabel">Search inside departments</span>
+              <input
+                id="departmentSearchInput"
+                type="search"
+                placeholder="Search rice, drinks, baby..."
+                data-i18n-placeholder="departmentSearchPlaceholder"
+              />
+            </label>
+            <nav id="departmentMenu" class="department-menu" aria-label="Departments"></nav>
+          </aside>
+
+          <div class="promo-stage">
+            <section class="promo-carousel-panel">
+              <div class="promo-carousel-header">
+                <div>
+                  <p class="eyebrow" data-i18n="promoBadge">Promo highlights</p>
+                  <h2 data-i18n="promoTitle">Weekly deals, bundles, and fast-moving offers</h2>
+                </div>
+                <div class="carousel-controls">
+                  <button id="promoPrev" class="icon-button" type="button" aria-label="Previous banner" data-i18n-aria-label="promoPrevAria" data-i18n="promoPrevLabel">Prev</button>
+                  <button id="promoNext" class="icon-button" type="button" aria-label="Next banner" data-i18n-aria-label="promoNextAria" data-i18n="promoNextLabel">Next</button>
+                </div>
+              </div>
+              <div id="promoCarousel" class="promo-carousel" aria-live="polite"></div>
+            </section>
+
+            <div id="promoTiles" class="promo-tiles"></div>
           </div>
         </section>
 
-        <section id="categories" class="showcase-panel">
-          <div class="section-header">
-            <h2 data-i18n="categoriesTitle">Shop by Category</h2>
-            <p data-i18n="categoriesSubtitle">Find exactly what you need</p>
-            <a href="index.html#shop" class="section-link">View All</a>
+        <section id="featured" class="showcase-panel alt-panel">
+          <div class="toolbar-header">
+            <div>
+              <p class="eyebrow" data-i18n="featuredBadge">Featured shelves</p>
+              <h2 data-i18n="featuredTitle">Popular picks and weekly highlights</h2>
+            </div>
+            <p class="toolbar-note" data-i18n="featuredText">
+              This section gives the homepage energy, helps discovery, and makes the store feel more alive than a plain list.
+            </p>
           </div>
-          <div id="categoriesGrid" class="categories-grid"></div>
+          <div id="featuredShelf" class="featured-shelf"></div>
         </section>
 
         <section class="showcase-panel">
-          <div class="section-header">
-            <h2 data-i18n="branchesTitle">Our Branches</h2>
-            <p data-i18n="branchesSubtitle">Pick up your order at any of our 9 Kigali locations</p>
-            <a href="branches.html" class="section-link">View All</a>
+          <div class="toolbar-header">
+            <div>
+              <p class="eyebrow" data-i18n="branchesShowcaseBadge">Branches</p>
+              <h2 data-i18n="branchesShowcaseTitle">Shop from the branch that works best for you</h2>
+            </div>
+            <p class="toolbar-note" data-i18n="branchesShowcaseText">
+              Branch selection keeps the shopping experience more practical by matching stock and delivery context to your preferred location.
+            </p>
           </div>
-          <div id="branchesGrid" class="branches-grid"></div>
+          <div id="branchHighlights" class="branch-highlight-grid"></div>
         </section>
 
-        <section id="featured" class="showcase-panel">
-          <div class="section-header">
-            <h2 data-i18n="featuredTitle">Featured Products</h2>
-            <p data-i18n="featuredSubtitle">Hand-picked favourites just for you</p>
-            <a href="index.html#shop?featured=true" class="section-link">View All</a>
+        <section class="showcase-panel row-panel">
+          <div class="toolbar-header">
+            <div>
+              <p class="eyebrow" data-i18n="shoppingRowsBadge">Shopping rows</p>
+              <h2 data-i18n="shoppingRowsTitle">Curated shelves that feel more like a real marketplace</h2>
+            </div>
+            <p class="toolbar-note" data-i18n="shoppingRowsText">
+              These rows help shoppers discover products by intent instead of only by category.
+            </p>
           </div>
-          <div id="featuredGrid" class="products-grid"></div>
+          <div id="shoppingRows" class="shopping-rows"></div>
         </section>
 
-        <section class="showcase-panel">
-          <div class="section-header">
-            <h2 data-i18n="topSellersTitle">Top Sellers</h2>
-            <p data-i18n="topSellersSubtitle">Our most popular products this month</p>
-            <a href="index.html#shop?sort=salesCount" class="section-link">View All</a>
+        <section class="showcase-panel electronics-panel">
+          <div class="toolbar-header">
+            <div>
+              <p class="eyebrow" data-i18n="electronicsBadge">Smart home picks</p>
+              <h2 data-i18n="electronicsTitle">Electronics that deserve more visibility</h2>
+            </div>
+            <p class="toolbar-note" data-i18n="electronicsText">
+              We now give electronics its own spotlight so high-value items do not disappear inside a long supermarket catalog.
+            </p>
           </div>
-          <div id="topSellersGrid" class="products-grid"></div>
+          <div id="electronicsSpotlight" class="electronics-spotlight"></div>
         </section>
 
-        <section class="showcase-panel">
-          <div class="section-header">
-            <h2 data-i18n="recommendedTitle">Recommended for You</h2>
-            <p data-i18n="recommendedSubtitle">Based on your shopping history</p>
-            <a href="index.html#shop" class="section-link">View All</a>
+        <section class="toolbar elevated-toolbar" id="catalog">
+          <div class="toolbar-header">
+            <div>
+              <p class="eyebrow" data-i18n="catalogBadge">Digital supermarket</p>
+              <h2 data-i18n="catalogTitle">Search, filter, and add to cart quickly</h2>
+            </div>
+            <p class="toolbar-note" data-i18n="catalogNote">
+              The catalog below keeps the power of the old store, but packages it in a cleaner and more responsive layout.
+            </p>
           </div>
-          <div id="recommendedGrid" class="products-grid"></div>
+
+          <div class="toolbar-controls refine-controls">
+            <label class="field">
+              <span data-i18n="searchLabel">Manual refine</span>
+              <input id="searchInput" type="search" placeholder="Search milk, bread, rice..." data-i18n-placeholder="searchPlaceholder" />
+            </label>
+
+            <label class="field">
+              <span data-i18n="categoryLabel">Category</span>
+              <select id="categoryFilter"></select>
+            </label>
+
+            <label class="field">
+              <span data-i18n="priceLabel">Max price</span>
+              <input id="priceFilter" type="range" min="1000" max="120000" step="1000" value="120000" />
+              <strong id="priceValue">RWF 120,000</strong>
+            </label>
+          </div>
         </section>
+
+        <section class="status-row">
+          <p id="resultsSummary"></p>
+        </section>
+
+        <section id="skeletonState" class="skeleton-grid" aria-hidden="true">
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+          <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>
+        </section>
+
+        <section id="loadingState" class="state-panel loading-panel hidden">
+          <div class="loader"></div>
+          <p data-i18n="loading">Loading products...</p>
+        </section>
+
+        <section id="emptyState" class="state-panel hidden">
+          <h3 data-i18n="emptyTitle">No products found</h3>
+          <p data-i18n="emptyText">Try a different search term, category, or price range.</p>
+        </section>
+
+        <section id="productsByCategory" class="catalog-grid" aria-live="polite"></section>
       </main>
     </div>
 
     <footer class="site-footer">
       <div class="footer-inner">
         <div class="footer-grid">
-          <div class="footer-brand">
-            <img src="assets/simba-logo.svg" alt="Simba Super Market logo" />
-            <div class="footer-brand-info">
-              <strong>Simba Super Market</strong>
-              <p>Kigali, Rwanda</p>
-              <p>Kigali's favourite supermarket - fresh, fast, and reliable.</p>
-              <p><a href="tel:+250788307200">+250 788307200</a> <a href="mailto:info@simbasupermarket.rw">info@simbasupermarket.rw</a></p>
-              <p><a href="https://maps.app.goo.gl/sQsE5ERQ48yB1ih4A">Kigali, Rwanda</a></p>
+          <div>
+            <div class="footer-brand">
+              <img class="footer-logo" src="assets/simba-logo.svg" alt="Simba Supermarket logo" />
+              <span class="footer-brand-name">Simba Supermarket</span>
+            </div>
+            <p class="footer-tagline">
+              Rwanda's modern online supermarket for groceries, home essentials, and branch-based pickup shopping.
+            </p>
+            <div class="payment-badges">
+              <span class="payment-badge">MTN MoMo</span>
+              <span class="payment-badge">Airtel Money</span>
+              <span class="payment-badge">Visa</span>
+              <span class="payment-badge">Mastercard</span>
             </div>
           </div>
 
           <div>
-            <p class="footer-col-title">Shop</p>
+            <p class="footer-col-title" data-i18n="footerQuickLinks">Quick links</p>
             <ul class="footer-links">
-              <li><a href="index.html#shop">All Products</a></li>
-              <li><a href="index.html#shop?sort=comparePrice">Today's Deals</a></li>
-              <li><a href="index.html#shop?sort=createdAt&order=desc">New Arrivals</a></li>
+              <li><a href="./index.html#aisles" data-i18n="footerShopAisles">Shop aisles</a></li>
+              <li><a href="./index.html#catalog" data-i18n="footerAllProducts">All products</a></li>
+              <li><a href="./branches.html" data-i18n="footerOurBranches">Our branches</a></li>
+              <li><a href="./about.html" data-i18n="footerAboutUs">About us</a></li>
+              <li><a href="./contact.html" data-i18n="footerContact">Contact</a></li>
+              <li><a href="./account.html" data-i18n="footerMyAccount">My account</a></li>
             </ul>
           </div>
 
           <div>
-            <p class="footer-col-title">Company</p>
-            <ul class="footer-links">
-              <li><a href="about.html">About Us</a></li>
-              <li><a href="blog.html">Blog</a></li>
-              <li><a href="contact.html">Contact Us</a></li>
-            </ul>
+            <p class="footer-col-title" data-i18n="footerPopularBranches">Popular branches</p>
+            <div class="footer-branch-item">
+              <strong>Union Trade Centre</strong>
+              <span>KN 4 Ave, Kigali</span>
+            </div>
+            <div class="footer-branch-item">
+              <strong>Remera</strong>
+              <span>KK 15 Rd, Kigali</span>
+            </div>
+            <div class="footer-branch-item">
+              <strong>Kimironko</strong>
+              <span>KG 11 Ave, Kigali</span>
+            </div>
+            <div class="footer-branch-item">
+              <strong>Kacyiru</strong>
+              <span>KG 7 Ave, Kigali</span>
+            </div>
           </div>
 
           <div>
-            <p class="footer-col-title">Support</p>
+            <p class="footer-col-title" data-i18n="footerSupportTitle">Support</p>
             <ul class="footer-links">
-              <li><a href="faq.html">FAQ</a></li>
-              <li><a href="returns-policy.html">Returns Policy</a></li>
-              <li><a href="privacy-policy.html">Privacy Policy</a></li>
-              <li><a href="terms-of-service.html">Terms of Service</a></li>
-              <li><a href="delivery-info.html">Delivery Info</a></li>
+              <li><a href="./checkout.html" data-i18n="footerCheckoutHelp">Checkout help</a></li>
+              <li><a href="./contact.html" data-i18n="footerCustomerSupport">Customer support</a></li>
+              <li><a href="./about.html" data-i18n="footerStoreInfo">Store information</a></li>
             </ul>
           </div>
         </div>
 
         <div class="footer-bottom">
-          <p>&copy; 2026 Simba Super Market. All rights reserved.</p>
+          <p data-i18n="footerCopyright">Copyright 2026 Simba Supermarket Rwanda. All rights reserved.</p>
+          <div class="footer-bottom-links">
+            <a href="./about.html" data-i18n="footerPrivacy">Privacy</a>
+            <a href="./contact.html" data-i18n="footerSupportLink">Support</a>
+            <a href="./branches.html" data-i18n="footerBranchesLink">Branches</a>
+          </div>
         </div>
       </div>
     </footer>
 
     <aside id="cartDrawer" class="cart-drawer" aria-hidden="true">
       <div class="cart-header">
-        <h2 data-i18n="cartTitle">Shopping cart</h2>
-        <button id="closeCart" class="icon-button" type="button" aria-label="Close cart">Close</button>
+        <div>
+          <p class="eyebrow" data-i18n="cartBadge">Your basket</p>
+          <h2 data-i18n="cartTitle">Shopping cart</h2>
+        </div>
+        <button id="closeCart" class="icon-button" type="button" aria-label="Close cart" data-i18n-aria-label="closeCartAria" data-i18n="closeCartLabel">Close</button>
       </div>
+
       <div id="cartItems" class="cart-items"></div>
+
       <div class="cart-footer">
         <div class="cart-summary-line">
           <span data-i18n="subtotal">Subtotal</span>
           <strong id="cartSubtotal">RWF 0</strong>
         </div>
-        <a class="primary-button full-width" href="checkout.html" data-i18n="checkout">Checkout</a>
+        <a class="primary-button full-width" href="checkout.html" data-i18n="checkout">Proceed to checkout</a>
       </div>
     </aside>
+
     <div id="overlay" class="overlay" hidden></div>
 
     <script src="config.js" defer></script>

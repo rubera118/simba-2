@@ -1,5 +1,19 @@
 (function attachSimbaBranches() {
   const STORAGE_KEY = "simba-selected-branch";
+  const branchBranding = {
+    remera: {
+      heroImage: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1600&q=80",
+      specialty: "Busy city-centre branch with strong pantry and household availability.",
+    },
+    kimironko: {
+      heroImage: "https://images.unsplash.com/photo-1573246123716-6b1782bfc499?auto=format&fit=crop&w=1600&q=80",
+      specialty: "Fresh produce heavy branch with strong breakfast and vegetable picks.",
+    },
+    kacyiru: {
+      heroImage: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=1600&q=80",
+      specialty: "Home essentials and quick-stop convenience for residential shoppers.",
+    },
+  };
 
   const branches = [
     {
@@ -94,6 +108,8 @@
     },
   ].map((branch) => ({
     ...branch,
+    heroImage: branchBranding[branch.id]?.heroImage || "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1600&q=80",
+    specialty: branchBranding[branch.id]?.specialty || "Branch-based pickup, delivery context, and localized stock visibility.",
     mapQuery: branch.address,
     mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(branch.address)}`,
     embedUrl: `https://www.google.com/maps?q=${encodeURIComponent(branch.address)}&output=embed`,
