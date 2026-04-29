@@ -1143,11 +1143,19 @@ function renderDepartmentMenu() {
 
   elements.departmentMenu.innerHTML = filteredCategories
     .map((category) => {
-      const categoryLabel = getLocalizedCategoryName(category);
+      const meta = categoryMeta[category] || { icon: "Shop", image: PRODUCT_FALLBACK_IMAGE, summary: "" };
       const count = appState.products.filter((product) => product.category === category).length;
+      const categoryLabel = getLocalizedCategoryName(category);
+      const categorySummary = getLocalizedCategorySummary(category);
       return `
         <button class="department-link" type="button" data-category-link="${category}">
-          <span>${categoryLabel}</span>
+          <img class="department-photo" src="${meta.image}" alt="${categoryLabel}" loading="lazy" onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMAGE}'" />
+          <span class="department-copy">
+            <span class="department-icon">${meta.icon}</span>
+            <strong>${categoryLabel}</strong>
+            <small>${categorySummary}</small>
+            <small>${copy.departmentCount.replace("{count}", count)}</small>
+          </span>
         </button>
       `;
     })
