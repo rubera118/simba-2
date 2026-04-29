@@ -1364,7 +1364,26 @@ function loadLocalAccountOrders(profile) {
 }
 
 function loadLocalCustomers() {
-  return loadFromStorage(ACCOUNT_STORAGE_KEYS.customers, []);
+  const customers = loadFromStorage(ACCOUNT_STORAGE_KEYS.customers, []);
+  if (Array.isArray(customers) && customers.length) {
+    return customers;
+  }
+
+  const seededCustomers = [
+    {
+      id: "local-demo-buyer",
+      name: "Buyer Test",
+      email: "buyer@test.com",
+      phone: "+250 788 123 456",
+      address: "Kigali, KG 11 Ave",
+      passwordHash: "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f",
+      createdAt: "2026-01-01T08:00:00.000Z",
+      provider: "password",
+    },
+  ];
+
+  saveLocalCustomers(seededCustomers);
+  return seededCustomers;
 }
 
 function saveLocalCustomers(customers) {
