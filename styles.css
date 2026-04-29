@@ -969,6 +969,10 @@ button:disabled {
 
 .department-menu {
   margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .department-search-field {
@@ -976,14 +980,12 @@ button:disabled {
 }
 
 .department-link {
-  display: grid;
-  grid-template-columns: 84px 1fr;
-  align-items: stretch;
-  gap: 0.85rem;
-  width: 100%;
-  padding: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.85rem;
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: 999px;
   background: var(--bg-secondary);
   color: var(--text);
   cursor: pointer;
