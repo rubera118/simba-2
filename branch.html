@@ -3,15 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title data-i18n-document-title="homePageTitle">Simba Super Market - Fresh Groceries Delivered to Your Door | Simba Super Market</title>
-    <meta name="description" content="Simba Super Market - Kigali's favourite supermarket with fresh groceries, household essentials, and fast delivery." />
+    <title data-i18n-document-title="branchPageTitle">Branch Name | Simba Super Market</title>
+    <meta name="description" content="Shop at Simba Super Market branch name - location, hours, and products available." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
     <script src="preferences.js"></script>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body data-page="home">
+  <body data-page="branch">
     <div class="announcement-bar">
       <div class="announcement-inner">
         <p data-i18n="announceText">Free delivery on orders over RWF 50,000 - Kigali only</p>
@@ -34,9 +34,9 @@
 
         <div id="topbarPanel" class="topbar-panel">
           <nav class="nav-links">
-            <a href="index.html" data-i18n="navHome" class="active">Home</a>
+            <a href="index.html" data-i18n="navHome">Home</a>
             <a href="index.html#shop" data-i18n="navShop">Shop</a>
-            <a href="branches.html" data-i18n="navBranches">Branches</a>
+            <a href="branches.html" data-i18n="navBranches" class="active">Branches</a>
             <a href="blog.html" data-i18n="navBlog">Blog</a>
             <a href="contact.html" data-i18n="navContact">Contact</a>
           </nav>
@@ -63,76 +63,41 @@
       </header>
 
       <main>
-        <section class="hero hero-banner">
-          <img src="https://placehold.co/1400x500/fc7d00/white?text=Simba+Super+Market" alt="Simba Super Market" />
-          <div class="hero-banner-content">
-            <h1>Kigali's Favourite Supermarket</h1>
-            <p data-i18n="heroText">Fresh Groceries Delivered to Your Door</p>
-            <p>Shop thousands of products - food, beverages, household essentials and more, delivered fast across Kigali.</p>
-            <div class="hero-cta">
-              <a class="primary-button" href="index.html#shop" data-i18n="shopNow">Shop Now</a>
-              <a class="ghost-button" href="index.html#featured" data-i18n="viewDemo">View Demo</a>
+        <section class="branch-hero">
+          <img id="branchHeroImage" src="https://placehold.co/1400x400/fc7d00/white?text=Branch+Name" alt="Branch" />
+          <div class="branch-hero-content">
+            <h1 id="branchName">Branch Name</h1>
+            <p id="branchAddress">Branch Address</p>
+            <div class="branch-hero-meta">
+              <span id="branchHours">
+                <strong>Hours:</strong> <span>Open daily, 7:00 AM - 10:00 PM</span>
+              </span>
+              <span id="branchPhone">
+                <strong>Phone:</strong> <span>+250 788 000 001</span>
+              </span>
             </div>
           </div>
         </section>
 
-        <section class="search-section">
-          <h2 class="sr-only">Search Products</h2>
-          <div class="search-bar">
-            <input id="quickSearch" type="search" placeholder="Search" data-i18n-placeholder="searchPlaceholder" />
-          </div>
-          <div class="search-suggestions">
-            <button class="chip" type="button">Fresh milk</button>
-            <button class="chip" type="button">Where are your branches?</button>
-            <button class="chip" type="button">Cold drinks</button>
-            <button class="chip" type="button">Breakfast items</button>
-            <button class="chip" type="button">Vegetables</button>
-          </div>
+        <section class="branch-actions">
+          <a class="primary-button" href="#branch-products" data-i18n="shopHere">Shop at this branch</a>
+          <a class="ghost-button" href="branches.html" data-i18n="viewAllBranches">View all branches</a>
         </section>
 
-        <section id="categories" class="showcase-panel">
+        <section id="branch-products" class="showcase-panel">
           <div class="section-header">
-            <h2 data-i18n="categoriesTitle">Shop by Category</h2>
-            <p data-i18n="categoriesSubtitle">Find exactly what you need</p>
-            <a href="index.html#shop" class="section-link">View All</a>
+            <h2 data-i18n="availableProductsTitle">Available Products at This Branch</h2>
+            <p data-i18n="availableProductsSubtitle">Products in stock at this location</p>
           </div>
-          <div id="categoriesGrid" class="categories-grid"></div>
+          <div id="branchProductsGrid" class="products-grid"></div>
         </section>
 
         <section class="showcase-panel">
-          <div class="section-header">
-            <h2 data-i18n="branchesTitle">Our Branches</h2>
-            <p data-i18n="branchesSubtitle">Pick up your order at any of our 9 Kigali locations</p>
-            <a href="branches.html" class="section-link">View All</a>
-          </div>
-          <div id="branchesGrid" class="branches-grid"></div>
-        </section>
-
-        <section id="featured" class="showcase-panel">
           <div class="section-header">
             <h2 data-i18n="featuredTitle">Featured Products</h2>
-            <p data-i18n="featuredSubtitle">Hand-picked favourites just for you</p>
-            <a href="index.html#shop?featured=true" class="section-link">View All</a>
+            <p data-i18n="featuredSubtitle">Hand-picked favourites at this branch</p>
           </div>
           <div id="featuredGrid" class="products-grid"></div>
-        </section>
-
-        <section class="showcase-panel">
-          <div class="section-header">
-            <h2 data-i18n="topSellersTitle">Top Sellers</h2>
-            <p data-i18n="topSellersSubtitle">Our most popular products this month</p>
-            <a href="index.html#shop?sort=salesCount" class="section-link">View All</a>
-          </div>
-          <div id="topSellersGrid" class="products-grid"></div>
-        </section>
-
-        <section class="showcase-panel">
-          <div class="section-header">
-            <h2 data-i18n="recommendedTitle">Recommended for You</h2>
-            <p data-i18n="recommendedSubtitle">Based on your shopping history</p>
-            <a href="index.html#shop" class="section-link">View All</a>
-          </div>
-          <div id="recommendedGrid" class="products-grid"></div>
         </section>
       </main>
     </div>
@@ -147,7 +112,6 @@
               <p>Kigali, Rwanda</p>
               <p>Kigali's favourite supermarket - fresh, fast, and reliable.</p>
               <p><a href="tel:+250788307200">+250 788307200</a> <a href="mailto:info@simbasupermarket.rw">info@simbasupermarket.rw</a></p>
-              <p><a href="https://maps.app.goo.gl/sQsE5ERQ48yB1ih4A">Kigali, Rwanda</a></p>
             </div>
           </div>
 
@@ -156,7 +120,6 @@
             <ul class="footer-links">
               <li><a href="index.html#shop">All Products</a></li>
               <li><a href="index.html#shop?sort=comparePrice">Today's Deals</a></li>
-              <li><a href="index.html#shop?sort=createdAt&order=desc">New Arrivals</a></li>
             </ul>
           </div>
 
@@ -164,7 +127,6 @@
             <p class="footer-col-title">Company</p>
             <ul class="footer-links">
               <li><a href="about.html">About Us</a></li>
-              <li><a href="blog.html">Blog</a></li>
               <li><a href="contact.html">Contact Us</a></li>
             </ul>
           </div>
@@ -173,9 +135,6 @@
             <p class="footer-col-title">Support</p>
             <ul class="footer-links">
               <li><a href="faq.html">FAQ</a></li>
-              <li><a href="returns-policy.html">Returns Policy</a></li>
-              <li><a href="privacy-policy.html">Privacy Policy</a></li>
-              <li><a href="terms-of-service.html">Terms of Service</a></li>
               <li><a href="delivery-info.html">Delivery Info</a></li>
             </ul>
           </div>

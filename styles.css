@@ -1039,6 +1039,239 @@ button:disabled {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
+.hero-banner {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+}
+
+.hero-banner img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-banner-content {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  padding: 2rem;
+  text-align: center;
+  color: #fff;
+}
+
+.hero-banner-content h1 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.1;
+  margin: 0 0 0.5rem;
+}
+
+.hero-banner-content p {
+  font-size: 1.1rem;
+  opacity: 0.92;
+}
+
+.search-section {
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+  max-width: 720px;
+  text-align: center;
+}
+
+.search-bar {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 0.85rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 1rem;
+}
+
+.search-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.section-header h2 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.75rem;
+  margin: 0;
+}
+
+.section-header p {
+  color: var(--muted);
+  margin: 0.25rem 0 0;
+}
+
+.section-link {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.showcase-panel {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+}
+
+.categories-grid,
+.branches-grid,
+.products-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+
+.category-card,
+.branch-card,
+.product-card {
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-strong);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-card:hover,
+.branch-card:hover,
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.category-card img,
+.branch-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-bottom: 0.75rem;
+}
+
+.category-card h3,
+.branch-card h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.branch-hero {
+  position: relative;
+  min-height: 320px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.branch-hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.branch-hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 2rem;
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.75));
+  width: 100%;
+  height: 100%;
+  display: grid;
+  align-content: end;
+}
+
+.branch-hero-content h1 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin: 0 0 0.5rem;
+}
+
+.branch-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.branch-hero-meta strong {
+  color: var(--primary);
+}
+
+.branch-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.footer-brand {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.footer-brand img {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+}
+
+.footer-brand-info p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+.footer-brand-info a {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+.footer-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.footer-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
